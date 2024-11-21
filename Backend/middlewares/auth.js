@@ -7,24 +7,26 @@ dotenv.config();
 export const auth = (req,res,next)=>{
   
   try{
-    let token  = req.body.token || req.headers.token;
-    //check if token exist
-    if(!token){
+    const authHeader = req.headers['authorization'];
+    const token = authHeader.split(' ')[1]; // Extract the token
+    // console.log(token);
+  //  let token = req.headers.token;
+  
+    if (!token){
       return res.status(422).json({
         success:false,
         message:'Token missing'
       })
     }
-      
+
     // varify token
     let payload={};
     try{
       payload =jwt.verify(token,process.env.JWT_SECRET);
 
-      // console.log('payload',payload);
-
+      // console.log('payload',payload)
     }catch(err){
-      console.log(err);
+      console.log(err.message);
       return res.status(400).json({
         success:false,
         message:'Failed to verify token'
@@ -35,6 +37,7 @@ export const auth = (req,res,next)=>{
     return next();
 
   }catch(error){
+    console.log(error.message)
     res.status(401).json({
       success:false,
       message:'Somethin Went Wrong'
@@ -58,6 +61,7 @@ export const isSeller = (req,res,next)=>{
     return next();
 
   }catch(error){
+    console.log(err.message)
     res.status(500).json({
       success:false,
       message:'Somethin Went Wrong'

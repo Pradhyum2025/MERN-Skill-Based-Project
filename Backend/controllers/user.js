@@ -132,6 +132,7 @@ export const login =  async(req,res)=>{
       }
 
     }catch(err){
+      console.log(err.message)
       res.status(503).json({
         success:false,
         message:'Failed to compare password!'
@@ -146,41 +147,77 @@ export const login =  async(req,res)=>{
   }
 }
 
+//get user
+export const getUser =async(req,res)=>{
+  try{
+   let currUser = await User.findById(req.user.id).populate('listing');
+    return res.status(200).json({
+    success:true,
+    message:'get user successfully',
+    currUser
+   })
+
+  }catch(err){
+    res.status(500).json({
+      success:false,
+      message:'Internal Server Error'
+     })
+  }
+}
+
+
+//get bag
+export const getBag =async(req,res)=>{
+  try{
+    let currUser = await User.findById(req.user.id).populate('bag');
+
+    const bag = currUser.bag;
+    res.status(200).json({
+      success:true,
+      message:"Welocome on bag!",
+      bag
+    })
+  }catch(err){
+    console.log(err.message)
+    res.state(500).json({
+      success:false,
+      message:"Internal server error",
+      bag
+    })
+  }
+}
 //add to bag ----------------->>>
 export const addToBag =  async(req,res)=>{
 
   try{
     let {product_id} = req.params;
-
-    let currListing = await Listing.findById
-    (product_id);
-
+    let currListing = await Listing.findById(product_id);
+    
     //check listing exist or NOT
     if(currListing){
-
+      
       let currUser = await User.findById(req.user.id);
-
+      
       //check listiing alredy exist in user bag
       for(let list of currUser.bag){
-
+        
         if(list._id.equals(currListing._id)){
-          return res.status(400).json({
+          return res.status(201).json({
             success:false,
-            message:'Listing is aready exist in bag',
+            message:'Item is aready exist in bag',
           }) 
         }
       }
       currUser.bag.unshift(currListing._id);
-
-      let reso = await currUser.save();
-
+      currUser = await currUser.save();
+      
       return res.status(200).json({
         success:true,
-        message:'Successfully add to bag!'
+        message:'Successfully add to bag!',
+        currUser
       })
-
-    }else{
       
+    }else{
       return res.status(400).json({
         success:true,
         message:'cannot add to bag!'
@@ -188,9 +225,9 @@ export const addToBag =  async(req,res)=>{
     }
 
   }catch(error){
-    // console.log(error.message)
+    console.log(error.message)
     return res.status(500).json({
-      success:true,
+      success:false,
       message:'Internal server error!'
     })
   }
@@ -216,11 +253,12 @@ export const removeFrombag =  async(req,res)=>{
 
           currUser.bag = currUser.bag.filter(items=>!items._id.equals(currListing._id));
 
-          await currUser.save();
+          currUser = await currUser.save();
 
           return res.status(200).json({
             success:true,
-            message:'Successfully remove from bag!'
+            message:'Successfully remove from bag!',
+            currUser
           })
         }
       }
@@ -233,9 +271,9 @@ export const removeFrombag =  async(req,res)=>{
     }
     
   }catch(error){
-    // console.log(error.message)
+    console.log(error.message)
     return res.status(500).json({
-      success:true,
+      success:false,
       message:'Internal server error!'
     })
   }
@@ -245,7 +283,8 @@ export const removeFrombag =  async(req,res)=>{
 export const becomeASeller = async(req,res)=>{
   try{
     //and save it into currUser schema
-    let newSeller = new SellerDetails(req.body);
+    let {store_name,contact_number,store_description,state,city,postalCode,country,verified_status,store_address} = req.body;
+    let newSeller = new SellerDetails( {store_name,contact_number,store_description,state,city,postalCode,country,verified_status,store_address});
     newSeller = await newSeller.save();
 
     let currUser = await User.findById(req.user.id);
@@ -283,6 +322,7 @@ export const becomeASeller = async(req,res)=>{
     })
     
   }catch(err){
+    console.log(err.message)
     res.status(500).json({
       success:false,
       message:'Internal server error!'

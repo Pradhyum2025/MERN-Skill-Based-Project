@@ -26,8 +26,13 @@ export const getAllListings= async(req,res)=>{
 export const showListing = async(req,res)=>{
   try{
     let {product_id} = req.params;
-    let listing =await Listing.findById(product_id);
-    res.status(200).json(listing);
+    let listing =await Listing.findById(product_id).populate({path:"reviews",populate:{path: "author"}});
+
+    res.status(200).json({
+      success:true,
+      message:'fetch data Successfully!',
+      data:listing
+    });
 
   }catch(err){
     res.status(500).json({
@@ -46,7 +51,7 @@ export const postNewListing = async(req,res)=>{
     let {nameWithModel,price,image,warranty,catagory} = req.body;
     
     let features = ['5000mAh bettery', '50MP camera']
-    
+    console.log(req.body)
     //create  new Listing
     let newListing = new Listing({nameWithModel,price,image,features,warranty,catagory});
     
@@ -70,7 +75,7 @@ export const postNewListing = async(req,res)=>{
 
     res.status(500).json({
       success:false,
-      message:'Internal Server Error'
+      message:'Listing has been not posted!'
     })
   }
 }
@@ -83,13 +88,11 @@ export const editListing = async(req,res)=>{
 
     //get listing detail and compare to request user with listing seller
     let {product_id}=req.params;
-
+    
     let currListing = await Listing.findById(product_id);
 
-    console.log(currListing);
 
     if(currListing && currListing.seller._id.toString()===req.user.id){
-      
       await Listing.updateOne({_id:product_id},req.body);
 
       return res.status(200).json({
@@ -98,7 +101,7 @@ export const editListing = async(req,res)=>{
       })
       
     }else{
-
+      
       return res.status(401).json({
         success:false,
         message:'Unautherized request'
@@ -106,7 +109,7 @@ export const editListing = async(req,res)=>{
     }
 
   }catch(error){
-    console.log(error.message)
+    console.log("ERROR :",error.message)
     res.status(500).json({
       success:false,
       message:error.message
@@ -116,19 +119,15 @@ export const editListing = async(req,res)=>{
 
 // delete product
   export const deleteListing = async(req,res)=>{
+    
     try{
       let {product_id} = req.params;
       //find currUser
       let currListing = await Listing.findById(product_id);
-  
+       console.log('currListing',currListing)
       if(currListing && currListing.seller._id.toString()==req.user.id){
-        let currUser = await User.findById(req.user.id);
-        
-        //remove listing from currUser
-        currUser.listing=currUser.listing.filter(list=>list._id!=product_id);
 
-        //save  currUser
-        await currUser.save();
+        await User.findByIdAndUpdate(req.user.id,{$pull:{listing:product_id}});
 
         //remove listing from DB
         await Listing.findByIdAndDelete(product_id);
@@ -139,8 +138,8 @@ export const editListing = async(req,res)=>{
         })
         
       }else{
-        return res.status(401).json({
-          success:false,
+        return res.status(200).json({
+          success:true,
           message:'Unautherized request'
         })
       }

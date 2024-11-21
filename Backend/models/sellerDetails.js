@@ -16,8 +16,20 @@ const sellerDetailsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  state:{
+    type:String,
+    require:true
+  },
+  city:{
+    type:String,
+    require:true
+  },
+  postalCode:{
+    type:Number,
+    require:true
+  },
   contact_number: {
-    type: String,
+    type: Number,
     required: true,
   },
   verified_status: {

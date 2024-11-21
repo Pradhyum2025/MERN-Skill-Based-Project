@@ -8,7 +8,7 @@ import { auth, isSeller } from '../middlewares/auth.js';
 listingRouter.get('/',getAllListings);
 
 //show listing
-listingRouter.get('/:product_id',showListing)
+listingRouter.get('/show/:product_id',showListing)
 
 //post listing
 listingRouter.post('/',auth,isSeller,postNewListing);
