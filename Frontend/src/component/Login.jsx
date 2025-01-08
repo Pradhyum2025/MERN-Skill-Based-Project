@@ -29,7 +29,7 @@ export default function Login() {
       localStorage.setItem('token',JSON.stringify(res.data.token));
       dispatch(authSliceAction.initializeAuther(res.data.currUser));
       toast.success(res.data.message);
-      navigate(+1);
+     ;
     }
     
   })

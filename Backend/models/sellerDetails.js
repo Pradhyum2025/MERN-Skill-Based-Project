@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-import connectDB from '../config/connectDB.js';
-connectDB();
 
 const sellerDetailsSchema = new mongoose.Schema({
   store_name: {

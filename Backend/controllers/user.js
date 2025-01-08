@@ -214,7 +214,7 @@ export const addToBag =  async(req,res)=>{
       return res.status(200).json({
         success:true,
         message:'Successfully add to bag!',
-        currUser
+        currListing
       })
       
     }else{
@@ -257,8 +257,7 @@ export const removeFrombag =  async(req,res)=>{
 
           return res.status(200).json({
             success:true,
-            message:'Successfully remove from bag!',
-            currUser
+            message:'Successfully remove from bag!'
           })
         }
       }

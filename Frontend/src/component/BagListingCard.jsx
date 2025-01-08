@@ -12,10 +12,10 @@ export default function BagListingCard({item}) {
    const dispatch =useDispatch();
    const navigate =useNavigate();
 
-    // handle show items
-    const handleGetItem =(curListing)=>{
+  // handle show items
+    const handleGetItem  =(curListing)=>{
       navigate(`/show/${curListing._id}`)
-     }
+    }
 
   let token = localStorage.getItem('token');
 
@@ -27,24 +27,20 @@ export default function BagListingCard({item}) {
         Authorization: `Bearer ${JSON.parse(token)}` // Include token as a Bearer token
       }});
       
-      if(response.data){
-        localStorage.setItem('currUser',JSON.stringify(response.data.currUser));
-        dispatch(authSliceAction.initializeAuther(response.data.currUser));
-      }
-      if(response.data.success){  
-      dispatch(bagSliceAction.removeToBag());
+      if(response.data.success){   
+      dispatch(bagSliceAction.removeToBag(product_id));
       toast.success(response.data.message,{
         duration: 300,
       });
-      setTimeout(()=>{
-        navigate(0);
-      },300)
-    }else{
+
+      }else{
       toast.error(response.data.message,{
         duration: 1000,
       });
     }
   }
+
+
 
   return (
     <div

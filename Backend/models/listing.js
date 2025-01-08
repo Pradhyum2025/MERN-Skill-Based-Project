@@ -3,7 +3,6 @@ import { User } from "./user.js";
 import connectDB from "../config/connectDB.js";
 import { Review } from "./review.js";
 
-connectDB();
 
 const listingSchema = new mongoose.Schema({
   image:{

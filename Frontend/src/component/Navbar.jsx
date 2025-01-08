@@ -12,7 +12,7 @@ export default function Navbar() {
    
   const dispatch = useDispatch();
   const  currUser = useSelector(store=>store.auth);
-  const bagItemsCount = useSelector(store=>store.bag); 
+  const bag = useSelector(store=>store.bag); 
  
   return (
 
@@ -70,7 +70,7 @@ export default function Navbar() {
       <Link to='/bag'> 
         <div className="indicator">
          <FaCartShopping className='text-xl text-black'/>
-          <span className="badge badge-sm indicator-item">{bagItemsCount}</span>
+          <span className="badge badge-sm indicator-item">{bag.length}</span>
         </div>
         </Link> 
       </div>
@@ -92,7 +92,7 @@ export default function Navbar() {
         </li>
         :<li>
           <span onClick={()=>document.getElementById('my_modal_3').showModal()}>Login</span>
-          <Login/>
+        
         </li> }
         {currUser?
           <li>
@@ -108,6 +108,7 @@ export default function Navbar() {
 
 
       </ul>
+        <Login/>
     </div>
   </div>
 

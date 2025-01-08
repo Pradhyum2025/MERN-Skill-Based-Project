@@ -21,16 +21,6 @@ connectDB();
 
 
 // routes
-// app.post('/listing/:listing_id/review', (req, res) => {
-//   const listingId = req.params.listing_id; // Correctly extract listing_id
-//   const review = req.body;
-
-//   console.log('Listing ID:', listingId);
-//   console.log('Review:', review);
-//   return res.json({
-//     message:'hi'
-//   })
-// })
 
 app.use('/listing/review',reviewRouter);
 app.use('/listing',listingRouter);

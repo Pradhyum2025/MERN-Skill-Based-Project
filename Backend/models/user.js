@@ -3,7 +3,6 @@ import connectDB from "../config/connectDB.js";
 import { Listing } from "./listing.js";
 import { SellerDetails } from "./sellerDetails.js";
 
-connectDB();
 
 const userSchema = new mongoose.Schema({
   username:{
