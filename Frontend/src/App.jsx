@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Navbar from './component/Navbar'
-import Footer from './component/Footer'
 
+import Navbar from './component/common/Navbar'
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { Outlet } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
+import Footer from './component/common/Footer'
+import Login from './component/core/Auth/Login';
 function App() {
   const [count, setCount] = useState(0)
 
@@ -14,6 +15,7 @@ function App() {
     <>
      <Navbar/>
      <Toaster/>
+     <Login/>
      <Outlet/>
      <Footer/>
     </>

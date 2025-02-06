@@ -1,22 +1,27 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
-let currUser = localStorage.getItem('currUser')==="undefined"?null:localStorage.getItem('currUser');
+const authData = window.localStorage.getItem('currUser')?JSON.parse(window.localStorage.getItem('currUser')):null;
+const initalState = authData?authData:{};
 
-// console.log(currUser)
-const authSlice = createSlice({
+const authSlice  = createSlice({
   name:'auth',
-  initialState: JSON.parse(currUser),
+  initialState:initalState,
   reducers:{
-    initializeAuther:(state,action)=>{
-      return action.payload;
+    setFormData:(state,action)=>{
+     return {...action.payload}
     },
-    deInializeAuter:(state)=>{
-      localStorage.removeItem('currUser');
-      localStorage.removeItem('token');
-      return null;
+    setUserData:(state,action)=>{
+      return {...action.payload}
+    },
+    signout:(state)=>{
+      if(window.localStorage.getItem('currUser')){
+        window.localStorage.removeItem('currUser');
+      }
+      return {};
     }
   }
 })
 
-export const authSliceAction = authSlice.actions;
 export default authSlice;
+
+export const authSliceAction = authSlice.actions;

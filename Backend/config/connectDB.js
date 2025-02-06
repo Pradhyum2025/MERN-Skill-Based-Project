@@ -3,12 +3,12 @@ import dotenv from 'dotenv'
 //load env file
 dotenv.config();
 
-const ATLASDB_URL = process.env.ATLASDB_URL;
+const MONGODB_URL = process.env.MONGODB_URL;
 
 
 export default function connectDB(){
 
-    mongoose.connect(ATLASDB_URL)
+    mongoose.connect(MONGODB_URL)
     .then(()=>{
       console.log('SuccessFully Connect With MongoDB');
     })

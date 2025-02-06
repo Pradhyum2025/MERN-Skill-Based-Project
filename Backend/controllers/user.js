@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Listing } from "../models/listing.js";
-import { ObjectId } from "mongodb";
 import { SellerDetails } from "../models/sellerDetails.js";
 
 dotenv.config();
@@ -12,9 +11,9 @@ dotenv.config();
 //signup --------------------- >>>>>>>>>>>>
 export const signup = async(req,res)=>{
   try{
-    const {username,email,password} = req.body;
+    const {firstname,lastName,email,contact,password} = req.body;
 
-    const currUser = await User.findOne({email});
+    let currUser = await User.findOne({email});
     
     //check user exist
     if(currUser){
@@ -23,6 +22,7 @@ export const signup = async(req,res)=>{
         message:'User Already Exist! Please Login'
       })
     }
+ 
     //Secure password
     let hashPassword = '';
     try{
@@ -34,31 +34,39 @@ export const signup = async(req,res)=>{
       }) 
     }
     //create newUser 
-    let newUser = new User({
-      username:username,
-      email:email,
-      password:hashPassword
+    let userPayload = new User({
+      firstname,
+      lastName,
+      email,
+      password:hashPassword,
     })
+   
+    let contactList = [];
+    contactList.push(contact);
+   
+    userPayload.contact = contactList;
+    
     //save newUser
-    newUser = await newUser.save();
+    currUser = await userPayload.save();
     
     //login newUser via send JWT token
     const payload ={
-      id:newUser._id,
-      email:newUser.email,
-      role:newUser.role
+      id:currUser._id,
+      email:currUser.email,
+      role:currUser.accountType
     }
-
+    
     let token = jwt.sign(payload,process.env.JWT_SECRET,{
       expiresIn:'2h'
     });
-
-    newUser =newUser.toObject();
-    newUser.token = token;
-    newUser.password=undefined;
+    
+    currUser =currUser.toObject();
+    currUser.token = token;
+    currUser.password=undefined
+    currUser.bag=undefined
     
     let options = {
-      expire:new Date(Date.now()+3*24*60*60*1000),
+      expiresIn:new Date(Date.now()+3*24*60*60*1000),
       httpOnly:true
     }
 
@@ -66,10 +74,10 @@ export const signup = async(req,res)=>{
       success:true,
       message:'Signup seccussfully!',
       token,
-      newUser
+      currUser
     })
   }catch(error){
-    
+    console.log(error.message)
     res.status(500).json({
       success:false,
       message:'Internal server error!'
@@ -103,7 +111,7 @@ export const login =  async(req,res)=>{
         const payload = {
           id:currUser._id,
           email:currUser.email,
-          role:currUser.role
+          role:currUser.accountType
         }
         let token  = jwt.sign(payload,process.env.JWT_SECRET,{
           expiresIn:'2h'  
@@ -166,117 +174,117 @@ export const getUser =async(req,res)=>{
 }
 
 
-//get bag
-export const getBag =async(req,res)=>{
-  try{
-    let currUser = await User.findById(req.user.id).populate('bag');
+// //get bag
+// export const getBag =async(req,res)=>{
+//   try{
+//     let currUser = await User.findById(req.user.id).populate('bag');
 
-    const bag = currUser.bag;
-    res.status(200).json({
-      success:true,
-      message:"Welocome on bag!",
-      bag
-    })
-  }catch(err){
-    console.log(err.message)
-    res.state(500).json({
-      success:false,
-      message:"Internal server error",
-      bag
-    })
-  }
-}
-//add to bag ----------------->>>
-export const addToBag =  async(req,res)=>{
+//     const bag = currUser.bag;
+//     res.status(200).json({
+//       success:true,
+//       message:"Welocome on bag!",
+//       bag
+//     })
+//   }catch(err){
+//     console.log(err.message)
+//     res.state(500).json({
+//       success:false,
+//       message:"Internal server error",
+//       bag
+//     })
+//   }
+// }
+// //add to bag ----------------->>>
+// export const addToBag =  async(req,res)=>{
 
-  try{
-    let {product_id} = req.params;
-    let currListing = await Listing.findById(product_id);
+//   try{
+//     let {product_id} = req.params;
+//     let currListing = await Listing.findById(product_id);
     
-    //check listing exist or NOT
-    if(currListing){
+//     //check listing exist or NOT
+//     if(currListing){
       
-      let currUser = await User.findById(req.user.id);
+//       let currUser = await User.findById(req.user.id);
       
-      //check listiing alredy exist in user bag
-      for(let list of currUser.bag){
+//       //check listiing alredy exist in user bag
+//       for(let list of currUser.bag){
         
-        if(list._id.equals(currListing._id)){
-          return res.status(201).json({
-            success:false,
-            message:'Item is aready exist in bag',
-          }) 
-        }
-      }
-      currUser.bag.unshift(currListing._id);
-      currUser = await currUser.save();
+//         if(list._id.equals(currListing._id)){
+//           return res.status(201).json({
+//             success:false,
+//             message:'Item is aready exist in bag',
+//           }) 
+//         }
+//       }
+//       currUser.bag.unshift(currListing._id);
+//       currUser = await currUser.save();
       
-      return res.status(200).json({
-        success:true,
-        message:'Successfully add to bag!',
-        currListing
-      })
+//       return res.status(200).json({
+//         success:true,
+//         message:'Successfully add to bag!',
+//         currListing
+//       })
       
-    }else{
-      return res.status(400).json({
-        success:true,
-        message:'cannot add to bag!'
-      })
-    }
+//     }else{
+//       return res.status(400).json({
+//         success:true,
+//         message:'cannot add to bag!'
+//       })
+//     }
 
-  }catch(error){
-    console.log(error.message)
-    return res.status(500).json({
-      success:false,
-      message:'Internal server error!'
-    })
-  }
-}
+//   }catch(error){
+//     console.log(error.message)
+//     return res.status(500).json({
+//       success:false,
+//       message:'Internal server error!'
+//     })
+//   }
+// }
 
-//remove from bag
-export const removeFrombag =  async(req,res)=>{
-  try{
-    let {product_id} = req.params;
+// //remove from bag
+// export const removeFrombag =  async(req,res)=>{
+//   try{
+//     let {product_id} = req.params;
 
-    let currListing = await Listing.findById
-    (product_id);
+//     let currListing = await Listing.findById
+//     (product_id);
 
-    //check listing exist or NOT
-    if(currListing){
+//     //check listing exist or NOT
+//     if(currListing){
 
-      let currUser = await User.findById(req.user.id);
+//       let currUser = await User.findById(req.user.id);
 
-      //check listiing alredy exist in user bag
-      for(let list of currUser.bag){
+//       //check listiing alredy exist in user bag
+//       for(let list of currUser.bag){
 
-        if(list._id.equals(currListing._id)){
+//         if(list._id.equals(currListing._id)){
 
-          currUser.bag = currUser.bag.filter(items=>!items._id.equals(currListing._id));
+//           currUser.bag = currUser.bag.filter(items=>!items._id.equals(currListing._id));
 
-          currUser = await currUser.save();
+//           currUser = await currUser.save();
 
-          return res.status(200).json({
-            success:true,
-            message:'Successfully remove from bag!'
-          })
-        }
-      }
+//           return res.status(200).json({
+//             success:true,
+//             message:'Successfully remove from bag!'
+//           })
+//         }
+//       }
 
-      return res.status(400).json({
-            success:false,
-            message:'listing not exist in bag!',
-      }) 
+//       return res.status(400).json({
+//             success:false,
+//             message:'listing not exist in bag!',
+//       }) 
 
-    }
+//     }
     
-  }catch(error){
-    console.log(error.message)
-    return res.status(500).json({
-      success:false,
-      message:'Internal server error!'
-    })
-  }
-}
+//   }catch(error){
+//     console.log(error.message)
+//     return res.status(500).json({
+//       success:false,
+//       message:'Internal server error!'
+//     })
+//   }
+// }
 
 //become a seller
 export const becomeASeller = async(req,res)=>{

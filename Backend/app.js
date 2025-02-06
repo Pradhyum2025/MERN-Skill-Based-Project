@@ -2,10 +2,12 @@ import express from 'express'
 import dotenv from 'dotenv'
 import connectDB from './config/connectDB.js';
 import bodyParser from 'body-parser';
+
 import listingRouter from './routes/listing.js';
 import userRouter from './routes/user.js';
 import cors from 'cors';
 import reviewRouter from './routes/review.js';
+import bagRoutes from './routes/bag.js';
 
 //load env files
 dotenv.config();
@@ -22,9 +24,10 @@ connectDB();
 
 // routes
 
-app.use('/listing/review',reviewRouter);
-app.use('/listing',listingRouter);
-app.use('/user', userRouter);
+// app.use('/listing/review',reviewRouter);
+// app.use('/listing',listingRouter);
+app.use('/auth', userRouter);
+app.use('/bag',bagRoutes);
 
 const PORT  = process.env.PORT || 4040;
 app.listen(PORT,()=>{

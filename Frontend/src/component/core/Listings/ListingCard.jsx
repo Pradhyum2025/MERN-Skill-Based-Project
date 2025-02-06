@@ -1,7 +1,8 @@
 import React from 'react'
-import ListingCardBtn from './ListingCardBtn';
-import ListingCardImage from './ListingCardImage';
-import ListingCardDescription from './ListingCardDescription';
+import ListingCardImage from './ListingCardImage'
+import ListingCardDescription from './ListingCardDescription'
+import ListingCardBtn from './ListingCardBtn'
+
 
 
 export default function ListingCard({ listing }) {

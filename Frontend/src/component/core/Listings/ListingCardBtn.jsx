@@ -2,7 +2,8 @@ import React, { useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import toast from "react-hot-toast";
 import axios from 'axios'
-import { bagSliceAction } from '../store/Bag';
+import { bagSliceAction } from '../../../store/slices/Bag';
+
 
 export default function ListingCardBtn({listing}) {
 

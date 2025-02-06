@@ -1,13 +1,15 @@
 import mongoose from "mongoose";
-import connectDB from "../config/connectDB.js";
-import { Listing } from "./listing.js";
-import { SellerDetails } from "./sellerDetails.js";
-
 
 const userSchema = new mongoose.Schema({
-  username:{
+  firstName:{
     type:String,
-    require:true
+    require:true,
+    trim:true
+  },
+  lastName:{
+    type:String,
+    require:true,
+    trim:true
   },
   email:{
     type:String,
@@ -18,10 +20,13 @@ const userSchema = new mongoose.Schema({
     type:String,
     require:true
   },
-  role:{
+  contact:{
+    type:[Number],
+  },
+  accountType:{
     type:String,
-    enum:['seller','buyer'],
-    default:'buyer'
+    enum:['Seller','Buyer','Admin'],
+    default:'Buyer'
   },
   sellerDetails:{
     type:mongoose.Schema.Types.ObjectId,

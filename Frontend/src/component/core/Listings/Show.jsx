@@ -1,12 +1,12 @@
 import axios from 'axios';
 import React, { useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { getItemSliceAction } from '../store/getItem';
+import { getItemSliceAction } from '../../../store/getItem';
 import { useParams } from 'react-router-dom';
-import { loadingSliceAction } from '../store/loading';
-import ReviewCard from './ReviewCard';
+import { loadingSliceAction } from '../../../store/loading';
+import ReviewCard from '../../ReviewCard';
 import ListingCardBtn from './ListingCardBtn';
-import Loader from './Loader';
+import Loader from '../../Loader';
 
 export default function Show() {
   const dispatch =useDispatch();

@@ -4,12 +4,13 @@ import dotenv from "dotenv"
 dotenv.config();
 
 // check seller authenticity
-export const auth = (req,res,next)=>{
+export const isAuth = (req,res,next)=>{
   
   try{
-    const authHeader = req.headers['authorization'];
-    const token = authHeader.split(' ')[1]; // Extract the token
-    // console.log(token);
+    const token = req.cookies?.token
+    || req?.body?.token
+    || req.header('authorisation').replace('Bearer ',"");
+
   //  let token = req.headers.token;
   
     if (!token){
@@ -53,6 +54,52 @@ export const isSeller = (req,res,next)=>{
     let payload = req.user;
     
     if(payload.role!=='seller'){
+      return res.status(401).json({
+        success:false,
+        message:'First register as a Seller in the platform'
+      })
+    }
+    return next();
+
+  }catch(error){
+    console.log(err.message)
+    res.status(500).json({
+      success:false,
+      message:'Somethin Went Wrong'
+    })
+  }
+}
+
+// check user is seller or NOT
+export const isBuyer= (req,res,next)=>{
+  
+  try{
+    let payload = req.user;
+    console.log(payload)
+    if(payload.role!=='Buyer'){
+      return res.status(401).json({
+        success:false,
+        message:'First register as a  in the platform'
+      })
+    }
+    return next();
+
+  }catch(error){
+    console.log(err.message)
+    res.status(500).json({
+      success:false,
+      message:'Somethin Went Wrong'
+    })
+  }
+}
+
+// check user is seller or NOT
+export const isAdmin = (req,res,next)=>{
+  
+  try{
+    let payload = req.user;
+    
+    if(payload.role!=='Admin'){
       return res.status(401).json({
         success:false,
         message:'First register as a Seller in the platform'

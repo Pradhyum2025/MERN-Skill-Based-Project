@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import ListingCard from './ListingCard'
 import { useDispatch, useSelector} from 'react-redux'
-import { listinSlicegAction } from '../store/listings'
+import { listinSlicegAction } from '../../../store/listings'
 import { Toaster } from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
-import { bagSliceAction } from '../store/Bag'
+import ListingCard from './ListingCard'
 
-export default function Listing() {
+export default function ListingPage() {
 
   localStorage.removeItem('product');
   const dispatch = useDispatch();
@@ -16,6 +14,7 @@ export default function Listing() {
   useEffect(()=>{
     let fetchListng = async()=>{
       let response =await axios.get('http://localhost:8080/listing')
+      console.log(response)
       if(response.data){
         dispatch(listinSlicegAction.getListings(response.data.data));
       }
