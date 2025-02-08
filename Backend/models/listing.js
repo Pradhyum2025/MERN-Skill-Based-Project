@@ -1,42 +1,71 @@
 import mongoose from "mongoose";
-import { User } from "./user.js";
-import connectDB from "../config/connectDB.js";
-import { Review } from "./review.js";
-
 
 const listingSchema = new mongoose.Schema({
-  image:{
-    type:String,
-    default:''
+  productName: {
+    type: String,
+    required: true,
+    trim: true
   },
-  nameWithModel:{
-    type:String
+  brand: {
+    type: String,
+    required: true,
+    trim: true
   },
-  price:{
-    type:Number
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category", // Assuming a separate Category model
+    required: true
   },
-  features:[String],
-  
-  warranty:{
-    type:String,
-    default:"6 month"
+  price: {
+    type: Number,
+    required: true,
+    min: 0
   },
-  catagory:{
-    type:String,
-    enum:['Smartphone','Smartwatch','SmartTv','VR']
+  state: {
+    type: String,
+    enum: ["New", "Used", "Refurbished"],
+    default: "New"
+  },
+  returnPolicy: {
+    type: Number,
+    required: true,
+    min: 0 // Days for return
+  },
+  images: {
+    type: [String], // Array of image URLs
+    validate: (v) => Array.isArray(v) && v.length > 0
+  },
+  description: {
+    type: [String], // Array for bullet points or multiple descriptions
+    required: true
+  },
+  productWeight: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  stock: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  discount: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 100
   },
   seller:{
+   type:mongoose.Schema.Types.ObjectId,
+   ref:'User'
+  },
+  reviews:[
+    {
       type:mongoose.Schema.Types.ObjectId,
-      ref:"User"
-    },
-    reviews:[{
-      type:mongoose.Schema.Types.ObjectId,
-      ref:"Review"
-    }],
-    createdAt:{
-      type:Date,
-      default:Date.now()
+      ref:'Review'
     }
-})
+  ]
+}, { timestamps: true });
 
-export const Listing = mongoose.model('Listing',listingSchema);
+export const Listing = mongoose.model("Listing", listingSchema);
+

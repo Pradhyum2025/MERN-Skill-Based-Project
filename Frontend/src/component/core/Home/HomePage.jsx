@@ -4,7 +4,7 @@ import HeroSection from './HeroSection'
 
 export default function HomePage() {
   return (
-    <div className='mt-20 bg-white'>
+    <div className='pt-[5rem] bg-white'>
       <OfferSlider/>
       <HeroSection/>
     </div>

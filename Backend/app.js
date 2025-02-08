@@ -3,11 +3,18 @@ import dotenv from 'dotenv'
 import connectDB from './config/connectDB.js';
 import bodyParser from 'body-parser';
 
-import listingRouter from './routes/listing.js';
+// import listingRouter from './routes/listing.js';
 import userRouter from './routes/user.js';
 import cors from 'cors';
-import reviewRouter from './routes/review.js';
+import fileUpload from "express-fileupload";
+
+
+// import reviewRouter from './routes/review.js';
 import bagRoutes from './routes/bag.js';
+import categoryRoutes from './routes/Category.js';
+import listingRouter from './routes/listing.js';
+import connectCloudinary from './config/connectCloudinary.js';
+import sellerRouter from './routes/Seller.js';
 
 //load env files
 dotenv.config();
@@ -15,19 +22,28 @@ const app = express();
 
 //parse json data from body
 app.use(cors());
-app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ limit: "50mb" })); // Increase JSON payload size
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
+app.use(fileUpload({
+  useTempFiles: true
+}));
+
+//config connectCloudinary
+connectCloudinary();
+
 
 //connect with DB
 connectDB();
 
 
 // routes
-
-// app.use('/listing/review',reviewRouter);
-// app.use('/listing',listingRouter);
 app.use('/auth', userRouter);
 app.use('/bag',bagRoutes);
+app.use('/category',categoryRoutes);
+app.use('/listing',listingRouter);
+app.use('/seller',sellerRouter);
+
 
 const PORT  = process.env.PORT || 4040;
 app.listen(PORT,()=>{

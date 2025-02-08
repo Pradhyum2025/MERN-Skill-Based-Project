@@ -17,23 +17,7 @@ export default function SellerListingCard({item}) {
   let token = localStorage.getItem('token');
 
   //delete item from listing
-  const handleDeleteItem=async(product_id)=>{
-        
-        let response = await axios.delete(`http://localhost:8080/listing/${product_id}`,{
-        headers: {
-          Authorization: `Bearer ${JSON.parse(token)}` // Include token as a Bearer token
-        }})
-          if(response.data.success){
-          console.log(response)
-          toast.success(response.data.message);
-          navigate(0);
-          
-          }else{
-            toast.error("Alredy deleted");
 
-          }
-      
-  }
   
   //edit items
   const handleEditItem=async(item)=>{

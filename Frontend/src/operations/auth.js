@@ -1,6 +1,6 @@
 import axios from "axios";
 import toast from "react-hot-toast";
-import { authSliceAction } from "../store/auth";
+import { authSliceAction } from "../store/slices/auth";
 import { fetchSliceAction } from "../store/slices/fetchSlice";
 
 
@@ -51,9 +51,12 @@ export const signIn = async (navigate,dispatch,formData) => {
 
 
 // Sign out function 
-export const signOut = (dispatch, navigate) => {
+export const signOut = (dispatch, navigate,setUserDropDown) => {
   dispatch(authSliceAction.signout())
   dispatch(fetchSliceAction.deserializeFetching());
+  if(setUserDropDown){
+    setUserDropDown(()=>false)
+  }
   navigate('/')
 }
 

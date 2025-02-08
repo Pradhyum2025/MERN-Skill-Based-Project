@@ -1,15 +1,20 @@
 import { useState, useEffect } from "react";
 import { FiSearch, FiShoppingCart, FiUser, FiGlobe, FiSun, FiMoon, FiMenu, FiX } from "react-icons/fi";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FaRegUserCircle } from "react-icons/fa";
+import { signOut } from "../../operations/auth";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [cartCount, setCartCount] = useState(3);
   const [showDropdown, setShowDropdown] = useState("");
+  const [userDropdown, setUserDropdown] = useState(false);
   const navigate = useNavigate();
-  const bag= useSelector(store=>store.bag);
+  const dispatch = useDispatch();
+  const bag = useSelector(store => store.bag);
+  const currUser = useSelector(store => store.auth);
+
 
   const categories = [
     { name: "Smartphones", items: ["iPhone", "Samsung", "Google Pixel"] },
@@ -37,10 +42,17 @@ const Navbar = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  
-  const HandleNavigateLogin=()=>{
-   navigate('/');
-   return document.getElementById('my_modal_3').showModal();
+
+  const currPath = useLocation().pathname;
+  const handleNavigateLogin = () => {
+    if (currPath === '/signup') {
+      navigate('/');
+    }
+    return document.getElementById('my_modal_3').showModal();
+  }
+
+  const handleSignOut = () => {
+    return signOut(dispatch, navigate, setUserDropdown);
   }
 
   return (
@@ -49,7 +61,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo Section */}
           <div className="flex-shrink-0 flex items-center btn">
-            E-commerce    
+            E-commerce
           </div>
 
           {/* Desktop Navigation */}
@@ -108,28 +120,103 @@ const Navbar = () => {
 
             <div className="flex items-center space-x-4">
 
-              <div className="">
+              <div className="relative group"
+                onMouseEnter={() => setUserDropdown(() => true)}
+                onMouseLeave={() => setUserDropdown(() => false)}
+              >
                 <FiUser className="h-6 w-6 cursor-pointer" />
-                <div className="w-[100px] absolute bg-gray-700 rounded text-sm text-white font-[500] top-[3.3rem] right-[.3rem] py-3">
-                  <ul>
-                    <li  className="pl-3 pr-[2rem] py-1  cursor-pointer hover:bg-gray-600">
-                      <Link to={'/signup'}>
-                      SignUp
-                      </Link>
-                      </li>
-                    <li className="pl-3 pr-[2rem] py-1  cursor-pointer hover:bg-gray-500"
-                    onClick={HandleNavigateLogin}
-                    >
-                      Login
-                      </li>
-                    <li className="pl-3 pr-[2rem] py-1 cursor-pointer hover:bg-gray-500">Help</li>
-                  </ul>
-                </div>
+
+
+                {userDropdown ?
+                  <>
+                    {(currUser?.email) ? (
+                      <div className="absolute top-full  right-[-70px] w-[8.2rem] bg-white  shadow-lg rounded-md py-2 mt-0">
+                        {currUser.accounttype === 'Buyer'
+                          &&
+                          <>
+                            <Link
+                              to={'/profile'}
+                              className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                            >
+                              Profile
+                            </Link>
+                            <Link
+                              to={'/my-order'}
+                              className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                            >
+                              My Order
+                            </Link>
+                            <Link
+                              to={'/wishlist'}
+                              className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                            >
+                              Wishlist
+                            </Link>
+                            <Link
+                              to={'/become-a-seller'}
+                              className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                            >
+                              Become a seller
+                            </Link>
+                          </>
+                        }
+                        { currUser.accounttype !== 'Buyer'
+                          &&
+                          <>
+                           <Link
+                          to={'/dashbord'}
+                          className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                        >
+                          Dashbord
+                        </Link>
+                          </>
+                          }
+                        <Link
+                          to={'/dashbord'}
+                          className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                        >
+                          Settings
+                        </Link>
+
+                        <p
+                          onClick={handleSignOut}
+                          className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                        >
+                          Logout
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="absolute top-full  right-[-70px] w-[8.2rem] bg-white  shadow-lg rounded-md py-2 mt-0">
+                        <Link
+                          to={'/signup'}
+                          className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 "
+                        >
+                          Signup
+                        </Link>
+
+                        <p
+                          onClick={handleNavigateLogin}
+                          className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                        >
+                          Login
+                        </p>
+
+                        <p
+                          className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                        >
+                          Help
+                        </p>
+                      </div>
+                    )}
+                  </> :
+                  null
+                }
+
               </div>
 
               <div className="relative">
                 <Link to={'/bag'}>
-                <FiShoppingCart className="h-6 w-6 cursor-pointer" />
+                  <FiShoppingCart className="h-6 w-6 cursor-pointer" />
                   <span className="absolute -top-2 -right-2 bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                     {bag?.length || 0}
                   </span>

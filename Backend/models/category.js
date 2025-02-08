@@ -12,7 +12,7 @@ const categorySchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    items: [
+    listingItems: [
       {
        type:mongoose.Schema.Types.ObjectId,
        ref:'Listing'

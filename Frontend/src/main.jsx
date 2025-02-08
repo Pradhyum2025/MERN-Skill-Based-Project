@@ -9,6 +9,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomePage from './component/core/Home/HomePage.jsx'
 import { BagPage } from './component/core/BagPage/BagPage.jsx'
 import Signup from '../src/component/core/Auth/Signup.jsx'
+import DashBoardRoute from './DashBoardRoute.jsx'
+import CategoryCreation from './component/core/category/CategoryCreation.jsx'
+import Categories from './component/core/category/Categories.jsx'
+import ListingCreation from './component/core/Listings/Seller/ListingCreation.jsx'
+import { MyListing } from './component/core/Listings/Seller/MyListings.jsx'
+import ListingDetails from './component/core/Listings/ListingDetails.jsx'
 
 const router = createBrowserRouter([
     {
@@ -21,6 +27,18 @@ const router = createBrowserRouter([
 
       ]
     },
+    {
+      path: '/dashbord',
+      element: <DashBoardRoute />,
+      children:[
+        {path:'/dashbord/',element: <MyListing/>} ,
+        {path:'/dashbord/createCategory',element: <CategoryCreation/>},
+        {path:'/dashbord/categories',element: <Categories/>} ,
+        {path:'/dashbord/create-listing',element: <ListingCreation/>} ,
+        {path:'/dashbord/show/:listingId',element: <ListingDetails/>} 
+        
+      ]
+    }
   
   ])
 

@@ -53,7 +53,7 @@ export const isSeller = (req,res,next)=>{
   try{
     let payload = req.user;
     
-    if(payload.role!=='seller'){
+    if(payload.role!=='Seller'){
       return res.status(401).json({
         success:false,
         message:'First register as a Seller in the platform'

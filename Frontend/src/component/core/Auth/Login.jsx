@@ -3,9 +3,8 @@ import { RxCross2 } from "react-icons/rx";
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux';
-import { authSliceAction } from '../../../store/auth';
 import { signIn } from '../../../operations/auth';
-authSliceAction
+
 
 export default function Login() {
 
