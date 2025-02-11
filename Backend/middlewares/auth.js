@@ -56,7 +56,7 @@ export const isSeller = (req,res,next)=>{
     if(payload.role!=='Seller'){
       return res.status(401).json({
         success:false,
-        message:'First register as a Seller in the platform'
+        message:'Protected route for sellers'
       })
     }
     return next();
@@ -75,11 +75,11 @@ export const isBuyer= (req,res,next)=>{
   
   try{
     let payload = req.user;
-    console.log(payload)
+ 
     if(payload.role!=='Buyer'){
       return res.status(401).json({
         success:false,
-        message:'First register as a  in the platform'
+        message:'Protected route for buyers'
       })
     }
     return next();
@@ -102,7 +102,7 @@ export const isAdmin = (req,res,next)=>{
     if(payload.role!=='Admin'){
       return res.status(401).json({
         success:false,
-        message:'First register as a Seller in the platform'
+        message:'Protected route for admins'
       })
     }
     return next();

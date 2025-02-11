@@ -1,39 +1,24 @@
 import mongoose from 'mongoose';
 
+const sellerDetailSchema = new mongoose.Schema({
 
-const sellerDetailsSchema = new mongoose.Schema({
-  store_name: {
+  companyName: {
     type: String,
     required: true,
+    trim:true
   },
-  store_description: {
-    type: String,
-    required: false,
-  },
-  store_address: {
+  about: {
     type: String,
     required: true,
+    trim:true
   },
-  state:{
-    type:String,
-    require:true
+  contact:{
+    Type:[Number],
   },
-  city:{
-    type:String,
-    require:true
-  },
-  postalCode:{
-    type:Number,
-    require:true
-  },
-  contact_number: {
-    type: Number,
-    required: true,
-  },
-  verified_status: {
-    type: Boolean,
-    default: false,
-  },
+  companyAddress:[ {
+    type: mongoose.Schema.Types.ObjectId,
+    ref:'Address'
+  }]
 });
 
-export const SellerDetails = mongoose.model('SellerDetails',sellerDetailsSchema);
+export const SellerDetail = mongoose.model('SellerDetail',sellerDetailSchema);

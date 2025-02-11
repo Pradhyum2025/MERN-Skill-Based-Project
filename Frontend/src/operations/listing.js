@@ -127,3 +127,37 @@ export const updateListing = async (dispatch, navigate,listingId, formData, toke
     );
   }
 }
+
+export const getFilteredListing = async(dispatch,categoryId)=>{
+
+  try {
+    const res = await axios.get(`http://localhost:8080/listing/filter/${categoryId}`,{
+    });
+    if (res.data && res.data.success) {
+      console.log("GET Filter Listing Response --->>>", res)
+      dispatch(listinSlicegAction.SetListingData(res.data.filteredListings));
+    }
+  } catch (error) {
+    console.log('GET Filter listing error : ', error);
+    throw new Error(
+      error.response?.data?.message || error.message || "An unknown error occurred."
+    );
+  }
+}
+
+export const getAllListings = async(dispatch)=>{
+  try {
+    const res = await axios.get(`http://localhost:8080/listing`,{
+    });
+
+    if (res.data && res.data.success) {
+      console.log("Get All Listing Response --->>>", res)
+      dispatch(listinSlicegAction.SetListingData(res.data.allListings));
+    }
+  } catch (error) {
+    console.log('Get all listing error : ', error);
+    throw new Error(
+      error.response?.data?.message || error.message || "An unknown error occurred."
+    );
+  }
+}

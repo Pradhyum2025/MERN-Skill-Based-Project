@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { MyListingCard } from "./MyListingCard";
-import { getMyListings } from "../../../../operations/listing";
+import { getFilteredListing } from "../../../../operations/listing";
 import { HiCurrencyRupee } from "react-icons/hi";
-import DeleteModal from "./DeleteModal";
+import { FilteredListingCard } from "./FilteredListingCard";
 
-export const MyListing = () => {
+export const FilteredListing = ({categoryId}) => {
   const currUser = useSelector(store => store.auth)
   const dispatch = useDispatch();
-  const [listingDetails ,setListingDetails] = useState({
-    productName:'',
-    _id:''
-  });
 
   useEffect(() => {
-    if (currUser?.accountType === 'Seller' && currUser.token) {
-      getMyListings(dispatch, currUser.token)
+    if (currUser?.accountType === 'Admin') {
+      getFilteredListing(dispatch,categoryId)
     } else {
       return;
     }
@@ -24,16 +19,10 @@ export const MyListing = () => {
   const myListings = useSelector(store => store.listings);
 
   return (
-
-    <div className="w-full min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-10">
-      <div className="max-w-4xl mx-auto">
-
-        <h1 className="w-full text-xl font-[800] text-blue-600 mb-8 text-center md:text-left">Your Listing Deatils
-        </h1>
-
+    <>
         {myListings?.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-xl">Your Listing is empty</p>
+          <div className="text-center py-5">
+            <p className="text-gray-500  text-[1  rem] font-[700] text-xl">There is no listing </p>
           </div>
         ) : (
           <div
@@ -43,17 +32,6 @@ export const MyListing = () => {
               {/* Table head */}
               <thead class="bg-gray-100 whitespace-nowrap">
                 <tr>
-                  <th class="pl-4 w-8">
-                    <input id="checkbox" type="checkbox" class="hidden peer" />
-                    <label for="checkbox"
-                      class="relative flex items-center justify-center p-0.5 peer-checked:before:hidden before:block before:absolute before:w-full before:h-full before:bg-white w-4 h-4 cursor-pointer bg-blue-500 border border-gray-400 rounded overflow-hidden">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-full fill-white" viewBox="0 0 520 520">
-                        <path
-                          d="M79.423 240.755a47.529 47.529 0 0 0-36.737 77.522l120.73 147.894a43.136 43.136 0 0 0 36.066 16.009c14.654-.787 27.884-8.626 36.319-21.515L486.588 56.773a6.13 6.13 0 0 1 .128-.2c2.353-3.613 1.59-10.773-3.267-15.271a13.321 13.321 0 0 0-19.362 1.343q-.135.166-.278.327L210.887 328.736a10.961 10.961 0 0 1-15.585.843l-83.94-76.386a47.319 47.319 0 0 0-31.939-12.438z"
-                          data-name="7-Check" data-original="#000000" />
-                      </svg>
-                    </label>
-                  </th>
                   <th class="p-4 text-left text-sm font-semibold text-black">
                     Product
                   </th>
@@ -70,7 +48,7 @@ export const MyListing = () => {
                     Rating
                   </th>
                   <th class="p-4 text-left text-sm font-semibold text-black">
-                    Action
+                    Seller
                   </th>
                 </tr>
               </thead>
@@ -78,7 +56,7 @@ export const MyListing = () => {
               <tbody class="whitespace-nowrap divide-y divide-gray-200">
                 {/* Table rows */}
               {myListings && myListings.map(listing=>{
-                return <MyListingCard listing={listing} setListingDetails={setListingDetails}/>
+                return <FilteredListingCard listing={listing}/>
               })}
               </tbody>
 
@@ -128,12 +106,9 @@ export const MyListing = () => {
               </div>
             </div>
 
-            <DeleteModal listingDetails={listingDetails}/>
           </div>
         )}
-      </div>
-    </div>
-
+    </>
   );
 };
 

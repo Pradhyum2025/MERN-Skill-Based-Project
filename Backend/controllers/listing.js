@@ -1,5 +1,5 @@
 import {Listing} from "../models/listing.js";
-
+import Category from "../models/category.js";
 
 //get listing data 
 export const getAllListings= async(req,res)=>{
@@ -9,7 +9,7 @@ export const getAllListings= async(req,res)=>{
     res.status(200).json({
       success:true,
       message:'fetch data Successfully!',
-      data:allListings
+      allListings
     })
   }catch(error){
     // console.log(error.message)
@@ -46,3 +46,43 @@ export const showListing = async(req,res)=>{
   }
 }
 
+
+//getFiltered courses handler
+export const getFilteredListing = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const currCategory = await Category.findById(categoryId);
+
+    if (!currCategory) {
+      return res.status(400).json({
+        success: false,
+        message: 'Category not found',
+      })
+    }
+
+    if (currCategory?.listingItems?.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: 'There are no course available for this category',
+        filteredListings :[]
+      })
+    }
+    
+
+    const filteredListings = await Listing.find({ _id: { $in: currCategory.listingItems }}).populate('seller');
+    
+    return res.status(200).json({
+      success: true,
+      message: 'Category courses fetched suceesfully!',
+      filteredListings
+    })
+
+
+  } catch (error) {
+    console.log('Error to fetch filtered lisitngs:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch all courses! Please try again'
+    })
+  }
+}

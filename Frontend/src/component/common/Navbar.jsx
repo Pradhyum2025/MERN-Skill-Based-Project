@@ -13,6 +13,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const bag = useSelector(store => store.bag);
+
   const currUser = useSelector(store => store.auth);
 
 
@@ -60,9 +61,11 @@ const Navbar = () => {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo Section */}
-          <div className="flex-shrink-0 flex items-center btn">
-            E-commerce
-          </div>
+          <Link to={'/'}>
+            <div className="flex-shrink-0 flex items-center btn">
+              E-commerce
+            </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -131,7 +134,7 @@ const Navbar = () => {
                   <>
                     {(currUser?.email) ? (
                       <div className="absolute top-full  right-[-70px] w-[8.2rem] bg-white  shadow-lg rounded-md py-2 mt-0">
-                        {currUser.accounttype === 'Buyer'
+                        {currUser.accountType === 'Buyer'
                           &&
                           <>
                             <Link
@@ -153,24 +156,25 @@ const Navbar = () => {
                               Wishlist
                             </Link>
                             <Link
-                              to={'/become-a-seller'}
+                              to={'/become-seller'}
                               className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
                             >
                               Become a seller
                             </Link>
                           </>
                         }
-                        { currUser.accounttype !== 'Buyer'
+                        {(currUser.accountType === 'Admin' || currUser.accountType === 'Seller')
                           &&
                           <>
-                           <Link
-                          to={'/dashbord'}
-                          className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
-                        >
-                          Dashbord
-                        </Link>
+                            <Link
+                              to={'/dashbord'}
+                              className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                            >
+                              Dashbord
+                            </Link>
+
                           </>
-                          }
+                        }
                         <Link
                           to={'/dashbord'}
                           className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"

@@ -1,6 +1,6 @@
 import express from 'express'
-import { login, signup } from '../controllers/user.js';
-import { isAuth, isSeller } from '../middlewares/auth.js';
+import { becomeSeller, login, signup } from '../controllers/user.js';
+import { isAuth, isBuyer, isSeller } from '../middlewares/auth.js';
 
 const userRouter = express.Router();
 
@@ -22,6 +22,6 @@ userRouter.post('/login',login);
 // userRouter.delete('/bag/:product_id',auth,removeFrombag)
 
 //become a seller
-// userRouter.post('/seller',isAuth,becomeASeller);
+userRouter.post('/seller',isAuth,isBuyer,becomeSeller);
 
 export default userRouter;

@@ -36,7 +36,7 @@ export default function ListingDetails() {
     }
 
   //Set preview image
-  const [mainImage, setMainImage] = useState(listing?.images[0]);
+  const [mainImage, setMainImage] = useState(null);
 
   if (!listing) {
     return (
@@ -64,7 +64,7 @@ export default function ListingDetails() {
 
                   {/* Main image for show up */}
                   <div class="bg-white shadow rounded  overflow-x-hidden">
-                    <img src={mainImage ? mainImage : ''} alt="Product"
+                    <img src={mainImage ? mainImage : listing?.images[0]} alt="Product"
                       class="w-full  aspect-[11/8] object-cover object-top" />
                   </div>
                   {/* Other row images */}

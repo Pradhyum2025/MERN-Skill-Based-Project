@@ -1,147 +1,113 @@
 [
-  {
-      "image": "https://rukminim2.flixcart.com/image/416/416/xif0q/smartwatch/j/h/a/-original-imagtps83tkwf3jq.jpeg?q=70&crop=false",
-      "nameWithModel": "Smartphone X1",
-      "price": 699.99,
-      "features": ["6.5 inch Display", "128GB Storage", "12MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image": "https://rukminim2.flixcart.com/image/416/416/ktketu80/mobile/t/r/6/iphone-13-mlpf3hn-a-apple-original-imag6vzz4ekzra9f.jpeg?q=70&crop=false",
-      "nameWithModel": "Smartphone X2",
-      "price": 799.99,
-      "features": ["6.7 inch Display", "256GB Storage", "48MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image": "https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/g/p/s/t3-lite-5g-v2356-vivo-original-imah27wmhnm4yyfr.jpeg?q=70&crop=false",
-      "nameWithModel": "Smartphone Y1",
-      "price": 499.99,
-      "features": ["6.4 inch Display", "64GB Storage", "16MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image": "https://rukminim2.flixcart.com/image/832/832/xif0q/watch/1/p/b/-original-imagyxqzs4z4qgfc.jpeg?q=70&crop=false",
-      "nameWithModel": "Smartphone Z1",
+    {
+      "productName": "Samsung Galaxy S24 Ultra",
+      "description": "Flagship smartphone with a 200MP camera and Snapdragon 8 Gen 3 processor.",
+      "brand": "Samsung",
+      "category": { "$oid": "67a62b169edfdc7872e5d807" },
+      "price": 1299.99,
+      "state": "New",
+      "returnPolicy": 14,
+      "images": [
+        "https://example.com/s24-ultra-1.jpg",
+        "https://example.com/s24-ultra-2.jpg"
+      ],
+      "features": [
+        "200MP Camera",
+        "5000mAh Battery",
+        "S-Pen Included"
+      ],
+      "productWeight": 234,
+      "stock": 50,
+      "discount": 10,
+      "seller": { "$oid": "67a5099d2eb1c7aebb714296" }
+    },
+    {
+      "productName": "iPhone 15 Pro Max",
+      "description": "Latest iPhone with A17 Bionic chip and titanium build.",
+      "brand": "Apple",
+      "category": { "$oid": "67a62b169edfdc7872e5d807" },
+      "price": 1499.99,
+      "state": "New",
+      "returnPolicy": 15,
+      "images": [
+        "https://example.com/iphone15promax-1.jpg",
+        "https://example.com/iphone15promax-2.jpg"
+      ],
+      "features": [
+        "A17 Bionic Chip",
+        "Titanium Body",
+        "Always-On Display"
+      ],
+      "productWeight": 221,
+      "stock": 40,
+      "discount": 5,
+      "seller": { "$oid": "67a5099d2eb1c7aebb714296" }
+    },
+    {
+      "productName": "Google Pixel 8 Pro",
+      "description": "AI-powered smartphone with Tensor G3 chip and top-tier camera.",
+      "brand": "Google",
+      "category": { "$oid": "67a62b169edfdc7872e5d807" },
+      "price": 1099.99,
+      "state": "New",
+      "returnPolicy": 10,
+      "images": [
+        "https://example.com/pixel8pro-1.jpg",
+        "https://example.com/pixel8pro-2.jpg"
+      ],
+      "features": [
+        "Tensor G3 Processor",
+        "50MP Main Camera",
+        "Super Res Zoom"
+      ],
+      "productWeight": 213,
+      "stock": 35,
+      "discount": 8,
+      "seller": { "$oid": "67a5099d2eb1c7aebb714296" }
+    },
+    {
+      "productName": "OnePlus 12",
+      "description": "Fast and smooth smartphone with Snapdragon 8 Gen 3 and 120Hz AMOLED display.",
+      "brand": "OnePlus",
+      "category": { "$oid": "67a62b169edfdc7872e5d807" },
       "price": 899.99,
-      "features": ["6.8 inch Display", "512GB Storage", "108MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image": "https://rukminim2.flixcart.com/image/612/612/xif0q/headphone/f/y/f/-original-imahy3uqgtzmdsge.jpeg?q=70",
-      "nameWithModel": "Smartphone A1",
-      "price": 399.99,
-      "features": ["6.1 inch Display", "32GB Storage", "8MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image": "https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/t/v/o/-original-imahyfnmyxuc5bfh.jpeg?q=70&crop=false",
-      "nameWithModel": "Smartphone B1",
-      "price": 649.99,
-      "features": ["6.5 inch Display", "128GB Storage", "20MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image": "https://rukminim2.flixcart.com/image/416/416/xif0q/monitor/k/f/x/-original-imah2phfhkgxd5gu.jpeg?q=70&crop=false" ,
-      "nameWithModel": "Smartphone C1",
-      "price": 749.99,
-      "features": ["6.3 inch Display", "256GB Storage", "48MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image":"https://rukminim2.flixcart.com/image/416/416/xif0q/mobile-holder/p/d/f/stand-mobile-stand-holder-metal-built-cell-phone-stand-perfect-original-imagx6bfzzxrhtgn.jpeg?q=70&crop=false",
-      "nameWithModel": "Smartphone D1",
-      "price": 299.99,
-      "features": ["5.5 inch Display", "16GB Storage", "5MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image": "https://rukminim2.flixcart.com/image/416/416/xif0q/drone/u/l/e/50-30-1-e300-radhikatoys-original-imahyzfk9jeenjhj.jpeg?q=70&crop=false",
-      "nameWithModel": "Smartphone E1",
+      "state": "New",
+      "returnPolicy": 12,
+      "images": [
+        "https://example.com/oneplus12-1.jpg",
+        "https://example.com/oneplus12-2.jpg"
+      ],
+      "features": [
+        "120Hz AMOLED Display",
+        "Snapdragon 8 Gen 3",
+        "5000mAh Battery"
+      ],
+      "productWeight": 210,
+      "stock": 60,
+      "discount": 12,
+      "seller": { "$oid": "67a5099d2eb1c7aebb714296" }
+    },
+    {
+      "productName": "Xiaomi 14 Ultra",
+      "description": "High-end Xiaomi phone with Leica camera and Snapdragon 8 Gen 3.",
+      "brand": "Xiaomi",
+      "category": { "$oid": "67a62b169edfdc7872e5d807" },
       "price": 999.99,
-      "features": ["6.9 inch Display", "1TB Storage", "200MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image":"https://rukminim2.flixcart.com/image/416/416/xif0q/drone/d/p/t/100-30-1-ritu-enterprises-e88-drone-4k-hd-camera-1080p-360-original-imahfhyun8zd9zkq.jpeg?q=70&crop=false",
-      "nameWithModel": "Smartphone F1",
-      "price": 399.99,
-      "features": ["6.0 inch Display", "64GB Storage", "12MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/store-card-40-iphone-16-pro-202409_GEO_US?wid=800&hei=1000&fmt=jpeg&qlt=90&.v=1726165763260",
-      "nameWithModel": "Smartphone G1",
-      "price": 599.99,
-      "features": ["6.5 inch Display", "128GB Storage", "20MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/store-card-40-iphone-16-202409_GEO_US?wid=800&hei=1000&fmt=jpeg&qlt=90&.v=1725661572513",
-      "nameWithModel": "Smartphone H1",
-      "price": 499.99,
-      "features": ["6.4 inch Display", "64GB Storage", "16MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/store-card-40-airpods-max-202409_GEO_US?wid=800&hei=1000&fmt=jpeg&qlt=90&.v=1725895773753",
-      "nameWithModel": "Smartphone I1",
-      "price": 699.99,
-      "features": ["6.7 inch Display", "256GB Storage", "48MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/store-card-40-ipad-air-202405?wid=800&hei=1000&fmt=jpeg&qlt=90&.v=1713308272877",
-      "nameWithModel": "Smartphone J1",
-      "price": 799.99,
-      "features": ["6.8 inch Display", "512GB Storage", "108MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-      "image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/store-card-40-watch-s10-202409?wid=800&hei=1000&fmt=jpeg&qlt=90&.v=1724095131742",
-      "nameWithModel": "Smartphone K1",
-      "price": 899.99,
-      "features": ["6.1 inch Display", "32GB Storage", "8MP Camera"],
-      "warranty": "1 Year",
-      "catagory": "Smartphone",
-      "seller":"673841acd63bc3e485ad0378"
-  },
-  {
-    "image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/store-card-40-watch-ultra-202409_GEO_US?wid=800&hei=1000&fmt=jpeg&qlt=90&.v=1725655432734",
-    "nameWithModel": "Smartphone K1",
-    "price": 899.99,
-    "features": ["6.1 inch Display", "32GB Storage", "8MP Camera"],
-    "warranty": "1 Year",
-    "catagory": "Smartphone",
-    "seller":"673841acd63bc3e485ad0378"
-}
+      "state": "New",
+      "returnPolicy": 14,
+      "images": [
+        "https://example.com/xiaomi14ultra-1.jpg",
+        "https://example.com/xiaomi14ultra-2.jpg"
+      ],
+      "features": [
+        "Leica Quad Camera",
+        "5000mAh Battery",
+        "Snapdragon 8 Gen 3"
+      ],
+      "productWeight": 219,
+      "stock": 55,
+      "discount": 10,
+      "seller": { "$oid": "67a5099d2eb1c7aebb714296" }
+    }
+  ]
   
-]

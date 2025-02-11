@@ -50,6 +50,33 @@ export const signIn = async (navigate,dispatch,formData) => {
 }
 
 
+// Login / Signin function handler
+export const becomeSeller = async (navigate,dispatch,formData,token) => {
+  try {
+    dispatch(fetchSliceAction.serializeFetching());
+    const res = await axios.post('http://localhost:8080/auth/seller', formData,{
+      headers:{
+        'Authorisation':`Bearer ${token}`
+      }
+    });
+    dispatch(fetchSliceAction.deserializeFetching());
+
+    if (res.data && res.data.success) {
+      console.log("BECOME SELLER RESPONSE --->>>", res)
+      dispatch(authSliceAction.setUserData(res.data.currUser));
+      window.localStorage.setItem('currUser', JSON.stringify(res.data.currUser));
+      toast.success(res?.data?.message, { position: 'right-bottom', duration: 2000 });
+      navigate('/dashbord');
+
+    }
+  } catch (error) {
+    dispatch(fetchSliceAction.deserializeFetching());
+    toast.error(error?.response?.data?.message, { position: 'top-right', duration: 2000 });
+    console.log('Become seller error : ', error)
+  }
+
+}
+
 // Sign out function 
 export const signOut = (dispatch, navigate,setUserDropDown) => {
   dispatch(authSliceAction.signout())

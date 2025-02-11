@@ -3,7 +3,8 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Listing } from "../models/listing.js";
-import { SellerDetails } from "../models/sellerDetails.js";
+import { SellerDetail } from "../models/sellerDetails.js";
+import { Address } from "../models/address.js";
 
 dotenv.config();
 
@@ -287,25 +288,52 @@ export const getUser =async(req,res)=>{
 // }
 
 //become a seller
-export const becomeASeller = async(req,res)=>{
+export const becomeSeller = async(req,res)=>{
   try{
     //and save it into currUser schema
-    let {store_name,contact_number,store_description,state,city,postalCode,country,verified_status,store_address} = req.body;
-    let newSeller = new SellerDetails( {store_name,contact_number,store_description,state,city,postalCode,country,verified_status,store_address});
+    let {companyName,contact,about,state,city,postalCode,country,landMark,streetAddress} = req.body;
+  
+    if( !companyName|| !contact|| !about|| !state|| !city|| !postalCode|| !country|| !landMark|| !streetAddress){
+    
+      return res.status(400).json({
+        success:false,
+        message:'All feilds are reuire!'
+      })
+
+    }
+
+   const userId= req.user.id;
+    let newSeller = new SellerDetail( {companyName,about,contact});
+
+    const addressPayload = {
+      state,
+      city,
+      postalCode,
+      country,
+      landMark,
+      streetAddress
+    }
+
+    const currAddress = await Address.create(addressPayload);
+
+    // Push address in seller details
+    newSeller.companyAddress.unshift(currAddress._id);
+
     newSeller = await newSeller.save();
 
-    let currUser = await User.findById(req.user.id);
-    
     //save new seller info user schema
-    currUser.role='seller'; //change role
-    currUser.sellerDetails=newSeller._id;
+    let currUser = await User.findById(userId);
+    
+    currUser.accountType ='Seller'; //change role
+    currUser.sellerDetails = newSeller._id;
+
     currUser = await currUser.save(); //save user
 
     //sign JWT token again because we can change role of the current user which use for next request for authorization
     const payload = {
       id:currUser._id,
       email:currUser.email,
-      role:currUser.role
+      role:currUser.accountType
     }
     let token  = jwt.sign(payload,process.env.JWT_SECRET,{
       expiresIn:'2h'  
@@ -324,12 +352,13 @@ export const becomeASeller = async(req,res)=>{
 
     return res.cookie('token',token,options).json({
       success:true,
-      message:'Successfully created seller profile!',
-      token
+      message:'Successfully upgrade your account into seller account!',
+      token,
+      currUser
     })
     
   }catch(err){
-    console.log(err.message)
+    console.log("Seller account upgradation error",err.message)
     res.status(500).json({
       success:false,
       message:'Internal server error!'

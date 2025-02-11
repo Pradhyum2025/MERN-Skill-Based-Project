@@ -7,11 +7,12 @@ const listingSlice = createSlice({
     SetListingData:(state,action)=>{
       return[...action.payload];
     },
+
     setSingleListing:(state,action)=>{
       return [action.payload];
     },
+
     deleteListing:(state,action)=>{
-      console.log(action.payload)
       return [...state.filter(listing=>listing._id!==action.payload)]
     }
     }

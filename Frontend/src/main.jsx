@@ -16,6 +16,9 @@ import ListingCreation from './component/core/Listings/Seller/ListingCreation.js
 import { MyListing } from './component/core/Listings/Seller/MyListings.jsx'
 import ListingDetails from './component/core/Listings/ListingDetails.jsx'
 import { ListingUpdation } from './component/core/Listings/Seller/ListingUpdation.jsx'
+import AllListings from './component/core/Listings/Admin/AllListings.jsx'
+import MyProfile from './component/core/Listings/Seller/MyProfile.jsx'
+import BecomeSeller from './component/BecomeSeller.jsx'
 
 const router = createBrowserRouter([
     {
@@ -25,6 +28,7 @@ const router = createBrowserRouter([
         {path:"/",element:<HomePage/>},
         {path:'/bag',element:<BagPage/>},
         {path:'/signup',element:<Signup/>},
+        {path:'/become-seller',element:<BecomeSeller/>},
 
       ]
     },
@@ -37,7 +41,9 @@ const router = createBrowserRouter([
         {path:'/dashbord/categories',element: <Categories/>} ,
         {path:'/dashbord/create-listing',element: <ListingCreation/>} ,
         {path:'/dashbord/show/:listingId',element: <ListingDetails/>} ,
-        {path:'/dashbord/edit/:listingId',element: <ListingUpdation/>} 
+        {path:'/dashbord/edit/:listingId',element: <ListingUpdation/>},
+        {path:'/dashbord/all-listings',element: <AllListings/>},
+        {path:'/dashbord/my-profile',element: <MyProfile/>} 
         
       ]
     }
