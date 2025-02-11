@@ -6,6 +6,12 @@ const listingSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  description: {
+    type: String,
+    required: true,
+    trim: true
+  },
+
   brand: {
     type: String,
     required: true,
@@ -35,7 +41,7 @@ const listingSchema = new mongoose.Schema({
     type: [String], // Array of image URLs
     validate: (v) => Array.isArray(v) && v.length > 0
   },
-  description: {
+  features: {
     type: [String], // Array for bullet points or multiple descriptions
     required: true
   },

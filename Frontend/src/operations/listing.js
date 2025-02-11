@@ -65,12 +65,16 @@ export const deleteLisitng = async (dispatch, token, listingId,setFetching) => {
       }
     })
     setFetching(()=>false);
-    if (res.data && res.data.success) {
+    if (res.data && res.data?.success) {
       // console.log("DELETE USER LISTING RESPONSE --->>>", res)
       dispatch(listinSlicegAction.deleteListing(listingId));
+      document.getElementById('my_modal_3').close()
+      toast.success(res?.data?.message, { position: 'bottom-right', duration: 2000 });
     }
   } catch (error) {
     setFetching(()=>false)
+    document.getElementById('my_modal_3').close()
+    toast.error(error.response?.data?.message, { position: 'bottom-right', duration: 2000 });
     console.log('delete Listing error : ', error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."
@@ -84,11 +88,40 @@ export const getSingleListing = async (dispatch,listingId) => {
     let res = await axios.get(`http://localhost:8080/listing/show/${listingId}`)
 
     if (res.data && res.data.success) {
-      console.log("GET USINGLESER LISTING RESPONSE --->>>", res)
+      // console.log("GET U SINGLE LISTING RESPONSE --->>>", res)
       dispatch(listinSlicegAction.setSingleListing(res.data.listingData));
     }
   } catch (error) {
     console.log('Get Single Listing Error : ', error)
+    throw new Error(
+      error.response?.data?.message || error.message || "An unknown error occurred."
+    );
+  }
+}
+
+// Update new listing
+export const updateListing = async (dispatch, navigate,listingId, formData, token) => {
+  try {
+
+    dispatch(fetchSliceAction.serializeFetching());
+    // Send request with authorization
+    const res = await axios.patch(`http://localhost:8080/seller/${listingId}`, formData, {
+      headers: {
+        "Authorisation": `Bearer ${token}`, // Pass the user's token
+        "Content-Type": "multipart/form-data", // Required for FormData
+      },
+    });
+
+    dispatch(fetchSliceAction.deserializeFetching());
+    if (res.data && res?.data?.success) {
+      console.log("UPDATE LISING RESPONSE --->>>", res)
+      toast.success(res?.data?.message, { position: 'bottom-right', duration: 2000 });
+      navigate('/dashbord');
+    }
+  } catch (error) {
+    dispatch(fetchSliceAction.deserializeFetching());
+    toast.error(error.response?.data?.message, { position: 'bottom-right', duration: 2000 });
+    console.log(' UPDATE LISING ERROR : ', error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."
     );

@@ -2,29 +2,29 @@ import { Listing } from "../models/listing.js";
 import { User } from "../models/user.js";
 import Category from "../models/category.js";
 import { uploadMultipleImages } from '../utils/imageUploader.js'
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 //post listing data
 export const postNewListing = async (req, res) => {
 
   try {
-    let { productName, brand, category, price, state, returnPolicy, productWeight, stock, discount } = req.body;
+    let { productName, brand, description, category, price, state, returnPolicy, productWeight, stock, discount } = req.body;
 
     const userId = req.user.id;
 
-    let description = req.body?.['description[]'];
+    let features = req.body?.['features[]'];
 
     let productImages = req?.files?.['images']
-    
-    
-    if (!productName || !brand || !category || !price || !state || !returnPolicy || !description || !productWeight || !stock || !discount || !productImages) {
+
+
+    if (!productName || !brand || !category || !price || !state || !returnPolicy || !description || !productWeight || !stock || !discount || !productImages || !features) {
       return res.status(400).json({
         success: false,
         message: 'All fields are required'
       })
     }
 
-    
+
     const currCategory = await Category.findById(category);
 
     if (!currCategory) {
@@ -35,12 +35,13 @@ export const postNewListing = async (req, res) => {
     }
 
     //Upload multiple files
-    const uploadImagesSecureUrl = await uploadMultipleImages(productImages,process.env.FOLDER_NAME)
+    const uploadImagesSecureUrl = await uploadMultipleImages(productImages, process.env.FOLDER_NAME)
 
     let productPayload = new Listing({
       productName,
       brand,
       category,
+      features,
       price,
       returnPolicy,
       description,
@@ -48,7 +49,7 @@ export const postNewListing = async (req, res) => {
       stock,
       seller: userId,
       discount,
-      images:uploadImagesSecureUrl
+      images: uploadImagesSecureUrl
     })
 
 
@@ -94,33 +95,98 @@ export const postNewListing = async (req, res) => {
 export const updateListing = async (req, res) => {
   try {
 
-    //get listing detail and compare to request user with listing seller
-    let { product_id } = req.params;
+    const { listingId } = req.params;
+    const userId = req.user.id;
 
-    let currListing = await Listing.findById(product_id);
+    const currListing = await Listing.findOne({ _id: listingId, seller: userId });
 
-
-    if (currListing && currListing.seller._id.toString() === req.user.id) {
-      await Listing.updateOne({ _id: product_id }, req.body);
-
-      return res.status(200).json({
-        success: true,
-        message: 'Update successfully'
-      })
-
-    } else {
-
-      return res.status(401).json({
+    if (!currListing) {
+      return res.status(400).json({
         success: false,
-        message: 'Unautherized request'
+        message: 'Listing not found'
       })
     }
 
+    let { productName, brand, description, category, price, state, returnPolicy, productWeight, stock, discount } = req.body;
+
+
+    let features = req.body?.['features[]'];
+
+    let productImages = req?.files?.['images']
+    
+
+    if (!productName || !brand || !category || !price || !state || !returnPolicy || !description || !productWeight || !stock || !discount  || !features) {
+      return res.status(400).json({
+        success: false,
+        message: 'All fields are required'
+      })
+    }
+
+    const currCategory = await Category.findById(category);
+
+    if (!currCategory) {
+      return res.status(400).json({
+        success: false,
+        message: 'Category not found!'
+      })
+    }
+
+
+    let productPayload = {
+      productName,
+      brand,
+      features,
+      price,
+      returnPolicy,
+      description,
+      productWeight,
+      stock,
+      discount,
+    }
+
+    // If category is diff from curr category
+    const prevCategory = currListing.category;
+
+    if (!currCategory._id.equals(prevCategory)) {
+      //romove product from previous category
+      await Category.findByIdAndUpdate({ _id: prevCategory }, {
+        $pull: {
+          listingItems: currListing._id
+        }
+      });
+      
+      // Push in curr category
+      await Category.findByIdAndUpdate({ _id: currCategory._id }, {
+        $push: {
+          listingItems:{
+            $each:[currListing._id]
+          } 
+        }
+      })
+      //
+      productPayload.category = currCategory._id;
+    }
+
+    if (productImages) {
+      //Upload multiple files
+      const uploadImagesSecureUrl = await uploadMultipleImages(productImages, process.env.FOLDER_NAME)
+      // save image urls in Schema
+      productPayload.images = uploadImagesSecureUrl;
+    }
+    
+    let response = await Listing.findByIdAndUpdate(listingId ,productPayload,{new:true});
+
+    return res.status(200).json({
+      success: true,
+      message: 'Update successfully'
+    })
+
+
   } catch (error) {
-    console.log("ERROR :", error.message)
+    console.log("ERROR :", error?.message)
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error?.message
     })
   }
 }

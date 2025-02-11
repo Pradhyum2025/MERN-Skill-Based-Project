@@ -15,6 +15,7 @@ import Categories from './component/core/category/Categories.jsx'
 import ListingCreation from './component/core/Listings/Seller/ListingCreation.jsx'
 import { MyListing } from './component/core/Listings/Seller/MyListings.jsx'
 import ListingDetails from './component/core/Listings/ListingDetails.jsx'
+import { ListingUpdation } from './component/core/Listings/Seller/ListingUpdation.jsx'
 
 const router = createBrowserRouter([
     {
@@ -35,7 +36,8 @@ const router = createBrowserRouter([
         {path:'/dashbord/createCategory',element: <CategoryCreation/>},
         {path:'/dashbord/categories',element: <Categories/>} ,
         {path:'/dashbord/create-listing',element: <ListingCreation/>} ,
-        {path:'/dashbord/show/:listingId',element: <ListingDetails/>} 
+        {path:'/dashbord/show/:listingId',element: <ListingDetails/>} ,
+        {path:'/dashbord/edit/:listingId',element: <ListingUpdation/>} 
         
       ]
     }
