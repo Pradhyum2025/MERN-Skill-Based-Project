@@ -1,5 +1,6 @@
 import React from 'react'
 import { FaArrowRightLong } from "react-icons/fa6";
+import { Link } from 'react-router-dom';
 export default function HeroSection() {
   const data = [
     {
@@ -44,6 +45,8 @@ export default function HeroSection() {
       imageURL:'https://rukminim2.flixcart.com/image/612/612/xif0q/cpu/x/b/k/2-8-intel-core-i5-7400-lga1151-7th-generation-core-desktop-16gb-original-imahyg9cdmgdxakt.jpeg?q=70'
     },
   ]
+
+  const cateory =['67a62b169edfdc7872e5d807']
   return (
     <>
       <div className='flex flex-col gap-y-5 px-2 py-5'>
@@ -52,8 +55,12 @@ export default function HeroSection() {
 
         {data.map(entry=>{
           return  <div className='rounded shadow-2xl hover:shadow-2xl flex justify-start items-center flex-col p-1'>
-
-          <h1 className='w-full  flex  items-center  gap-x-2 text-lg text-blue-600 font-bold py-2 px-2  hover:underline cursor-pointer'><span>{entry.type}</span> <FaArrowRightLong /></h1>
+          <Link to={`/listings/${cateory[0]}`}>
+          <h1 className='w-full  flex  items-center justify-center  gap-x-2 text-lg text-blue-600 font-bold py-2 px-2  hover:underline cursor-pointer group'>
+            <span>{entry.type}</span> 
+            <FaArrowRightLong className='group-hover:translate-x-[2px]'/>
+            </h1>
+          </Link>
 
           <div className='flex justify-center items-center w-[15rem] '>
 

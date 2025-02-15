@@ -6,14 +6,14 @@ export const getAllListings= async(req,res)=>{
   
   try{
     const allListings = await Listing.find({});
-    res.status(200).json({
+    return res.status(200).json({
       success:true,
       message:'fetch data Successfully!',
       allListings
     })
   }catch(error){
     // console.log(error.message)
-    res.status(500).json({
+    return res.status(500).json({
       success:false,
       message:'Internal Server Error!'
     })

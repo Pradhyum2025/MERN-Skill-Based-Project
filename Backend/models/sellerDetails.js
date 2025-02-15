@@ -5,20 +5,17 @@ const sellerDetailSchema = new mongoose.Schema({
   companyName: {
     type: String,
     required: true,
-    trim:true
+    trim: true
   },
   about: {
     type: String,
     required: true,
-    trim:true
+    trim: true
   },
-  contact:{
-    Type:[Number],
+  contact: {
+   type:[Number]
   },
-  companyAddress:[ {
-    type: mongoose.Schema.Types.ObjectId,
-    ref:'Address'
-  }]
+  
 });
 
-export const SellerDetail = mongoose.model('SellerDetail',sellerDetailSchema);
+export const SellerDetail = mongoose.model('SellerDetail', sellerDetailSchema);

@@ -267,3 +267,40 @@ export const getMyListing = async (req, res) => {
     })
   }
 }
+
+//Get my listings
+export const getAllSellers = async (req, res) => {
+  try {
+
+    const userId = req.user.id;
+
+    const currUser = await User.findOne({_id:userId,accountType:'Admin'});
+
+    if (!currUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+
+    const allSellers = await User.find({accountType:'Seller'},{
+      firstName:true,
+      lastName:true,
+      contact:true,
+      email:true
+    }).populate('sellerDetails');
+
+    return res.status(200).json({
+      success: true,
+      message: 'Seller fetch suceess',
+      allSellers
+    })
+
+  } catch (error) {
+    console.log('Get all seller error : ', error?.message)
+    return res.status(500).json({
+      success: false,
+      message: 'Internal sever error'
+    })
+  }
+}

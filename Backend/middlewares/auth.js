@@ -115,3 +115,26 @@ export const isAdmin = (req,res,next)=>{
     })
   }
 }
+
+// check user is seller or NOT
+export const isMultiRoll = (req,res,next)=>{
+  
+  try{
+    let payload = req.user;
+    
+    if(payload.role!=='Seller' && payload.role!=='Buyer'){
+      return res.status(401).json({
+        success:false,
+        message:'Protected route for sellers'
+      })
+    }
+    return next();
+
+  }catch(error){
+    console.log(err.message)
+    res.status(500).json({
+      success:false,
+      message:'Somethin Went Wrong'
+    })
+  }
+}

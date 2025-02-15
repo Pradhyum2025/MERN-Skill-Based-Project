@@ -2,7 +2,6 @@ import { User } from "../models/user.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import { Listing } from "../models/listing.js";
 import { SellerDetail } from "../models/sellerDetails.js";
 import { Address } from "../models/address.js";
 
@@ -12,7 +11,7 @@ dotenv.config();
 //signup --------------------- >>>>>>>>>>>>
 export const signup = async(req,res)=>{
   try{
-    const {firstname,lastName,email,contact,password} = req.body;
+    const {firstName,lastName,email,contact,password} = req.body;
 
     let currUser = await User.findOne({email});
     
@@ -36,7 +35,7 @@ export const signup = async(req,res)=>{
     }
     //create newUser 
     let userPayload = new User({
-      firstname,
+      firstName,
       lastName,
       email,
       password:hashPassword,
@@ -175,123 +174,11 @@ export const getUser =async(req,res)=>{
 }
 
 
-// //get bag
-// export const getBag =async(req,res)=>{
-//   try{
-//     let currUser = await User.findById(req.user.id).populate('bag');
-
-//     const bag = currUser.bag;
-//     res.status(200).json({
-//       success:true,
-//       message:"Welocome on bag!",
-//       bag
-//     })
-//   }catch(err){
-//     console.log(err.message)
-//     res.state(500).json({
-//       success:false,
-//       message:"Internal server error",
-//       bag
-//     })
-//   }
-// }
-// //add to bag ----------------->>>
-// export const addToBag =  async(req,res)=>{
-
-//   try{
-//     let {product_id} = req.params;
-//     let currListing = await Listing.findById(product_id);
-    
-//     //check listing exist or NOT
-//     if(currListing){
-      
-//       let currUser = await User.findById(req.user.id);
-      
-//       //check listiing alredy exist in user bag
-//       for(let list of currUser.bag){
-        
-//         if(list._id.equals(currListing._id)){
-//           return res.status(201).json({
-//             success:false,
-//             message:'Item is aready exist in bag',
-//           }) 
-//         }
-//       }
-//       currUser.bag.unshift(currListing._id);
-//       currUser = await currUser.save();
-      
-//       return res.status(200).json({
-//         success:true,
-//         message:'Successfully add to bag!',
-//         currListing
-//       })
-      
-//     }else{
-//       return res.status(400).json({
-//         success:true,
-//         message:'cannot add to bag!'
-//       })
-//     }
-
-//   }catch(error){
-//     console.log(error.message)
-//     return res.status(500).json({
-//       success:false,
-//       message:'Internal server error!'
-//     })
-//   }
-// }
-
-// //remove from bag
-// export const removeFrombag =  async(req,res)=>{
-//   try{
-//     let {product_id} = req.params;
-
-//     let currListing = await Listing.findById
-//     (product_id);
-
-//     //check listing exist or NOT
-//     if(currListing){
-
-//       let currUser = await User.findById(req.user.id);
-
-//       //check listiing alredy exist in user bag
-//       for(let list of currUser.bag){
-
-//         if(list._id.equals(currListing._id)){
-
-//           currUser.bag = currUser.bag.filter(items=>!items._id.equals(currListing._id));
-
-//           currUser = await currUser.save();
-
-//           return res.status(200).json({
-//             success:true,
-//             message:'Successfully remove from bag!'
-//           })
-//         }
-//       }
-
-//       return res.status(400).json({
-//             success:false,
-//             message:'listing not exist in bag!',
-//       }) 
-
-//     }
-    
-//   }catch(error){
-//     console.log(error.message)
-//     return res.status(500).json({
-//       success:false,
-//       message:'Internal server error!'
-//     })
-//   }
-// }
-
 //become a seller
 export const becomeSeller = async(req,res)=>{
   try{
     //and save it into currUser schema
-    let {companyName,contact,about,state,city,postalCode,country,landMark,streetAddress} = req.body;
+    let {companyName,contact,alternateContact,about,state,city,postalCode,country,landMark,streetAddress} = req.body;
   
     if( !companyName|| !contact|| !about|| !state|| !city|| !postalCode|| !country|| !landMark|| !streetAddress){
     
@@ -302,10 +189,19 @@ export const becomeSeller = async(req,res)=>{
 
     }
 
-   const userId= req.user.id;
-    let newSeller = new SellerDetail( {companyName,about,contact});
+   const currUser = await User.findById(req.user.id,{firstName:true,lastName:true})
+   
+   let contactList = [contact,alternateContact];
+
+    let newSeller = new SellerDetail( {companyName,about,contact:contactList});
+
+   
+    newSeller = await newSeller.save();
 
     const addressPayload = {
+      firstName:currUser.firstName,
+      lastName:currUser.lastName,
+      contact:contactList,
       state,
       city,
       postalCode,
@@ -316,16 +212,10 @@ export const becomeSeller = async(req,res)=>{
 
     const currAddress = await Address.create(addressPayload);
 
-    // Push address in seller details
-    newSeller.companyAddress.unshift(currAddress._id);
-
-    newSeller = await newSeller.save();
-
-    //save new seller info user schema
-    let currUser = await User.findById(userId);
     
     currUser.accountType ='Seller'; //change role
     currUser.sellerDetails = newSeller._id;
+    currUser.addresses = [currAddress._id];
 
     currUser = await currUser.save(); //save user
 
@@ -342,9 +232,7 @@ export const becomeSeller = async(req,res)=>{
     currUser = currUser.toObject();
     currUser.token = token;
     currUser.password = undefined;
-    currUser.username=undefined;
-    currUser.email=undefined;
-    
+
     let options = {
       expire:new Date(Date.now()+3*24*60*60*1000),
       httpOnly:true
@@ -359,7 +247,7 @@ export const becomeSeller = async(req,res)=>{
     
   }catch(err){
     console.log("Seller account upgradation error",err.message)
-    res.status(500).json({
+    return res.status(500).json({
       success:false,
       message:'Internal server error!'
     })

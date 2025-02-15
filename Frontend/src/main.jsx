@@ -19,6 +19,13 @@ import { ListingUpdation } from './component/core/Listings/Seller/ListingUpdatio
 import AllListings from './component/core/Listings/Admin/AllListings.jsx'
 import MyProfile from './component/core/Listings/Seller/MyProfile.jsx'
 import BecomeSeller from './component/BecomeSeller.jsx'
+import AllSeller from './component/core/User/AllSeller.jsx'
+import Listing from './component/core/Listings/ListingMainPage/Listing.jsx'
+import AddressForm from './component/core/Address/AddressForm.jsx'
+import BagCardSection from './component/core/BagPage/BagCardSection.jsx'
+import LoginStatus from './component/core/order/LoginStatus.jsx'
+import AddressStatus from './component/core/order/AddressStatus.jsx'
+import OrderSummary from './component/core/order/OrderSummary.jsx'
 
 const router = createBrowserRouter([
     {
@@ -26,10 +33,11 @@ const router = createBrowserRouter([
       element:<App/>,
       children:[
         {path:"/",element:<HomePage/>},
-        {path:'/bag',element:<BagPage/>},
         {path:'/signup',element:<Signup/>},
         {path:'/become-seller',element:<BecomeSeller/>},
-
+        {path:'/listings/:categoryId',element:<Listing/>},
+        {path:'/show/:listingId',element: <ListingDetails/>},
+        {path:'/address',element: <AddressForm/>},
       ]
     },
     {
@@ -43,8 +51,18 @@ const router = createBrowserRouter([
         {path:'/dashbord/show/:listingId',element: <ListingDetails/>} ,
         {path:'/dashbord/edit/:listingId',element: <ListingUpdation/>},
         {path:'/dashbord/all-listings',element: <AllListings/>},
-        {path:'/dashbord/my-profile',element: <MyProfile/>} 
+        {path:'/dashbord/my-profile',element: <MyProfile/>} ,
+        {path:'/dashbord/all-sellers',element: <AllSeller/>}
         
+      ]
+    },
+    {
+      path: '/bag',
+      element: <BagPage />,
+      children:[
+        {path:'/bag',element: <BagCardSection/>} , 
+        {path:'/bag/order-loginStatus',element: <AddressStatus/>} ,   
+        {path:'/bag/order-summary',element: <OrderSummary/>} ,      
       ]
     }
   

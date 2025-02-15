@@ -30,11 +30,18 @@ const userSchema = new mongoose.Schema({
   },
   sellerDetails:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"SellerDetails",
+    ref:"SellerDetail",
     required:function () {
-      return this.user_type === 'seller';
+      return this.accountType === 'Seller';
     }
   },
+  addresses:[
+    {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Address"
+    }
+  ],
+
   listing:[
     {
       type:mongoose.Schema.Types.ObjectId,
@@ -44,7 +51,7 @@ const userSchema = new mongoose.Schema({
   bag:[
     {
       type:mongoose.Schema.Types.ObjectId,
-      ref:"Listing"
+      ref:"Bag"
     }
   ]
 })

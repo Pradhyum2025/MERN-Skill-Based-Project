@@ -5,13 +5,17 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getSingleListing } from '../../../operations/listing';
 import { FaAngleLeft } from 'react-icons/fa';
 import DeleteModal from './Seller/DeleteModal';
-
+import { getMyBag } from '../../../operations/bag';
+import { BagButtons2 } from '../BagPage/BagButtons2';
+import { GoPlus } from "react-icons/go";
+import { LuMinus } from "react-icons/lu";
 
 export default function ListingDetails() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const returnPath = useLocation().state?.returnPath;
   const { listingId } = useParams()
+  const currUser = useSelector(store => store.auth);
 
   // Back to handler
   const handleBackTo = () => {
@@ -23,20 +27,28 @@ export default function ListingDetails() {
     getSingleListing(dispatch, listingId)
   }, [])
 
+  // Get my bag
+  useEffect(() => {
+    if (currUser.token && currUser.accountType === 'Buyer') {
+      getMyBag(dispatch, currUser.token);
+    }
+  }, [])
+
   // Get listing from react state
   const listingArray = useSelector(store => store.listings);
   let listing = null
   if (Array.isArray(listingArray) && listingArray.length > 0) {
     listing = listingArray[0];
   }
-  
-    //Delete to cart Handler
-    const handleDeleteListing = () => {
-      return document.getElementById('my_modal_3').showModal();
-    }
+
+  //Delete to cart Handler
+  const handleDeleteListing = () => {
+    return document.getElementById('my_modal_3').showModal();
+  }
 
   //Set preview image
   const [mainImage, setMainImage] = useState(null);
+  const myBag = useSelector(store => store.bag);
 
   if (!listing) {
     return (
@@ -45,7 +57,7 @@ export default function ListingDetails() {
   }
 
   return (
-    <div className="w-full bg-gray-50 py-5 px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-gray-50 py-5 px-0 sm:px-3 lg:px-8">
       <div className=" mx-auto">
         {/*  --------- Back to btn ---------  */}
         <button
@@ -54,34 +66,29 @@ export default function ListingDetails() {
           <FaAngleLeft className='group-hover:text-black text-lg group-hover:translate-x-[-3px] tansition delay-0 duration-500' />
           Back
         </button>
-
         <div class="p-4 mt-4 bg-gray-100">
-          <div class="lg:max-w-6xl max-w-xl mx-auto">
+          <div class="lg:max-w-7xl max-w-xl mx-auto">
             <div class="grid items-start grid-cols-1 lg:grid-cols-2 gap-8 max-lg:gap-12 max-sm:gap-8">
               {/*  ---------- Image Section  ----------  */}
-              <div class="w-full lg:sticky top-20">
-                <div class="flex flex-col gap-4">
 
-                  {/* Main image for show up */}
-                  <div class="bg-white shadow rounded  overflow-x-hidden">
+              <div class="w-full ">
+                <div class="flex flex-row gap-5 w-full">
+                  <div class="flex flex-col gap-2 w-16 max-sm:w-14 shrink-0">
+                    {listing && listing.images.map(img => {
+                      return <img
+                        onClick={() => setMainImage(img)}
+                        src={img} alt="Product1"
+                        class="aspect-[64/85] object-cover object-top w-full cursor-pointer  border-b-2 border-black" />
+                    })}
+                  </div>
+                  <div class="flex-1">
                     <img src={mainImage ? mainImage : listing?.images[0]} alt="Product"
-                      class="w-full  aspect-[11/8] object-cover object-top" />
+                      class="w-full  aspect-[548/612]  object-fill" />
                   </div>
-                  {/* Other row images */}
-                  <div class="bg-white p-2 w-full max-w-full overflow-auto">
-                    <div class="flex justify-around flex-row gap-4 shrink-0">
-                      {listing && listing.images.map(img => {
-                        return <img
-                          onClick={() => setMainImage(img)}
-                          src={img} alt="Product1"
-                          class="w-16 h-16 aspect-square object-cover object-top cursor-pointer shadow-md border-b-2 border-black rounded" />
-                      })}
-                    </div>
-                  </div>
-
                 </div>
               </div>
 
+              {/*  ---------- Details Section  ----------  */}
               <div class="w-full">
                 <div>
                   {/* ---------- Product name  ---------- */}
@@ -109,11 +116,11 @@ export default function ListingDetails() {
                     <p class="text-sm text-gray-500">50 Reviews</p>
                   </div>
 
-                 
+
                   {/*  --------- Descriptions ---------  */}
-                  <div class="mt-2">
+                  {/* <div class="mt-2">
                     <p class="text-gray-500 mt-1 text-sm">{listing?.description}</p>
-                  </div>
+                  </div> */}
 
                   {/* Prices and discount */}
                   <div class="flex items-center flex-wrap gap-5  mt-4">
@@ -122,7 +129,7 @@ export default function ListingDetails() {
                     <div class="flex py-1 px-2 bg-blue-600 font-semibold !ml-4">
                       <span class="text-white text-sm">save {listing?.discount}%</span>
                     </div>
-                    </div>
+                  </div>
 
                   <div>
                     <h4 class="text-base mt-4 text-gray-500 font-semibold">Net Wt: {listing?.productWeight} gram</h4>
@@ -132,83 +139,84 @@ export default function ListingDetails() {
                 <hr class="my-6 border-gray-300" />
 
                 <div>
-                {listing?.accountType==='Buyer'?
-                    <div class="flex gap-2 items-center border border-gray-300 bg-white px-3 py-2.5 w-max">
-                    <button type="button" class="border-none outline-none">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5" viewBox="0 0 121.805 121.804">
-                        <path
-                          d="M7.308 68.211h107.188a7.309 7.309 0 0 0 7.309-7.31 7.308 7.308 0 0 0-7.309-7.309H7.308a7.31 7.31 0 0 0 0 14.619z"
-                          data-original="#000000" />
-                      </svg>
-                    </button>
-                    <span class="text-gray-800 text-sm font-semibold px-3">1</span>
-                    <button type="button" class="border-none outline-none">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5" viewBox="0 0 512 512">
-                        <path
-                          d="M256 509.892c-19.058 0-34.5-15.442-34.5-34.5V36.608c0-19.058 15.442-34.5 34.5-34.5s34.5 15.442 34.5 34.5v438.784c0 19.058-15.442 34.5-34.5 34.5z"
-                          data-original="#000000" />
-                        <path
-                          d="M475.392 290.5H36.608c-19.058 0-34.5-15.442-34.5-34.5s15.442-34.5 34.5-34.5h438.784c19.058 0 34.5 15.442 34.5 34.5s-15.442 34.5-34.5 34.5z"
-                          data-original="#000000" />
-                      </svg>
-                    </button>
-                  </div>
-                  :<>
-                  { //Stock details
-                    listing?.stock===0?
-                    <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm ">Out of stock</span>
-                    :
+                  {currUser?.accountType === 'Buyer' ?
                     <>
-                    <span class="bg-green-200 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm ">In Stock</span>
-                    <span className='text-gray-600 font-bold'>{listing?.stock} items in stock</span>
+                      {/*  Stock */}
+                      {
+                        listing?.stock === 0 ?
+                          <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm ">Out of stock</span>
+                          :
+                          <div class="flex gap-2 items-center border border-gray-300 bg-white px-3 py-2.5 w-max">
+                            <button type="button" class="border-none outline-none">
+                              <LuMinus className='text-gray-900' />
+                            </button>
+                            <span class="text-gray-800 text-sm font-semibold px-3">1</span>
+                            <button type="button" class="border-none outline-none">
+                              <GoPlus className='text-gray-900' />
+                            </button>
+                          </div>
+                      }
+                    </>
+                    : <>
+                      { //Stock details
+                        listing?.stock === 0 ?
+                          <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm ">Out of stock</span>
+                          :
+                          <>
+                            <span class="bg-green-200 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm ">In Stock</span>
+                            <span className='text-gray-600 font-bold'>{listing?.stock} items in stock</span>
+                          </>
+                      }
                     </>
                   }
-                  </> 
-                  }
-                 
+
 
                   {/*  --------- Buttons ---------  */}
-                  {listing?.accountType==='Buyer'?
-                   <div class="mt-4 flex flex-wrap gap-4">
-                   <button type="button"
-                     class="px-4 py-3 w-[45%] border border-gray-300 bg-white hover:bg-gray-50 text-gray-800 text-sm font-semibold">Add
-                     to cart</button>
-                   <button type="button"
-                     class="px-4 py-3 w-[45%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">Buy
-                     it now</button>
-                 </div>:
-                  <div class="mt-4 flex flex-wrap gap-4">
-                  <button type="button"
-                    onClick={()=>navigate(`/dashbord/edit/${listing._id}`)}
-                    class="px-4 py-3 w-[45%] border border-gray-300 bg-white hover:bg-gray-50 text-gray-800 text-sm font-semibold">Update details
-                  </button>
-                  <button type="button"
-                   onClick={handleDeleteListing}
-                    class="px-4 py-3 w-[45%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">Delete listing
-                    </button>
-                </div>
+                  {(currUser?.accountType !== 'Seller' && currUser?.accountType !== 'Admin') ?
+                    <div class="mt-4 flex flex-wrap gap-4">
+                      <BagButtons2 listing={listing} myBag={myBag} quantity={1} />
+                      <button type="button"
+                        class="px-4 py-3 w-[45%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">Buy
+                        it now</button>
+                    </div>
+                    :
+                    <>
+                      {
+                        currUser?.accountType === 'Seller' &&
+                        <div class="mt-4 flex flex-wrap gap-4">
+                          <button type="button"
+                            onClick={() => navigate(`/dashbord/edit/${listing._id}`)}
+                            class="px-4 py-3 w-[45%] border border-gray-300 bg-white hover:bg-gray-50 text-gray-800 text-sm font-semibold">Update details
+                          </button>
+                          <button type="button"
+                            onClick={handleDeleteListing}
+                            class="px-4 py-3 w-[45%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">Delete listing
+                          </button>
+                        </div>
+                      }
+                    </>
                   }
-                 
+
 
                 </div>
 
                 <hr class="my-6 border-gray-300" />
 
                 {/*  ---------- Delevery location ----------   */}
-                {listing?.accountType==='Buyer'?
-                <div>
-                  <h3 class="text-lg sm:text-xl font-bold text-gray-800">Select Delivery Location</h3>
-                  <p class="text-gray-500 text-sm mt-1">Enter the pincode of your area to check product availability.</p>
-                  <div class='flex items-center gap-2 mt-4 max-w-sm'>
-                    <input type='number' placeholder='Enter pincode'
-                      class='bg-white px-4 py-2.5 text-sm w-full  border border-gray-300 outline-0' />
-                    <button type='button'
-                      class='border border-blue-600 outline-none bg-blue-600 hover:bg-blue-700 text-white  px-4 py-2.5 text-sm'>Apply</button>
+                {currUser?.accountType === 'Buyer' ?
+                  <div>
+                    <h3 class="text-lg sm:text-xl font-bold text-gray-800">Select Delivery Location</h3>
+                    <p class="text-gray-500 text-sm mt-1">Enter the pincode of your area to check product availability.</p>
+                    <div class='flex items-center gap-2 mt-4 max-w-sm'>
+                      <input type='number' placeholder='Enter pincode'
+                        class='bg-white px-4 py-2.5 text-sm w-full  border border-gray-300 outline-0' />
+                      <button type='button'
+                        class='border border-blue-600 outline-none bg-blue-600 hover:bg-blue-700 text-white  px-4 py-2.5 text-sm'>Apply</button>
+                    </div>
                   </div>
-                </div>
-                :
-                null
-                  }
+                  :
+                  null
+                }
 
                 <div class='flex justify-between gap-4 mt-6'>
                   <div class="text-center">
@@ -257,21 +265,107 @@ export default function ListingDetails() {
                   </div>
                 </div>
               </div>
+
+              {/* -------  Features  -------  */}
+              <div className='flex flex-col  mt-10'>
+                <h1 className='text-lg sm:text-xl font-bold text-gray-800'>Features :</h1>
+                {listing?.features.map(feature => {
+                  return <p className='text-gray-500 text-sm mt-1'> <span className='text-black rounded-full'>&#8226;</span> {feature}</p>
+                })}
+              </div>
+
+              {/* Reviews */}
+              <div>
+                <hr class="my-6 border-gray-300" />
+                <div>
+                  <h3 class="text-lg sm:text-xl font-bold text-gray-800">Customer Reviews</h3>
+                  <div class="flex items-center gap-1.5 mt-4">
+                    <svg class="w-5 h-5 fill-blue-600" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                    </svg>
+                    <svg class="w-5 h-5 fill-blue-600" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                    </svg>
+                    <svg class="w-5 h-5 fill-blue-600" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                    </svg>
+                    <svg class="w-5 h-5 fill-blue-600" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                    </svg>
+                    <svg class="w-5 h-5 fill-[#CED5D8]" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                    </svg>
+                  </div>
+
+                  <div class="flex items-center flex-wrap gap-4 mt-4">
+                    <h4 class="text-2xl sm:text-3xl text-gray-800 font-semibold">4.0 / 5</h4>
+                    <p class="text-sm text-gray-500">Based on 253 ratings</p>
+                  </div>
+                </div>
+
+                <div class="mt-6">
+                  <div class="flex items-start">
+                    <img src="https://readymadeui.com/team-2.webp" class="w-12 h-12 rounded-full border-2 border-white" />
+                    <div class="ml-3">
+                      <h4 class="text-sm font-bold">John Doe</h4>
+                      <div class="flex space-x-1 mt-1">
+                        <svg class="w-[14px] h-[14px] fill-blue-600" viewBox="0 0 14 13" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                        </svg>
+                        <svg class="w-[14px] h-[14px] fill-blue-600" viewBox="0 0 14 13" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                        </svg>
+                        <svg class="w-[14px] h-[14px] fill-blue-600" viewBox="0 0 14 13" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                        </svg>
+                        <svg class="w-[14px] h-[14px] fill-blue-600" viewBox="0 0 14 13" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                        </svg>
+                        <svg class="w-[14px] h-[14px] fill-[#CED5D8]" viewBox="0 0 14 13" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                        </svg>
+                        <p class="text-xs text-gray-500 !ml-2">2 months ago</p>
+                      </div>
+                      <p class="text-sm text-gray-500 mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                        eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    </div>
+                  </div>
+                  <a href="javascript:void(0)" class="block text-blue-600 hover:underline text-sm mt-6 font-semibold">Read all
+                    reviews</a>
+                </div>
+              </div>
+
             </div>
           </div>
 
-          {/* -------  Features  -------  */}
-          <div className='flex flex-col md:pl-[1.8rem] mt-10'>
-            <h1 className='text-lg sm:text-xl font-bold text-gray-800'>Features :</h1>
-           {listing?.features.map(feature=>{
-            return <p className='text-gray-500 text-sm mt-1'> <span className='text-black rounded-full'>&#8226;</span> {feature}</p>
-           })}
+          <div>
+
+
+
           </div>
+
         </div>
-        
-        {listing?.accountType!=='Buyer'?
-        <DeleteModal listingDetails={{productName :listing.productName , _id:listing._id}}/>
-        :'HELOO'
+
+
+
+        {listing?.accountType !== 'Buyer' ?
+          <DeleteModal listingDetails={{ productName: listing.productName, _id: listing._id }} />
+          : 'HELOO'
         }
 
       </div>

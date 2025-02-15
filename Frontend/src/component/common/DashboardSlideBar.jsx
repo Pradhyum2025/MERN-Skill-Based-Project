@@ -84,10 +84,10 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
                 </Link>
                 <Link
                   onClick={handleSelectSubSection}
-                  to='/dashbord/instructor'>
+                  to='/dashbord/all-sellers'>
                   <li>
-                    <a href="#Profile" class={`${currLocation === '/dashbord/instructor' ? 'dark:bg-gray-700' : ''} flex items-center p-2 text-gray-900 rounded-lg dark:text-white  group`}>
-                      <FaSellcast className={`${currLocation === '/dashbord/instructor' ? 'text-white' : ''}  flex-shrink-0 w-4 h-4 text-gray-400 transition duration-75`} />
+                    <a href="#Profile" class={`${currLocation === '/dashbord/all-sellers' ? 'dark:bg-gray-700' : ''} flex items-center p-2 text-gray-900 rounded-lg dark:text-white  group`}>
+                      <FaSellcast className={`${currLocation === '/dashbord/all-sellers' ? 'text-white' : ''}  flex-shrink-0 w-4 h-4 text-gray-400 transition duration-75`} />
                       <span class="flex-1 ms-3 whitespace-nowrap">Our sellers</span>
                     </a>
                   </li>

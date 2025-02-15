@@ -15,6 +15,8 @@ import categoryRoutes from './routes/Category.js';
 import listingRouter from './routes/listing.js';
 import connectCloudinary from './config/connectCloudinary.js';
 import sellerRouter from './routes/Seller.js';
+import orderRouter from './routes/order.js';
+import addressRoutes from './routes/Address.js';
 
 //load env files
 dotenv.config();
@@ -43,6 +45,8 @@ app.use('/bag',bagRoutes);
 app.use('/category',categoryRoutes);
 app.use('/listing',listingRouter);
 app.use('/seller',sellerRouter);
+app.use('/order',orderRouter);
+app.use('/address',addressRoutes);
 
 
 const PORT  = process.env.PORT || 4040;

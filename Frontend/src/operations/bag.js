@@ -1,19 +1,20 @@
-import toast from "react-hot-toast";
-
+import { FaCircleCheck } from "react-icons/fa6";
+import React from "react"; // ✅ Required if using JSX
 import axios from "axios";
 import { bagSliceAction } from "../store/slices/Bag";
+import toast from "react-hot-toast";
 
 //Add to cart
-export const getMyBag = async (dispatch,token) => {
+export const getMyBag = async (dispatch, token) => {
 
   try {
-    const res = await axios.get('http://localhost:8080/bag',{
+    const res = await axios.get('http://localhost:8080/bag', {
       headers: {
-        'Authorisation':`Bearer ${token}`
+        'Authorisation': `Bearer ${token}`
       }
     });
-    if(res.data && res.data.success) {
-      // console.log("GET MY BAG RESPONSE --->>>", res)
+    if (res.data && res.data.success) {
+      console.log("GET MY BAG RESPONSE --->>>", res)
       dispatch(bagSliceAction.setBagData(res.data.bag));
     }
   } catch (error) {
@@ -23,69 +24,152 @@ export const getMyBag = async (dispatch,token) => {
 }
 
 //Add to cart
-export const addToBag = async (dispatch,course,token,setFetching) => {
+export const addToBag = async (dispatch, listing, quantity, token, setFetching) => {
   try {
-    setFetching(()=>true)
-    const res = await axios.get(`http://localhost:8080/bag/addToBag/${course._id}`,{
+    setFetching(() => true)
+    const res = await axios.post(`http://localhost:8080/bag/addToBag/${listing._id}`, { quantity }, {
       headers: {
-        'Authorisation':`Bearer ${token}`
+        'Authorisation': `Bearer ${token}`
       }
     });
-    setFetching(()=>false)
+    setFetching(() => false)
     if (res.data && res.data.success) {
-      // console.log("ADD TO BAG RESPONSE --->>>", res)
-      dispatch(bagSliceAction.addToBag(course))
-      toast.success(res?.data?.message, { position: 'right-bottom', duration: 2000 });
+      console.log("ADD TO BAG RESPONSE --->>>", res)
+      dispatch(bagSliceAction.addToBag(res?.data?.currBagItem))
+      toast(`✅${res?.data?.message}`,{
+        style:{
+          background:'#001a00',
+          color:'#f2f2f2',
+          borderRadius:'0px',
+          width:'500px'
+        },
+        position:'right-center'
+       })
     }
   } catch (error) {
-    setFetching(()=>false)
+    setFetching(() => false)
     toast.error(error?.response?.data?.message, { position: 'right-bottom', duration: 2000 });
-    console.log('Login error : ', error)
+    console.log('Add to cart error : ', error)
   }
 
 }
 
 //Remove to cart
-export const removeToBag = async (dispatch,courseId,token,setFetching) => {
+export const removeToBag = async (dispatch, bagId, token, setFetching) => {
   try {
-    setFetching(()=>true)
-    const res = await axios.get(`http://localhost:8080/bag/removeToBag/${courseId}`,{
-      headers:{
-        'Authorisation':`Bearer ${token}`
+    setFetching(() => true)
+    const res = await axios.get(`http://localhost:8080/bag/removeToBag/${bagId}`, {
+      headers: {
+        'Authorisation': `Bearer ${token}`
       }
     });
-    setFetching(()=>false)
+    setFetching(() => false)
     if (res.data && res.data.success) {
       // console.log("REMOVE TO BAG RESPONSE --->>>", res)
-      dispatch(bagSliceAction.removeToBag(courseId))
-      toast.success(res.data?.message, { position: 'right-bottom', duration: 2000 });
+      dispatch(bagSliceAction.removeToBag(bagId))
+      toast(`✅${res?.data?.message}`,{
+        style:{
+          background:'#001a00',
+          color:'#f2f2f2',
+          borderRadius:'0px',
+          width:'500px'
+        },
+        position:'right-center'
+       })
     }
   } catch (error) {
-    setFetching(()=>false)
+    setFetching(() => false)
     toast.error(error?.response?.data?.message, { position: 'right-bottom', duration: 2000 });
-    console.log('Login error : ', error)
+    console.log('Remove to cart error : ', error)
   }
 
 }
 
-export const isPresentInCart = (course,userBag)=>{
+export const incQuantity = async(dispatch,token,setFetching,bagId)=>{
+  try {
+    const res = await axios.get(`http://localhost:8080/bag/incQuantity/${bagId}`, {
+      headers: {
+        'Authorisation': `Bearer ${token}`
+      }
+    });
+    if (res.data && res.data.success) {
+      // console.log("INCREASE BAG QUANTITY --->>>", res)
+      dispatch(bagSliceAction.incQuantity(bagId));
+      toast(`✅${res?.data?.message}`,{
+        style:{
+          background:'#001a00',
+          color:'#f2f2f2',
+          borderRadius:'0px',
+          width:'500px'
+        },
+        position:'right-center'
+       })
+    
+    }
+  } catch (error) {
+    toast.error(error?.response?.data?.message, { position: 'right-bottom', duration: 2000 });
+    console.log('Increse quantity  error : ', error)
+  }
+
+}
+
+export const decQuantity = async(dispatch,token,setFetching,bagId)=>{ 
+  try {
+   
+    const res = await axios.get(`http://localhost:8080/bag/decQuantity/${bagId}`, {
+      headers: {
+        'Authorisation': `Bearer ${token}`
+      }
+    });
+    if (res.data && res.data.success) {
+      // console.log("DECRESE BAG QUANTITY --->>>", res)
+      dispatch(bagSliceAction.decQuantity(bagId));
+      toast(`✅${res?.data?.message}`,{
+        style:{
+          background:'#001a00',
+          color:'#f2f2f2',
+          borderRadius:'0px',
+          width:'500px'
+        },
+        position:'right-center'
+       })
+    }
+  } catch (error) {
+    toast.error(error?.response?.data?.message, { position: 'right-bottom', duration: 2000 });
+    console.log('Decrese quantity error : ', error)
+  }
+
+}
+
+export const isPresentInCart = (listing, userBag) => {
 
   let IsPresent = false;
-  for(let bagCourse of userBag){
-    if(bagCourse._id === course._id){
+  let isPresentBagId = null;
+
+  for (let bagListing of userBag) {
+    if (bagListing.product === listing._id) {
       IsPresent = true;
+      isPresentBagId = bagListing._id
       break;
     }
   }
-  return IsPresent;
+  return {IsPresent,isPresentBagId};
 }
 
-export const calcTotal = (userBag)=>{
-  let total = 0;
-  for(let bagCourse of userBag){
-    total += bagCourse.price?bagCourse.price:0;
+export const calcTotal = (userBag) => {
+  let totalPrice = 0;
+  let totalSaving = 0;
+  let totalItems =0;
+  for (let bagListing of userBag) {
+    if(bagListing.stock!==0){
+      totalItems +=bagListing.quantity
+      totalPrice += bagListing.price ? bagListing.price* bagListing.quantity : 0;
+      totalSaving += (bagListing?.discount && bagListing?.price) ?
+        ((bagListing.discount / 100) * bagListing.price)*bagListing.quantity  : 0;
+    }
   }
-  return total;
-  
+  return { totalPrice, totalSaving,totalItems };
+
 }
+
 
