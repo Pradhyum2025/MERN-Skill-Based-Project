@@ -47,10 +47,10 @@ export const BagButtons2 = ({ listing, myBag, quantity }) => {
       return document.getElementById('my_modal_3').showModal()
     }
   }
-  const { IsPresent, isPresentBagId } = isPresentInCart(listing, myBag)
+  const { isPresent, isPresentBagId } = isPresentInCart(listing, myBag)
   return (
     <>
-      {IsPresent ?
+      {isPresent ?
         <button type="button"
           onClick={() => handleRemoveTocart(isPresentBagId)}
           class="px-4 py-3 w-[45%] border border-gray-300 flex items-center justify-center bg-white hover:bg-gray-50 text-gray-800 text-sm font-semibold">

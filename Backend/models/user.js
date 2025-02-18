@@ -53,6 +53,13 @@ const userSchema = new mongoose.Schema({
       type:mongoose.Schema.Types.ObjectId,
       ref:"Bag"
     }
+  ],
+  myOrders:[
+    {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:()=>this.accountType==='Buyer'?"Order":'SubOrder'
+      
+    }
   ]
 })
 

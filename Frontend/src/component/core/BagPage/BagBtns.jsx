@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { FiAlertTriangle } from 'react-icons/fi';
 import { TbShoppingCartOff } from "react-icons/tb";
 import LoadingBtn from '../../common/LoadingBtn.jsx'
+
 export default function BagBtns({ listing, myBag, quantity }) {
 
   const currUser = useSelector(store => store.auth);
@@ -14,7 +15,7 @@ export default function BagBtns({ listing, myBag, quantity }) {
 
   const handleAddTocart = async (listing) => {
     if (currUser?.token && currUser?.accountType === 'Buyer') {
-      return await addToBag(dispatch, listing, quantity, currUser.token, setFetching);
+      return await addToBag(dispatch, listing, quantity, currUser.token, setFetching,);
     } else {
       toast("SignUp / login as a buyer!",
         {
@@ -51,11 +52,11 @@ export default function BagBtns({ listing, myBag, quantity }) {
     }
   }
 
-  const { IsPresent, isPresentBagId } = isPresentInCart(listing, myBag)
-
+  const { isPresent, isPresentBagId } = isPresentInCart(listing, myBag)
+  
   return (
     <>
-      {IsPresent ?
+      {isPresent ?
         <button
           onClick={() => handleRemoveTocart(isPresentBagId)}
           type="button" class="inline-flex items-center rounded-lg bg-primary-600 px-3 py-2.5 text-sm font-medium items-center gap-x-2 text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 ">

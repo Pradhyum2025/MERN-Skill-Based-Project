@@ -1,6 +1,7 @@
 import express from 'express'
-import { isAuth, isMultiRoll } from '../middlewares/auth.js';
+
 import { createNewAddress, getAddresses, setDefaultAddress } from '../controllers/Address.js';
+import { isAuth, isMultiRoll } from '../middlewares/Auth.js';
 
 const addressRoutes = express.Router();
 

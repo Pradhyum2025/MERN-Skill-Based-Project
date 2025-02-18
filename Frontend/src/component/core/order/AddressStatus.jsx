@@ -5,6 +5,7 @@ import { FaCheck } from "react-icons/fa6";
 import { getMyAddresses } from '../../../operations/Address';
 import AdderessCart from './AdderessCart';
 import LoadingBtn from '../../common/LoadingBtn';
+import { Link } from 'react-router-dom';
 export default function AddressStatus() {
   const dispatch = useDispatch();
   const currUser = useSelector(store => store.auth);
@@ -20,8 +21,9 @@ export default function AddressStatus() {
     <div className="flex flex-col gap-y-2">
       {/*  --------- Login status ---------  */}
       <div className="flex  items-center justify-between  p-4 bg-white  shadow-md  transition-shadow duration-300 relative">
-        <div className="flex flex-col gap-2 items-start ">
+        <div className="flex gap-2 items-center justify-between w-full ">
 
+          <div className='flex flex-col gap-2 items-start '>
           <div className='flex flex-row gap-x-2 items-center'>
             <span class="bg-gray-100 text-blue-700 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm ">1</span>
             <FaCheck className='text-blue-600 font-bold' />
@@ -32,6 +34,13 @@ export default function AddressStatus() {
             <span>{currUser.contact}</span>
             <span>{currUser.email}</span>
           </div>
+
+          </div>
+
+
+          <Link
+            className='px-1 py-2 w-[10%] text-center border border-blue-600 text-blue-600 hover:bg-gray-50 text-sm font-semibold'
+            to={'/bag/login-status'}>EDIT</Link>
 
         </div>
       </div>
@@ -95,7 +104,6 @@ export default function AddressStatus() {
         <div className="flex flex-row gap-x-2 items-center ">
           <div className='flex flex-row gap-x-2 items-center'>
             <span class="bg-gray-100 text-blue-700 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm ">3</span>
-            <FaCheck className='text-blue-600 font-bold' />
             <span className='text-gray-500 text-[1rem] font-bold'>ORDER SUMMARY</span>
           </div>
         </div>
@@ -106,7 +114,6 @@ export default function AddressStatus() {
         <div className="flex flex-row gap-x-2 items-center">
           <div className='flex flex-row gap-x-2 items-center'>
             <span class="bg-gray-100 text-blue-700 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm ">4</span>
-            <FaCheck className='text-blue-600 font-bold' />
             <span className='text-gray-500 text-[1rem] font-bold'>PAYMENT OPTIONS</span>
           </div>
         </div>

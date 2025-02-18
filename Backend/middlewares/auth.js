@@ -23,23 +23,24 @@ export const isAuth = (req,res,next)=>{
     // varify token
     let payload={};
     try{
-      payload =jwt.verify(token,process.env.JWT_SECRET);
+      payload = jwt.verify(token,process.env.JWT_SECRET);
 
       // console.log('payload',payload)
     }catch(err){
-      console.log(err.message);
+      console.log(err.message); 
       return res.status(400).json({
         success:false,
         message:'Failed to verify token'
       })
     }
-    req.user=payload;
+
+    req.user = payload;
 
     return next();
 
   }catch(error){
-    console.log(error.message)
-    res.status(401).json({
+    console.log("isAuth middleware error ",error.message)
+    return res.status(401).json({
       success:false,
       message:'Somethin Went Wrong'
     })
@@ -62,7 +63,7 @@ export const isSeller = (req,res,next)=>{
     return next();
 
   }catch(error){
-    console.log(err.message)
+    console.log("isSeller  middleware error ",error.message)
     res.status(500).json({
       success:false,
       message:'Somethin Went Wrong'
@@ -75,7 +76,6 @@ export const isBuyer= (req,res,next)=>{
   
   try{
     let payload = req.user;
- 
     if(payload.role!=='Buyer'){
       return res.status(401).json({
         success:false,
@@ -85,7 +85,7 @@ export const isBuyer= (req,res,next)=>{
     return next();
 
   }catch(error){
-    console.log(err.message)
+    console.log("isBuyer  middleware error ",error.message)
     res.status(500).json({
       success:false,
       message:'Somethin Went Wrong'
@@ -108,8 +108,8 @@ export const isAdmin = (req,res,next)=>{
     return next();
 
   }catch(error){
-    console.log(err.message)
-    res.status(500).json({
+    console.log("isAdmin  middleware error ",error.message)
+    return res.status(500).json({
       success:false,
       message:'Somethin Went Wrong'
     })
@@ -121,7 +121,7 @@ export const isMultiRoll = (req,res,next)=>{
   
   try{
     let payload = req.user;
-    
+ 
     if(payload.role!=='Seller' && payload.role!=='Buyer'){
       return res.status(401).json({
         success:false,
@@ -131,8 +131,8 @@ export const isMultiRoll = (req,res,next)=>{
     return next();
 
   }catch(error){
-    console.log(err.message)
-    res.status(500).json({
+    console.log("isMultiRoll  middleware error ",error.message)
+    return res.status(500).json({
       success:false,
       message:'Somethin Went Wrong'
     })

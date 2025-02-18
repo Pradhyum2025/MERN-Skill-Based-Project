@@ -7,6 +7,7 @@ import { Bag } from "../models/bag.js";
 export const getMyBag = async (req, res) => {
   try {
     const userId = req.user.id;
+
     if (!userId) {
       return res.status(400).json({
         success: false,
@@ -23,30 +24,7 @@ export const getMyBag = async (req, res) => {
       })
     }
 
-    let myBag = await Bag.find({ _id: { $in: currUser.bag } });
-
-
-    const bagListing = await Listing.find({
-      _id: {
-        $in: myBag.map(bagItem => bagItem.product)
-      }
-    },
-      {
-        productName: true,
-        discount: true,
-        images: true,
-        stock: true
-      });
-
-    myBag = myBag.map(bagItems => bagItems.toObject());
-
-    //Append extra info with bag data
-    for (let i = 0; i < myBag.length; i++) {
-      myBag[i].productName = bagListing[i].productName;
-      myBag[i].discount = bagListing[i].discount;
-      myBag[i].images = bagListing[i].images;
-      myBag[i].stock = bagListing[i].stock;
-    }
+    let myBag = await Bag.find({ _id: { $in: currUser.bag } }).populate('product','productName discount images stock price');
 
 
     // Return response
@@ -107,7 +85,7 @@ export const addToBag = async (req, res) => {
       quantity
     }
 
-    const currBagItem = await Bag.create(bagPayLoad);
+    let currBagItem = await Bag.create(bagPayLoad);
 
     // if not in bag then push
     currUser = await User.findByIdAndUpdate(
@@ -116,6 +94,8 @@ export const addToBag = async (req, res) => {
         bag: { $each: [currBagItem._id], $position: 0 }
       }
     });
+
+  currBagItem = await Bag.findOne({_id:currBagItem._id}).populate('product','productName discount images stock price');
 
 
     // Return response
@@ -126,7 +106,7 @@ export const addToBag = async (req, res) => {
     })
 
   } catch (error) {
-    console.log('Integrnal server error in add to cart:', error.message);
+    console.log('Internal server error in add to cart:', error.message);
 
     return res.status(500).json({
       success: false,
@@ -208,13 +188,13 @@ export const incQuantity = async (req, res) => {
       // Return response
       return res.status(200).json({
         success: true,
-        message: 'Item quantity has been increased by one',
+        message: 'Quantity has been increased by one',
       })
 
     } else {
       return res.status(400).json({
         success: false,
-        message: 'You make item limit out of stock'
+        message: 'You are making item limit out of stock'
       })
     }
 
@@ -249,13 +229,13 @@ export const decQuantity = async (req, res) => {
       // Return response
       return res.status(200).json({
         success: true,
-        message: 'Item quantity has been decresed by one',
+        message: 'Quantity has been decresed by one',
       })
 
     } else {
       return res.status(400).json({
         success: false,
-        message: 'Minimum one item reuired for shop'
+        message: 'Atleast one item require for shoping'
       })
     }
 

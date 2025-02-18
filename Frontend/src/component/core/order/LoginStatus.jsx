@@ -18,10 +18,13 @@ export default function LoginStatus() {
             <span className='text-gray-500 text-[1rem] font-bold'>LOGIN</span>
           </div>
 
+
+
           <div className='text-gray-700 flex items-center text-sm gap-5 pl-10'>
             <span>{currUser.contact}</span>
             <span>{currUser.email}</span>
           </div>
+          
 
         </div>
       </div>
@@ -32,7 +35,6 @@ export default function LoginStatus() {
 
           <div className='flex flex-row gap-x-2 items-center p-4 w-full bg-blue-600'>
             <span class="bg-gray-100 text-blue-700 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm ">2</span>
-          
             <span className='text-white text-[1rem] font-bold'>DELIVERY ADDRESS</span>
           </div>
           <div>
@@ -45,7 +47,7 @@ export default function LoginStatus() {
         <div className="flex flex-row gap-x-2 items-center ">
           <div className='flex flex-row gap-x-2 items-center'>
             <span class="bg-gray-100 text-blue-700 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm ">3</span>
-            <FaCheck className='text-blue-600 font-bold' />
+            {/* <FaCheck className='text-blue-600 font-bold' /> */}
             <span className='text-gray-500 text-[1rem] font-bold'>ORDER SUMMARY</span>
           </div>
         </div>
@@ -56,7 +58,7 @@ export default function LoginStatus() {
         <div className="flex flex-row gap-x-2 items-center">
           <div className='flex flex-row gap-x-2 items-center'>
             <span class="bg-gray-100 text-blue-700 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm ">4</span>
-            <FaCheck className='text-blue-600 font-bold' />
+            {/* <FaCheck className='text-blue-600 font-bold' /> */}
             <span className='text-gray-500 text-[1rem] font-bold'>PAYMENT OPTIONS</span>
           </div>
         </div>

@@ -26,6 +26,9 @@ import BagCardSection from './component/core/BagPage/BagCardSection.jsx'
 import LoginStatus from './component/core/order/LoginStatus.jsx'
 import AddressStatus from './component/core/order/AddressStatus.jsx'
 import OrderSummary from './component/core/order/OrderSummary.jsx'
+import PaymentOptions from './component/core/order/PaymentOptions.jsx'
+import OrderHistory from './component/core/order/Buyer/OrderHistory.jsx'
+import OrderDetails from './component/core/order/Buyer/OrderDetails.jsx'
 
 const router = createBrowserRouter([
     {
@@ -38,6 +41,8 @@ const router = createBrowserRouter([
         {path:'/listings/:categoryId',element:<Listing/>},
         {path:'/show/:listingId',element: <ListingDetails/>},
         {path:'/address',element: <AddressForm/>},
+        {path:'/my-order',element: <OrderHistory/>},
+        {path:'/my-order/:orderId',element: <OrderDetails/>},
       ]
     },
     {
@@ -61,8 +66,9 @@ const router = createBrowserRouter([
       element: <BagPage />,
       children:[
         {path:'/bag',element: <BagCardSection/>} , 
-        {path:'/bag/order-loginStatus',element: <AddressStatus/>} ,   
+        {path:'/bag/delivery-address',element: <AddressStatus/>} ,   
         {path:'/bag/order-summary',element: <OrderSummary/>} ,      
+        {path:'/bag/payment-options',element: <PaymentOptions/>} ,      
       ]
     }
   

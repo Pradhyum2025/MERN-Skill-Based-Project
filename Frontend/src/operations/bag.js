@@ -1,5 +1,5 @@
 import { FaCircleCheck } from "react-icons/fa6";
-import React from "react"; // ✅ Required if using JSX
+import React from "react";
 import axios from "axios";
 import { bagSliceAction } from "../store/slices/Bag";
 import toast from "react-hot-toast";
@@ -36,19 +36,31 @@ export const addToBag = async (dispatch, listing, quantity, token, setFetching) 
     if (res.data && res.data.success) {
       console.log("ADD TO BAG RESPONSE --->>>", res)
       dispatch(bagSliceAction.addToBag(res?.data?.currBagItem))
-      toast(`✅${res?.data?.message}`,{
-        style:{
-          background:'#001a00',
-          color:'#f2f2f2',
-          borderRadius:'0px',
-          width:'500px'
+      toast.success(res?.data?.message, {
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
         },
-        position:'right-center'
-       })
+        position: 'right-center',
+        duration:2000
+      })
     }
   } catch (error) {
     setFetching(() => false)
-    toast.error(error?.response?.data?.message, { position: 'right-bottom', duration: 2000 });
+    toast.error(error?.response?.data?.message, {
+      style: {
+        background: '#001a00',
+        color: '#f2f2f2',
+        borderRadius: '0px',
+        width: '400px',
+        fontWeight: 900
+      },
+      position: 'right-center'
+    })
+
     console.log('Add to cart error : ', error)
   }
 
@@ -67,25 +79,26 @@ export const removeToBag = async (dispatch, bagId, token, setFetching) => {
     if (res.data && res.data.success) {
       // console.log("REMOVE TO BAG RESPONSE --->>>", res)
       dispatch(bagSliceAction.removeToBag(bagId))
-      toast(`✅${res?.data?.message}`,{
-        style:{
-          background:'#001a00',
-          color:'#f2f2f2',
-          borderRadius:'0px',
-          width:'500px'
+      toast.success(res?.data?.message, {
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
         },
-        position:'right-center'
-       })
-    }
-  } catch (error) {
-    setFetching(() => false)
-    toast.error(error?.response?.data?.message, { position: 'right-bottom', duration: 2000 });
-    console.log('Remove to cart error : ', error)
+        position: 'right-center'
+      })
   }
+  } catch (error) {
+  setFetching(() => false)
+  toast.error(error?.response?.data?.message, { position: 'right-bottom', duration: 2000 });
+  console.log('Remove to cart error : ', error)
+}
 
 }
 
-export const incQuantity = async(dispatch,token,setFetching,bagId)=>{
+export const incQuantity = async (dispatch, token, setFetching, bagId) => {
   try {
     const res = await axios.get(`http://localhost:8080/bag/incQuantity/${bagId}`, {
       headers: {
@@ -95,27 +108,37 @@ export const incQuantity = async(dispatch,token,setFetching,bagId)=>{
     if (res.data && res.data.success) {
       // console.log("INCREASE BAG QUANTITY --->>>", res)
       dispatch(bagSliceAction.incQuantity(bagId));
-      toast(`✅${res?.data?.message}`,{
-        style:{
-          background:'#001a00',
-          color:'#f2f2f2',
-          borderRadius:'0px',
-          width:'500px'
+      toast.success(res?.data?.message, {
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
         },
-        position:'right-center'
-       })
-    
+        position: 'right-center'
+      })
+
     }
   } catch (error) {
-    toast.error(error?.response?.data?.message, { position: 'right-bottom', duration: 2000 });
+    toast.error(error?.response?.data?.message, {
+      style: {
+      background: '#001a00',
+      color: '#f2f2f2',
+      borderRadius: '0px',
+      width: '400px',
+      fontWeight: 900
+    },
+    position: 'right-center' }
+  );
     console.log('Increse quantity  error : ', error)
   }
 
 }
 
-export const decQuantity = async(dispatch,token,setFetching,bagId)=>{ 
+export const decQuantity = async (dispatch, token, setFetching, bagId) => {
   try {
-   
+
     const res = await axios.get(`http://localhost:8080/bag/decQuantity/${bagId}`, {
       headers: {
         'Authorisation': `Bearer ${token}`
@@ -124,18 +147,26 @@ export const decQuantity = async(dispatch,token,setFetching,bagId)=>{
     if (res.data && res.data.success) {
       // console.log("DECRESE BAG QUANTITY --->>>", res)
       dispatch(bagSliceAction.decQuantity(bagId));
-      toast(`✅${res?.data?.message}`,{
-        style:{
-          background:'#001a00',
-          color:'#f2f2f2',
-          borderRadius:'0px',
-          width:'500px'
+      toast.success(res?.data?.message, {
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
         },
-        position:'right-center'
-       })
+        position: 'right-center'
+      })
     }
   } catch (error) {
-    toast.error(error?.response?.data?.message, { position: 'right-bottom', duration: 2000 });
+    toast.error(error?.response?.data?.message, {  style: {
+      background: '#001a00',
+      color: '#f2f2f2',
+      borderRadius: '0px',
+      width: '400px',
+      fontWeight: 900
+    },
+    position: 'right-center'});
     console.log('Decrese quantity error : ', error)
   }
 
@@ -143,32 +174,32 @@ export const decQuantity = async(dispatch,token,setFetching,bagId)=>{
 
 export const isPresentInCart = (listing, userBag) => {
 
-  let IsPresent = false;
+  let isPresent = false;
   let isPresentBagId = null;
 
-  for (let bagListing of userBag) {
-    if (bagListing.product === listing._id) {
-      IsPresent = true;
-      isPresentBagId = bagListing._id
+  for (let bagItem of userBag) {
+    if (bagItem?.product._id === listing._id) {
+      isPresent = true;
+      isPresentBagId = bagItem._id
       break;
     }
   }
-  return {IsPresent,isPresentBagId};
+  return { isPresent, isPresentBagId };
 }
 
 export const calcTotal = (userBag) => {
   let totalPrice = 0;
   let totalSaving = 0;
-  let totalItems =0;
-  for (let bagListing of userBag) {
-    if(bagListing.stock!==0){
-      totalItems +=bagListing.quantity
-      totalPrice += bagListing.price ? bagListing.price* bagListing.quantity : 0;
-      totalSaving += (bagListing?.discount && bagListing?.price) ?
-        ((bagListing.discount / 100) * bagListing.price)*bagListing.quantity  : 0;
+  let totalItems = 0;
+  for (let bagItem of userBag) {
+    if (bagItem.product.stock !== 0) {
+      totalItems += bagItem.quantity
+      totalPrice += bagItem?.product.price ? (bagItem.product.price * bagItem.quantity): 0;
+      totalSaving += (bagItem?.product?.discount && bagItem?.product.price) ?
+        ((bagItem.product.discount / 100) * bagItem.product.price) * bagItem.quantity : 0;
     }
   }
-  return { totalPrice, totalSaving,totalItems };
+  return { totalPrice, totalSaving, totalItems };
 
 }
 

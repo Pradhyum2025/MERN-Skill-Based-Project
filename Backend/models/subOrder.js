@@ -28,7 +28,7 @@ const subOrderSchema = new mongoose.Schema({
       }
     }
   ],
-  orderStatus: { 
+  status: { 
     type: String, 
     enum: ["Processing", "Shipped", "Delivered", "Cancelled"], 
     default: "Processing" 
@@ -37,6 +37,8 @@ const subOrderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'SellerDetail', 
   }
-});
+},
+  { timestamps: true }
+);
 
 export const SubOrder = mongoose.model("SubOrder", subOrderSchema);

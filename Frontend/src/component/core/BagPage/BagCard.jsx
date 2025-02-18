@@ -3,14 +3,14 @@ import { decQuantity, incQuantity, removeToBag } from "../../../operations/bag";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import LoadingBtn from "../../common/LoadingBtn";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { LuMinus } from "react-icons/lu";
 import { GoPlus } from "react-icons/go";
 import toast from "react-hot-toast";
 import { IoWarning } from "react-icons/io5";
 
 export const BagCard = ({ bagItem }) => {
-
+  const currPath = useLocation().pathname;
   const currUser = useSelector(store => store.auth);
   const [fetching, setFetching] = useState(false);
   const dispatch = useDispatch();
@@ -32,9 +32,14 @@ export const BagCard = ({ bagItem }) => {
     }else{
      return toast('Something went wrong',{
       icon:<IoWarning/>,
-      style:{
-        background:'#000000'
-      }
+      style: {
+        background: '#001a00',
+        color: '#f2f2f2',
+        borderRadius: '0px',
+        width: '400px',
+        fontWeight: 900
+      },
+      position: 'right-center'
      })
     }
   }
@@ -46,12 +51,14 @@ export const BagCard = ({ bagItem }) => {
     }else{
       return toast('Something went wrong',{
         icon:<IoWarning style={{color:'#ffb31a'}} />,
-        style:{
-          background:'#001a00',
-          color:'#f2f2f2',
-          borderRadius:'0px'
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
         },
-        position:'bottom-center'
+        position: 'right-center'
        })
     }
   }
@@ -61,18 +68,15 @@ export const BagCard = ({ bagItem }) => {
   }
 
   return (
-    <div className="flex  items-center justify-between  p-4 bg-white  shadow-md  transition-shadow duration-300 relative">
+    <div className={`flex  items-center justify-between  p-4 bg-white    transition-shadow duration-300 relative ${currPath==='/bag/order-summary'?"shadow-0":"shadow-md"}`}>
       <div className="flex flex-row gap-x-2 items-center  md:mb-0">
 
 
         <img  
           onClick={() => handleNavigatation()}
-          src={bagItem?.images?.[0]}
-          alt={bagItem?.productName}
+          src={bagItem?.product.images?.[0]}
+          alt={bagItem?.product.productName}
           className="w-24 h-24 object-cover rounded-lg mb-0 md:mb-0 md:mr-6 cursor-pointer"
-          onError={(e) => {
-            e.target.src = "https://images.unsplash.com/photo-1560393464-5c69a73c5770";
-          }}
         />
 
 
@@ -80,18 +84,18 @@ export const BagCard = ({ bagItem }) => {
 
           <h3
             onClick={() => handleNavigatation()}
-            className="md:text-lg font-semibold text-blue-600 hover:underline cursor-pointer">{bagItem?.productName?.length>30?bagItem?.productName?.substring(0,27)+'..':bagItem?.productName}</h3>
+            className="md:text-lg font-semibold text-blue-600 hover:underline cursor-pointer">{bagItem?.product?.productName?.length>30?bagItem?.product?.productName?.substring(0,27)+'..':bagItem?.product?.productName}</h3>
 
           <p className="text-gray-600">{new Intl.NumberFormat('en-IN', {
             style: 'currency',
             currency: 'INR',
-          }).format(bagItem?.price)}
+          }).format(bagItem?.product?.price)}
           </p>
 
           {/* Stock */} 
           {
-            bagItem?.stock === 0 ?
-              <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm w-[35%] sm:w-[30%] ">Out of stock</span>
+            bagItem?.product?.stock === 0 ?
+              <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm text-center w-[100%] ">Out of stock</span>
               :
               <div class="flex gap-1 items-center border border-gray-300 bg-white px-2 py-[3px] w-max">
                 <button

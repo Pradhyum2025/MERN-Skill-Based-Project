@@ -1,18 +1,17 @@
 import express from 'express'
-import { createOrder } from '../controllers/order.js';
-import {isAdmin, isAuth, isBuyer}  from '../middlewares/auth.js'
-import { isOutOfStock } from '../middlewares/order.js';
+import { createOrder, getMyOrder, getOrderDetails } from '../controllers/order.js';
+import { isAuth, isBuyer, isMultiRoll } from '../middlewares/Auth.js';
 
 const orderRouter = express.Router();
 
 //Create order
-orderRouter.post('/',isAuth,isBuyer,isOutOfStock,createOrder);
+orderRouter.get('/create',isAuth,isBuyer,createOrder);
 
-//get all ordera
-orderRouter.get('/',isAuth,isAdmin)
+//get all order
+orderRouter.get('/my-order',isAuth,isMultiRoll,getMyOrder)
 
-//get specific ordera
-orderRouter.get('/:orderId',isAuth)
+//get specific order
+orderRouter.get('/my-order/:orderId',isAuth,isMultiRoll,getOrderDetails)
 
 
 export default orderRouter;
