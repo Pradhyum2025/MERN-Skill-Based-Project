@@ -120,7 +120,11 @@ export const login =  async(req,res)=>{
         currUser = currUser.toObject();
         currUser.token = token;
         currUser.password = undefined;
-        
+        currUser.listing=null;
+        currUser.myOrders=null;
+        currUser.sellerDetails=null;
+        currUser.addresses=null;
+
         let options = {
           expire:new Date(Date.now()+3*24*60*60*1000),
           httpOnly:true
@@ -189,7 +193,7 @@ export const becomeSeller = async(req,res)=>{
 
     }
 
-   const currUser = await User.findById(req.user.id,{firstName:true,lastName:true})
+   let currUser = await User.findById(req.user.id,{firstName:true,lastName:true})
    
    let contactList = [contact,alternateContact];
 

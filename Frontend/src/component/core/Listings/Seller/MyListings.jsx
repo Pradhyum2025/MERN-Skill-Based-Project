@@ -22,14 +22,21 @@ export const MyListing = () => {
   }, [])
 
   const myListings = useSelector(store => store.listings);
+  
+  if (myListings.length===0) {
+    return (
+      <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+      </div>
+    );
+  }
 
   return (
 
     <div className="w-full min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-10">
       <div className="max-w-4xl mx-auto">
 
-        <h1 className="w-full text-xl font-[800] text-blue-600 mb-8 text-center md:text-left">Your Listing Deatils
-        </h1>
+      <h1 className="text-lg font-[700] text-gray-500 mb-3">MY PRODUCTS</h1>
 
         {myListings?.length === 0 ? (
           <div className="text-center py-12">

@@ -154,9 +154,15 @@ export const createOrder = async (req, res) => {
 export const getMyOrder = async (req, res) => {
   try {
     const userId = req.user.id;
-
+    const {status} = req.body;
+    
     const currUser = await User.findById(userId, { myOrders: true })
-
+    if(!status || !userId){
+      return res.status(400).json({
+        success: false,
+        message: 'Something missing, please try again!'
+      })
+    }
     if (!currUser) {
       return res.status(400).json({
         success: false,
@@ -166,17 +172,23 @@ export const getMyOrder = async (req, res) => {
 
     let  currOrders = []
     if(req.user.role==='Buyer'){
-       currOrders = await Order.find({ _id: { $in: currUser.myOrders } }, { createdAt: true, orderStatus: true, totalAmount: true,paymentStatus:true })
-
+      if(status==="*"){
+        currOrders = await Order.find({ _id: { $in: currUser.myOrders } }, { createdAt: true, orderStatus: true, totalAmount: true,paymentStatus:true })
+      }else{
+        currOrders = await Order.find({ _id: { $in: currUser.myOrders },orderStatus:status }, { createdAt: true, orderStatus: true, totalAmount: true,paymentStatus:true })
+      }
     }else{
-      currOrders = await SubOrder.find({ _id: { $in: currUser.myOrders } }, {order:true, createdAt: true, status: true})
+      if(status==="*"){
+        currOrders = await SubOrder.find({ _id: { $in: currUser.myOrders }}, {order:true, createdAt: true, status: true,products:true})
+      }else{
+        currOrders = await SubOrder.find({ _id: { $in: currUser.myOrders },status:status }, {order:true, createdAt: true, status: true,products:true})
+      }
     }
 
     // Check for validation
-
     return res.status(200).json({
       success: true,
-      message: 'Please choose stock items',
+      message: 'Order get successfully',
       currOrders
     })
 
@@ -211,13 +223,17 @@ export const getOrderDetails = async (req, res) => {
       .populate({path:'products',populate:{path:'product',select:'price images productName discount'}})
 
     }else{
-      orderDetails = await SubOrder.find({ _id: orderId ,seller:userId})
+      orderDetails = await SubOrder.findOne({ _id: orderId ,seller:userId})
+      .populate({path:'products',populate:{path:'productId',select:"price images productName discount" ,populate:{path:'shippingAddress'}} })
+      .populate('SellerDetails')
+      .populate({path:'seller', select:'firstName lastName email contact'})
     }
+
 
     // Check for validation
     return res.status(200).json({
       success: true,
-      message: 'Please choose stock items',
+      message: 'Order details fetched success',
       orderDetails
     })
 

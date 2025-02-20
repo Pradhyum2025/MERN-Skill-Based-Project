@@ -33,6 +33,7 @@ const subOrderSchema = new mongoose.Schema({
     enum: ["Processing", "Shipped", "Delivered", "Cancelled"], 
     default: "Processing" 
   },
+  
   SellerDetails: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'SellerDetail', 

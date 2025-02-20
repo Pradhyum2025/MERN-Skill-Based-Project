@@ -19,13 +19,15 @@ export default function BagBtns({ listing, myBag, quantity }) {
     } else {
       toast("SignUp / login as a buyer!",
         {
-          icon: <FiAlertTriangle className="text-yellow-500" size={20} />,
+          icon: <FiAlertTriangle className="text-yellow-600" size={20} />,
           style: {
-            background: "#fef3c7",
-            color: "#b45309",
+            background: "#00100d",
+            color: "#b8971d",
+            fontWeight:900,
             padding: "10px",
+            borderRadius:'0px',
           },
-          position: 'bottom'
+          position: 'bottom-center'
         });
 
       return document.getElementById('my_modal_3').showModal()

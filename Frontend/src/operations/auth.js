@@ -16,7 +16,16 @@ export const signUp = async (navigate, dispatch, signUpData) => {
       //save user info into local storage
       window.localStorage.setItem('currUser', JSON.stringify(res.data.currUser));
       dispatch(authSliceAction.setUserData(res.data.currUser))
-      toast.success(res?.data?.message, { position: 'bottom-right', duration: 2000 });
+      toast.success(res?.data?.message, {
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
+        },
+        position: 'right-center'
+      })
       navigate('/');
     }
   } catch (error) {
@@ -37,7 +46,16 @@ export const signIn = async (navigate,dispatch,formData) => {
       console.log("LOGIN RESPONSE --->>>", res)
       dispatch(authSliceAction.setUserData(res.data.currUser));
       window.localStorage.setItem('currUser', JSON.stringify(res.data.currUser));
-      toast.success(res?.data?.message, { position: 'right-bottom', duration: 2000 });
+      toast.success(res?.data?.message, {
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
+        },
+        position: 'right-center'
+      })
       document.getElementById('my_modal_3').close()
       navigate('/');
     }
@@ -84,6 +102,16 @@ export const signOut = (dispatch, navigate,setUserDropDown) => {
   if(setUserDropDown){
     setUserDropDown(()=>false)
   }
+  toast.success('Logout successful', {
+    style: {
+      background: '#001a00',
+      color: '#f2f2f2',
+      borderRadius: '0px',
+      width: '400px',
+      fontWeight: 900
+    },
+    position: 'right-center'
+  })
   navigate('/')
 }
 

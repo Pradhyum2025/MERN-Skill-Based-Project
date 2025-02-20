@@ -30,7 +30,7 @@ export default function AddressStatus() {
             <span className='text-gray-500 text-[1rem] font-bold'>LOGIN</span>
           </div>
 
-          <div className='text-gray-700 flex items-center text-sm gap-5 pl-10'>
+          <div className='text-gray-700 flex flex-col md:flex-row text-start md:items-center text-sm gap-x-5 pl-10 '>
             <span>{currUser.contact}</span>
             <span>{currUser.email}</span>
           </div>
@@ -39,7 +39,7 @@ export default function AddressStatus() {
 
 
           <Link
-            className='px-1 py-2 w-[10%] text-center border border-blue-600 text-blue-600 hover:bg-gray-50 text-sm font-semibold'
+            className='px-1 py-2 w-[20%] md:w-[10%] text-center border border-blue-600 text-blue-600 hover:bg-gray-50 text-sm font-semibold'
             to={'/bag/login-status'}>EDIT</Link>
 
         </div>

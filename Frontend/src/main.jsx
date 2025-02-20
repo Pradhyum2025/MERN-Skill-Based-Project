@@ -29,6 +29,8 @@ import OrderSummary from './component/core/order/OrderSummary.jsx'
 import PaymentOptions from './component/core/order/PaymentOptions.jsx'
 import OrderHistory from './component/core/order/Buyer/OrderHistory.jsx'
 import OrderDetails from './component/core/order/Buyer/OrderDetails.jsx'
+import { SellerOrderHistory } from './component/core/order/seller/SellerOrderHistory.jsx'
+import SellerOrderDetails from './component/core/order/seller/SellerOrderDetails.jsx'
 
 const router = createBrowserRouter([
     {
@@ -57,7 +59,9 @@ const router = createBrowserRouter([
         {path:'/dashbord/edit/:listingId',element: <ListingUpdation/>},
         {path:'/dashbord/all-listings',element: <AllListings/>},
         {path:'/dashbord/my-profile',element: <MyProfile/>} ,
-        {path:'/dashbord/all-sellers',element: <AllSeller/>}
+        {path:'/dashbord/all-sellers',element: <AllSeller/>},
+        {path:'/dashbord/my-orders',element: <SellerOrderHistory/>},
+        {path:'/dashbord/my-orders/:orderId',element: <SellerOrderDetails/>}
         
       ]
     },

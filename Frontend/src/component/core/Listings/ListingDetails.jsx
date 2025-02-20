@@ -49,12 +49,32 @@ export default function ListingDetails() {
   //Set preview image
   const [mainImage, setMainImage] = useState(null);
   const myBag = useSelector(store => store.bag);
+  const handleGoToCard = ()=>{
+    if(currUser.accountType==='Buyer'){
+      return navigate('/bag')
+    }else{
+      toast("Login from buyer account",
+        {
+          icon: <FiAlertTriangle className="text-yellow-600" size={20} />,
+          style: {
+            background: "#00100d",
+            color: "#b8971d",
+            fontWeight:900,
+            padding: "10px",
+            borderRadius:'0px',
+          },
+          position: 'bottom-center'
+        });
 
+      return document.getElementById('my_modal_3').showModal()
+    }
+  }
   if (!listing) {
     return (
       <p>Loading...</p>
     )
   }
+
 
   return (
     <div className="w-full bg-gray-50 py-5 px-0 sm:px-3 lg:px-8">
@@ -139,25 +159,8 @@ export default function ListingDetails() {
                 <hr class="my-6 border-gray-300" />
 
                 <div>
-                  {currUser?.accountType === 'Buyer' ?
+                  {currUser?.accountType === 'Seller' && currUser?._id === listing.seller ?
                     <>
-                      {/*  Stock */}
-                      {
-                        listing?.stock === 0 ?
-                          <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm ">Out of stock</span>
-                          :
-                          <div class="flex gap-2 items-center border border-gray-300 bg-white px-3 py-2.5 w-max">
-                            <button type="button" class="border-none outline-none">
-                              <LuMinus className='text-gray-900' />
-                            </button>
-                            <span class="text-gray-800 text-sm font-semibold px-3">1</span>
-                            <button type="button" class="border-none outline-none">
-                              <GoPlus className='text-gray-900' />
-                            </button>
-                          </div>
-                      }
-                    </>
-                    : <>
                       { //Stock details
                         listing?.stock === 0 ?
                           <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm ">Out of stock</span>
@@ -168,33 +171,47 @@ export default function ListingDetails() {
                           </>
                       }
                     </>
+                    :
+                    <>
+                    {/*  Stock */}
+                    {
+                      listing?.stock === 0 ?
+                        <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm ">Out of stock</span>
+                        :
+                        <div class="flex gap-2 items-center border border-gray-300 bg-white px-3 py-2.5 w-max">
+                          <button type="button" class="border-none outline-none">
+                            <LuMinus className='text-gray-900' />
+                          </button>
+                          <span class="text-gray-800 text-sm font-semibold px-3">1</span>
+                          <button type="button" class="border-none outline-none">
+                            <GoPlus className='text-gray-900' />
+                          </button>
+                        </div>
+                    }
+                  </>
+                  
                   }
 
 
                   {/*  --------- Buttons ---------  */}
-                  {(currUser?.accountType !== 'Seller' && currUser?.accountType !== 'Admin') ?
+                  {(currUser?.accountType === 'Seller' && currUser?._id === listing.seller) ?
+                    <div class="mt-4 flex flex-wrap gap-4">
+                      <button type="button"
+                        onClick={() => navigate(`/dashbord/edit/${listing._id}`)}
+                        class="px-4 py-3 w-[45%] border border-gray-300 bg-white hover:bg-gray-50 text-gray-800 text-sm font-semibold">Update details
+                      </button>
+                      <button type="button"
+                        onClick={handleDeleteListing}
+                        class="px-4 py-3 w-[45%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">Delete listing
+                      </button>
+                    </div> :
                     <div class="mt-4 flex flex-wrap gap-4">
                       <BagButtons2 listing={listing} myBag={myBag} quantity={1} />
-                      <button type="button"
-                        class="px-4 py-3 w-[45%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">Buy
-                        it now</button>
+                      <button
+                      onClick={handleGoToCard}
+                       type="button"
+                        class="px-4 py-3 w-[45%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">Go to bag</button>
                     </div>
-                    :
-                    <>
-                      {
-                        currUser?.accountType === 'Seller' &&
-                        <div class="mt-4 flex flex-wrap gap-4">
-                          <button type="button"
-                            onClick={() => navigate(`/dashbord/edit/${listing._id}`)}
-                            class="px-4 py-3 w-[45%] border border-gray-300 bg-white hover:bg-gray-50 text-gray-800 text-sm font-semibold">Update details
-                          </button>
-                          <button type="button"
-                            onClick={handleDeleteListing}
-                            class="px-4 py-3 w-[45%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">Delete listing
-                          </button>
-                        </div>
-                      }
-                    </>
                   }
 
 
@@ -203,7 +220,6 @@ export default function ListingDetails() {
                 <hr class="my-6 border-gray-300" />
 
                 {/*  ---------- Delevery location ----------   */}
-                {currUser?.accountType === 'Buyer' ?
                   <div>
                     <h3 class="text-lg sm:text-xl font-bold text-gray-800">Select Delivery Location</h3>
                     <p class="text-gray-500 text-sm mt-1">Enter the pincode of your area to check product availability.</p>
@@ -214,9 +230,7 @@ export default function ListingDetails() {
                         class='border border-blue-600 outline-none bg-blue-600 hover:bg-blue-700 text-white  px-4 py-2.5 text-sm'>Apply</button>
                     </div>
                   </div>
-                  :
-                  null
-                }
+                
 
                 <div class='flex justify-between gap-4 mt-6'>
                   <div class="text-center">

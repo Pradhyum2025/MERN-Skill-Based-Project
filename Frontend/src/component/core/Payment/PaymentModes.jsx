@@ -90,7 +90,7 @@ export const PaymentMethods = () => {
                     <div className="w-3 h-3 rounded-full bg-blue-500" />
                   )}
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex hidden lg:flex items-center space-x-2">
                   <span className="text-xl text-blue-600">{<FaCreditCard/>}</span>
                   <span className="text-sm font-medium text-gray-500">{'Credit Card'}</span> &nbsp;
                   /
@@ -104,6 +104,13 @@ export const PaymentMethods = () => {
                   <span className="text-xl text-blue-600"><FaPaypal/></span>
                   <span className="text-sm font-medium text-gray-500">{'Paypal'}</span>
                 </div>
+
+                <div className="flex block lg:hidden items-center space-x-2">
+                  <span className="text-xl text-blue-600"><FaMobile /></span>
+                  <span className="text-sm font-medium text-gray-500">{'Online Payment'}</span>
+                </div>
+                
+
               </div>
             </label>
 
@@ -141,7 +148,7 @@ export const PaymentMethods = () => {
           <button
           disabled={fetching}
           onClick={handleContinueAndPlaceOrder}
-            className='px-4 py-3 w-[40%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold flex items-center justify-center disabled:cursor-not-allowed'>
+            className='px-4 py-3 w-[100%] sm:w-[40%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold flex items-center justify-center disabled:cursor-not-allowed'>
                {fetching?
               <LoadingBtn working={'MAKING ORDER...'}/>
               :
@@ -153,7 +160,7 @@ export const PaymentMethods = () => {
           <button
            disabled={fetching}
             onClick={handleMakePaymentAndPlaceOrder}
-            className='px-4 py-3 w-[40%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold flex items-center justify-center disabled:cursor-not-allowed'>
+            className='px-4 py-3 w-[100%] sm:w-[40%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold flex items-center justify-center disabled:cursor-not-allowed'>
               {fetching?
               <LoadingBtn working={'PREPARING FOR PAYMENT...'}/>
               :

@@ -31,13 +31,13 @@ export default function Login() {
   return (
     <div>
       <dialog id="my_modal_3" className="modal">
-        <div className="modal-box bg-gray-800 text-black ">
+        <div className="modal-box dark:bg-gray-800 text-black ">
           {/* if there is a button in form, it will close the modal */}
-          <button className="absolute text-2xl text-white hover:bg-gray-500 bg-gray-700 rounded  font-extrabold right-2 top-2"
+          <button className="absolute text-2xl text-gray-800 hover:text-gray-800 bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 rounded  font-extrabold right-2 top-2"
             onClick={() => document.getElementById('my_modal_3').close()}
           ><RxCross2 /></button>
 
-          <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0  xl:p-0 dark:bg-gray-800 dark:border-gray-800">
+          <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0  xl:p-0 dark:bg-gray-800 dark:border-gray-800 border-0">
             <div class="p-6 space-y-4 md:space-y-6 w-full">
 
               <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">

@@ -14,7 +14,7 @@ export default function OrderDetails() {
 
   useEffect(() => {
     if (currUser.token && orderId) {
-      getOrderDetails(dispatch, orderId, currUser.token)
+      getOrderDetails(dispatch, orderId, currUser.token,currUser.accountType)
     }
   }, []);
 
@@ -60,15 +60,15 @@ export default function OrderDetails() {
     <div className="min-h-screen bg-gray-100 p-4 md:p-8  mt-10">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header Section */}
-        <div className="flex justify-between items-center">
-          <h1 className="text-[1.3rem] font-[900] text-gray-600">ORDER SUMMARY</h1>
+        <div className="flex justify-between items-center  mt-5 sm:mt-0">
+          <h1 className="md:text-[1.3rem] font-[900] text-gray-600">ORDER SUMMARY</h1>
 
-          <div className="flex gap-4">
-            <button className="flex items-center gap-2 px-4 py-2 bg-primary text-gray-600  font-bold rounded hover:opacity-90 transition-opacity">
-              <FiPrinter /> Print Order
+          <div className="flex gap-4  justify-end">
+            <button className="flex text-[1rem] items-center gap-2 px-4 py-2 bg-primary text-gray-600  font-bold rounded hover:opacity-90 transition-opacity">
+              <FiPrinter /> <span className='hidden sm:block'>Print Order</span> 
             </button>
             <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-gray-100  font-bold rounded hover:opacity-90 transition-opacity">
-              <FiDownload /> Download Invoice
+              <FiDownload /> <span className='hidden sm:block'>Download Invoice</span>  
             </button>
           </div>
         </div>

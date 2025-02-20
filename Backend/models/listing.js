@@ -70,7 +70,11 @@ const listingSchema = new mongoose.Schema({
       type:mongoose.Schema.Types.ObjectId,
       ref:'Review'
     }
-  ]
+  ],
+  shippingAddress:{
+    type:mongoose.Schema.Types.ObjectId,
+      ref:'Address'
+  }
 }, { timestamps: true });
 
 export const Listing = mongoose.model("Listing", listingSchema);

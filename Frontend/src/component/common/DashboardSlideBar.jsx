@@ -26,7 +26,7 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
       {/*---------------- Aside slidebar ---------------- */}
       <aside id="separator-sidebar" class="xl:w-64 w-ful  transition-transform  fixed z-20 lg:static lg:z-0" aria-label="Sidebar">
 
-        <div class="h-full px-3 pb-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div class="h-full px-3 pb-4 overflow-y-auto bg-gray-800 ">
 
           {/* slidebar btn */}
           <div className='lg:hidden w-full flex items-center justify-end mt-2'>
@@ -40,12 +40,12 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
           <ul class="space-y-2 font-medium">
             {/*------- Dashbord------- */}
             <li>
-              <div class="flex items-center font-bold p-2 text-indigo-300">
-                <svg class="w-5 h-5 text-gray-500 transition text-indigo-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+              <div class="flex items-center font-bold p-2 text-blue-600">
+                <svg class="w-5 h-5 transition text-blue-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
                   <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
                   <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
                 </svg>
-                <span class="ms-3">{currUser.accountType + " " + 'Account'}</span>
+                <span class="ms-3 font-bold">{currUser.accountType.toUpperCase() + " " + 'ACCOUNT'}</span>
               </div>
             </li>
 
@@ -57,10 +57,10 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
                   to='/dashbord/all-listings'
                 >
                   <li>
-                    <a href="#MyCourse" class={`${currLocation === '/dashbord/all-listings' ? 'dark:bg-gray-700 text-white ' : ''} flex items-center p-2 text-gray-900 rounded-lg dark:text-white group`}>
+                    <a href="#MyCourse" class={`${currLocation === '/dashbord/all-listings' ? 'bg-gray-700 ' : ''} text-white flex items-center p-2  rounded-lg  group`}>
 
                       <svg
-                        class={`${currLocation === '/dashbord/all-listings' ? 'text-white' : ''}  flex-shrink-0 w-4 h-4 text-gray-400 transition duration-75`}
+                        class={`flex-shrink-0 w-4 h-4 text-white transition duration-75`}
                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
                         <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
                       </svg>
@@ -74,7 +74,7 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
                   to='/dashbord/categories'
                 >
                   <li>
-                    <a href="#MyCourse" class={`${currLocation === '/dashbord/categories' ? 'dark:bg-gray-700 text-white ' : ''} flex items-center p-2 text-gray-900 rounded-lg dark:text-white group`}>
+                    <a href="#MyCourse" class={`${currLocation === '/dashbord/categories' ? 'bg-gray-700 ' : ''}  text-white flex items-center p-2  rounded-lg  group`}>
 
                       <RiListUnordered />
 
@@ -86,8 +86,8 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
                   onClick={handleSelectSubSection}
                   to='/dashbord/all-sellers'>
                   <li>
-                    <a href="#Profile" class={`${currLocation === '/dashbord/all-sellers' ? 'dark:bg-gray-700' : ''} flex items-center p-2 text-gray-900 rounded-lg dark:text-white  group`}>
-                      <FaSellcast className={`${currLocation === '/dashbord/all-sellers' ? 'text-white' : ''}  flex-shrink-0 w-4 h-4 text-gray-400 transition duration-75`} />
+                    <a href="#Profile" class={`${currLocation === '/dashbord/all-sellers' ? 'bg-gray-700' : ''} flex items-center p-2 text-gray-900 rounded-lg text-white  group`}>
+                      <FaSellcast className={`flex-shrink-0 w-4 h-4 text-white transition duration-75`} />
                       <span class="flex-1 ms-3 whitespace-nowrap">Our sellers</span>
                     </a>
                   </li>
@@ -97,13 +97,12 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
                   to='/dashbord/categories'
                 >
                   <li>
-                    <a href="#MyCourse" class={`${currLocation === '/dashbord/categories' ? 'dark:bg-gray-700 text-white ' : ''} flex items-center p-2 text-gray-900 rounded-lg dark:text-white group`}>
+                    <a href="#MyCourse" class={`${currLocation === '/dashbord/categories' ? 'bg-gray-700' : ''} flex items-center p-2 text-gray-900 rounded-lg text-white group`}>
 
                       <MdCategory
-                        class={`${currLocation === '/dashbord/categories' ? 'text-white' : ''}  flex-shrink-0 w-4 h-4 text-gray-400 transition duration-75`}
+                        class={`flex-shrink-0 w-4 h-4 text-white transition duration-75`}
                       />
-
-                      <span class="flex-1 ms-3 whitespace-nowrap">Product categories</span>
+                      <span class="flex-1 ms-3 whitespace-nowrap">Product Categories</span>
                     </a>
                   </li>
                 </Link>
@@ -111,9 +110,9 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
                   onClick={handleSelectSubSection}
                   to='/dashbord/createCategory'>
                   <li>
-                    <a href="#Profile" class={`${currLocation === '/dashbord/createCategory' ? 'dark:bg-gray-700' : ''} flex items-center p-2 text-gray-900 rounded-lg dark:text-white  group`}>
-                      <HiViewGridAdd className={`${currLocation === '/dashbord/createCategory' ? 'text-white' : ''}  flex-shrink-0 w-5 h-5 text-gray-400 transition duration-75`} />
-                      <span class="flex-1 ms-3 whitespace-nowrap">Create a new Category</span>
+                    <a href="#Profile" class={`${currLocation === '/dashbord/createCategory' ? 'bg-gray-700' : ''} flex items-center p-2  rounded-lg text-white  group`}>
+                      <HiViewGridAdd className={`flex-shrink-0 w-5 h-5 text-white transition duration-75`} />
+                      <span class="flex-1 ms-3 whitespace-nowrap">Create New Category</span>
                     </a>
                   </li>
                 </Link> 
@@ -125,25 +124,38 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
                 onClick={handleSelectSubSection}
                 to={'/dashbord'}>
                 <li>
-                  <a href="#MyCourse" class={`${currLocation === '/dashbord' ? 'dark:bg-gray-700 text-white ' : ''} flex items-center p-2 text-gray-900 rounded-lg dark:text-white group`}>
+                  <a href="#MyCourse" class={`${currLocation === '/dashbord' ? 'bg-gray-700 text-white ' : ''} flex items-center p-2 text-gray-900 rounded-lg text-white group`}>
 
                     <svg
-                      class={`${currLocation === '/dashbord' ? 'text-white' : ''}  flex-shrink-0 w-4 h-4 text-gray-400 transition duration-75`}
+                      class={`${currLocation === '/dashbord' ? 'text-white' : 'text-white'}  flex-shrink-0 w-4 h-4  transition duration-75`}
                       aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
                       <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
                     </svg>
 
-                    <span class="flex-1 ms-3 whitespace-nowrap font-bold">my listings</span>
+                    <span class="flex-1 ms-3 whitespace-nowrap">My Products</span>
                   </a>
                 </li>
               </Link>
               <Link
+                  onClick={handleSelectSubSection}
+                  to='/dashbord/my-orders'
+                >
+                  <li>
+                    <a href="" class={`${currLocation === '/dashbord/my-orders' ? 'bg-gray-700 text-white ' : ''} flex items-center p-2 rounded-lg text-white group`}>
+
+                      <RiListUnordered  className='font-extrabold'/>
+
+                      <span class="flex-1 ms-3 whitespace-nowrap">My Orders</span>
+                    </a>
+                  </li>
+                </Link>
+              <Link
                 onClick={handleSelectSubSection}
                 to='/dashbord/create-listing'>
                 <li>
-                  <a href="#Profile" class={`${currLocation === '/dashbord/create-listing' ? 'dark:bg-gray-700' : ''} flex items-center pl-1 py-2 text-gray-900 rounded-lg dark:text-white `}>
-                    <HiViewGridAdd className={`${currLocation === '/dashbord/create-listing' ? 'text-white' : 'text-gray-400'}  flex-shrink-0 w-6 h-7  transition duration-75`} />
-                    <span class="flex-1 ms-3 whitespace-nowrap font-bold">Sell products</span>
+                  <a href="#Profile" class={`${currLocation === '/dashbord/create-listing' ? 'bg-gray-700' : ''} text-md flex items-center pl-1 py-2 rounded-lg text-white `}>
+                    <HiViewGridAdd className={`flex-shrink-0 w-6 h-7  transition duration-75`} />
+                    <span class="flex-1 ms-3 whitespace-nowrap">Sell Products</span>
                   </a>
                 </li>
               </Link>
@@ -155,24 +167,24 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
               onClick={handleSelectSubSection}
               to={'/dashbord/my-profile'}>
               <li>
-                <a href="#Profile" class={`${currLocation === '/dashbord/my-profile' ? 'dark:bg-gray-700' : ''} flex items-center p-2 text-gray-900 rounded-lg dark:text-white  group`}>
+                <a href="#Profile" class={`${currLocation === '/dashbord/my-profile' ? 'bg-gray-700' : ''} flex items-center p-2 text-white rounded-lg dark:text-white  group`}>
                   <svg
-                    class={`${currLocation === '/dashbord/my-profile' ? 'text-white' : ''}  flex-shrink-0 w-5 h-5 text-gray-400 transition duration-75`}
+                    class={`flex-shrink-0 w-5 h-5 text-white transition duration-75`}
                     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                     <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
                   </svg>
-                  <span class="flex-1 ms-3 whitespace-nowrap font-bold">Profile</span>
+                  <span class="flex-1 ms-3 whitespace-nowrap ">Profile</span>
                 </a>
               </li>
             </Link>
 
             {/*------- My Sign out------- */}
             <li onClick={handleSignOut}>
-              <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white  group">
-                <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
+              <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg text-white  group hover:bg-gray-700">
+                <svg class="flex-shrink-0 w-5 h-5 text-white transition duration-75 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3" />
                 </svg>
-                <span class="flex-1 ms-3 whitespace-nowrap font-bold">Sign out</span>
+                <span class="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
               </a>
             </li>
 

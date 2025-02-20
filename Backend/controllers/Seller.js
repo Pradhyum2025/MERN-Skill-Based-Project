@@ -8,16 +8,16 @@ import mongoose, { Schema } from "mongoose";
 export const postNewListing = async (req, res) => {
 
   try {
-    let { productName, brand, description, category, price, state, returnPolicy, productWeight, stock, discount } = req.body;
+    let { productName,shippingAddress, brand, description, category, price, state, returnPolicy, productWeight, stock, discount } = req.body;
 
     const userId = req.user.id;
 
     let features = req.body?.['features[]'];
 
     let productImages = req?.files?.['images']
-
-
-    if (!productName || !brand || !category || !price || !state || !returnPolicy || !description || !productWeight || !stock || !discount || !productImages || !features) {
+     console.log(productImages)
+    console.log(req.body)
+    if (!productName || !brand || !category || !shippingAddress || !price || !state || !returnPolicy || !description || !productWeight || !stock || !discount || !productImages || !features) {
       return res.status(400).json({
         success: false,
         message: 'All fields are required'
@@ -49,7 +49,8 @@ export const postNewListing = async (req, res) => {
       stock,
       seller: userId,
       discount,
-      images: uploadImagesSecureUrl
+      images: uploadImagesSecureUrl,
+      shippingAddress
     })
 
 

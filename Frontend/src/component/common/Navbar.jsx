@@ -217,7 +217,8 @@ const Navbar = () => {
                 }
 
               </div>
-
+               
+               {currUser.accountType==='Buyer' &&
               <div className="relative">
                 <Link to={'/bag'}>
                   <FiShoppingCart className="h-6 w-6 cursor-pointer" />
@@ -226,6 +227,7 @@ const Navbar = () => {
                   </span>
                 </Link>
               </div>
+               }
             </div>
           </div>
 

@@ -8,6 +8,8 @@ import { postListing } from "../../../../operations/listing";
 import { useNavigate } from "react-router-dom";
 import LoadingBtn from '../../../common/LoadingBtn.jsx'
 import { HiCurrencyRupee } from "react-icons/hi";
+import { getMyAddresses } from "../../../../operations/Address.js";
+import CreateAddressModal from "../../Address/CreateAddressModal.jsx";
 
 
 const ProductForm = () => {
@@ -17,6 +19,12 @@ const ProductForm = () => {
   const [images, setImages] = useState([]);
   const currUser = useSelector(store => store.auth);
 
+
+  useEffect(() => {
+    if (currUser.token) {
+      getMyAddresses(dispatch, currUser.token)
+    }
+  }, [])
   useEffect(() => {
     getAllCategories(dispatch)
   })
@@ -45,6 +53,7 @@ const ProductForm = () => {
     formData.append("productWeight", data.productWeight);
     formData.append("stock", data.stock);
     formData.append("discount", data.discount);
+    formData.append("shippingAddress", data.shippingAddress);
 
     //for images
     if (Array.isArray(images)) {
@@ -112,6 +121,7 @@ const ProductForm = () => {
   };
 
   const fetching = useSelector(store => store.fetching);
+  const myAddresses = useSelector(store => store.addresses);
 
   return (
     <div className="w-full bg-gray-50 py-5 px-4 sm:px-6 lg:px-8">
@@ -119,7 +129,7 @@ const ProductForm = () => {
 
         <section className="bg-white rounded-lg shadow-md p-6 sm:p-8">
           <div className="max-w-3xl px-4 py-8 mx-auto lg:py-0">
-            <h2 className="mb-10 text-3xl text-center font-extrabold text-blue-600">---- Sell Product ----</h2>
+            <h1 className="text-lg font-[700] text-gray-500 text-center mb-3">SELL PRODUCTS</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
                 {/* -----------Product Name ----------- */}
@@ -319,6 +329,51 @@ const ProductForm = () => {
 
               </div>
 
+              {/* ------------shippingAddress ------------ */}
+              <div className="flex flex-col gap-x-2 items-center w-full">
+                <label className="block mb-2 text-sm font-medium text-gray-900 text-left w-full">shipping Address</label>
+                {myAddresses && myAddresses.map(address => {
+                  return <div
+                    className="flex bg-gray-100 p-2 border-b-2">
+
+                    <input type="radio" value={address._id} name="shippingAddress" className=""
+                      {...register("shippingAddress", {
+                        required: { value: true, message: "shipping Address is required" },
+                      })}
+                    />
+                    <div className={`flex items-start gap-x-3 px-4 pt-4 pb-2 w-[100%]`}>
+
+                      <div className='flex flex-col gap-y-2'>
+
+                        <div className='flex items-center gap-2'>
+                          <span className='text-gray-800 text-[.99rem] font-[700]'>{address.firstName + " " + address.lastName + "  -"}</span>
+
+                          <span className='text-gray-800 text-[.9rem] font-[700]'>{address.contact[0]}</span>
+                        </div>
+
+                        <div className='w-[93%]'>
+                          <span className='text-gray-600 text-[.86rem] font-[600]'>{address?.streetAddress + ", " + address?.city + ", " + address?.state}</span>
+                          <span className='text-gray-900 text-[.87rem] font-[700]'>- {address?.postalCode}</span>
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+                })}
+                 {errors?.shippingAddress && <p className="text-red-500 text-sm w-full text-left">{errors?.shippingAddress?.message}</p>}
+                <div className='bg-gray-100 h-[3px] shadow-0'></div>
+
+                <div className='w-full flex items-center justify-end p-2'>
+                  <button
+                    onClick={() => document.getElementById('my_modal_1').showModal()}
+                    className='px-4 py-2 w-[2 5%] border-2 border-dashed border-blue-500  flex items-center justify-center bg-white hover:bg-gray-50 text-gray-800 text-sm font-semibold text-md'>
+                    NEW ADDRESS
+                  </button>
+                </div>
+
+              </div>
+
               {/* --------------- Images---------------  */}
               <div className="mb-10">
 
@@ -393,6 +448,7 @@ const ProductForm = () => {
               </div>
 
             </form>
+             <CreateAddressModal />
           </div>
         </section>
       </div>

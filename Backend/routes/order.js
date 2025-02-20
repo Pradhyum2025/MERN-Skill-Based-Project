@@ -8,7 +8,7 @@ const orderRouter = express.Router();
 orderRouter.get('/create',isAuth,isBuyer,createOrder);
 
 //get all order
-orderRouter.get('/my-order',isAuth,isMultiRoll,getMyOrder)
+orderRouter.post('/my-order',isAuth,isMultiRoll,getMyOrder)
 
 //get specific order
 orderRouter.get('/my-order/:orderId',isAuth,isMultiRoll,getOrderDetails)

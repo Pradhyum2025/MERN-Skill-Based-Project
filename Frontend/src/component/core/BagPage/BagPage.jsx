@@ -51,7 +51,7 @@ export const BagPage = () => {
               </div>
 
                {/* ------------PRICE DETAILS -------------------- */}
-              <div className="md:w-[38%] lg:w-[30%] bg-white px-6 py-2  shadow-md flex flex-col justify-around">
+              <div className={`md:w-[38%] lg:w-[30%]  bg-white px-6 py-2   shadow-md flex flex-col justify-around ${currPath!=='/bag'?"h-[18rem]":"h-[25rem]"}`}>
 
                 <div class="mt-6 w-full space-y-6 sm:mt-8 lg:mt-0 lg:max-w-xs xl:max-w-md">
                   <div class="flow-root">
@@ -86,7 +86,7 @@ export const BagPage = () => {
                       </dl>
                       {/* --------------Total Payable -------------- */}
                       <dl class="flex items-center justify-between gap-4 py-3">
-                        <dt class="text-lg font-bold text-gray-900 ">Total Payable</dt>
+                        <dt class="text-lg font-bold text-blue-600 ">Total Payable</dt>
                         <dd class="text-base font-bold text-gray-900 ">{new Intl.NumberFormat('en-IN', {
                           style: 'currency',
                           currency: 'INR',
@@ -98,7 +98,7 @@ export const BagPage = () => {
 
               {/*  ----------  Place order btn  ----------  */}
                 {currPath === '/bag' &&
-                  <div class="space-y-3 mt-5">
+                  <div class="space-y-3 mt-0">
                     <button
                       onClick={() => handleCreateOrder(userBag)}
 
