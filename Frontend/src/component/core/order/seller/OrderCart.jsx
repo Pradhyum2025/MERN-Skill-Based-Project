@@ -2,14 +2,14 @@ import React from 'react'
 import { dateFormate } from '../../../../operations/order'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import SellerOrderDetails from './SellerOrderDetails';
 
-export default function OrderCart({order,index}) {
+
+export default function OrderCart({subOrder,index}) {
   const currUser = useSelector(store=>store.auth);
   const navigate = useNavigate();
 
  const handleShowOrderDetails =()=>{
-  return navigate(`/dashbord/my-orders/${order._id}`)
+  return navigate(`/dashbord/my-orders/${subOrder._id}`)
  }
 
  const getStatusColor = (status) => {
@@ -35,22 +35,20 @@ export default function OrderCart({order,index}) {
 
   return (
     <tr
-    key={order._id}
+    key={subOrder._id}
     className={`hover:bg-blue-50 transition-colors border-b-2`}
   >
     <td className="py-4 px-6 text-sm font-[600] text-gray-800">
       <span 
-      className='cursor-pointer hover:text-gray-700 hover:underline'>{order.order}</span>
+      className='cursor-pointer hover:text-gray-700 hover:underline'>{subOrder._id}</span>
       </td>
     <td className="py-4 px-6 text-sm font-[600] text-gray-800">
-      {dateFormate(order.createdAt)}
+      {dateFormate(subOrder.createdAt)}
     </td>
    
     <td className="py-4 px-6">
 
-      {order.status==='Processing'?
-      <span className={`${getStatusColor(order.status)}` }>{order.status}</span>:
-      null}
+      <span className={`${getStatusColor(subOrder.status)}` }>{subOrder.status}</span>
     </td>
 
     <td className="py-4 px-6">

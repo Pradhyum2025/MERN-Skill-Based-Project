@@ -23,17 +23,20 @@ export default function SellerOrderDetails() {
   }, []);
 
   const orderArray = useSelector(store => store.orders);
-  const orderDetails = orderArray.length > 0 ? orderArray[0] : null
+  const subOrderDetails = orderArray.length > 0 ? orderArray[0] : null
 
   const handleNavigatation = (listingId) => {
     return navigate(`/show/${listingId}`)
   }
 
-  if (!orderDetails) {
+  if (!subOrderDetails) {
     return;
   }
+
+  console.log(subOrderDetails)
+
   const getStatusColor = (status) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case "delivered":
         return "bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
       case "pending":
@@ -52,7 +55,7 @@ export default function SellerOrderDetails() {
         return "bg-pink-100 text-pink-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
     }
   };
-  const time = new Date(orderDetails?.createdAt).toLocaleString().split(',')[1];
+  const time = new Date(subOrderDetails?.createdAt).toLocaleString().split(',')[1];
   return (
     <div className="min-h-screen bg-gray-100 p-4 w-full">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -60,39 +63,25 @@ export default function SellerOrderDetails() {
           {/* Heading */}
           <div className="flex justify-between items-center">
             <h1 className="md:text-[1.3rem] font-[900] text-gray-600">ORDER SUMMARY</h1>
-
-            <div className="flex gap-4  justify-end">
-              <button className="flex text-[1rem] items-center gap-2 px-4 py-2 bg-primary text-gray-600  font-bold rounded hover:opacity-90 transition-opacity">
-                <FiPrinter /> <span className='hidden sm:block'>Print Order</span>
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-gray-100  font-bold rounded hover:opacity-90 transition-opacity">
-                <FiDownload /> <span className='hidden sm:block'>Download Invoice</span>
-              </button>
-            </div>
           </div>
           {/* Summary */}
           <div className="bg-white p-6 rounded-lg shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className=''>
                 <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1">Order ID</p>
-                <p className="font-semibold  text-sm text-gray-500">{orderDetails?._id}</p>
+                <p className="font-semibold  text-sm text-gray-500">{subOrderDetails?._id}</p>
               </div>
-
-              {/* <div>
-                <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1">Seller Id</p>
-                <p className="font-semibold  text-sm text-gray-500 flex items-center gap-0">{orderDetails?.seller?._id}</p>
-              </div> */}
 
               <div>
                 <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1">Order Date</p>
                 <p className="font-semibold  text-sm text-gray-500 ">
-                  {dateFormate(orderDetails?.createdAt) + " " + time}
+                  {dateFormate(subOrderDetails?.createdAt) + " " + time}
                 </p>
               </div>
               <div>
                 <p className="text-yellow-400 font-semibold  text-sm sm:pl-3 mb-0">Status</p>
-                <span className={`${getStatusColor(orderDetails?.status)}`}>
-                  {orderDetails.status.toLowerCase()}
+                <span className={`${getStatusColor(subOrderDetails?.status)}`}>
+                  {subOrderDetails.status?.toLowerCase()}
                 </span>
               </div>
 
@@ -100,7 +89,7 @@ export default function SellerOrderDetails() {
                 <p className="text-yellow-400 font-semibold  text-sm sm:pl-3 mb-0">Total Ammount</p>
                 <span className={`font-semibold  text-sm text-gray-500 flex items-center gap-1 ml-2`}>
                   <BiRupee className='text-md' />
-                  {calTotalPrice(orderDetails?.products)}
+                  {subOrderDetails?.products?.length>0 && calTotalPrice(subOrderDetails?.products)}
                 </span>
               </div>
 
@@ -111,7 +100,7 @@ export default function SellerOrderDetails() {
           <div className=''>
             <h2 className="text-lg text-gray-700 font-bold mb-3 flex flex-col">PRODUCTS</h2>
             <div className="space-y-4">
-              {orderDetails?.products && orderDetails?.products?.map((orderItem) => (
+              {subOrderDetails?.products && subOrderDetails?.products?.map((orderItem) => (
                 <div key={orderItem?.productId?._id} className="flex  flex-row  bg-white items-start gap-4 p-4 border border-border rounded-lg hover:bg-gray-50 transition-colors">
                   <img
                     onClick={() => handleNavigatation(orderItem?.productId?._id)}
@@ -125,7 +114,7 @@ export default function SellerOrderDetails() {
                       onClick={() => handleNavigatation(orderItem?.productId?._id)}
                       className="font-semibold text-blue-700 cursor-pointer hover:text-blue-600">{orderItem?.productId?.productName}</h3>
                     <p className="text-gray-600  text-sm font-[600] pl-0">Piece : {orderItem?.quantity}</p>
-                    <p className="text-gray-600 font-[600] flex text-sm items-center"><BiRupee />{((orderItem?.productId?.price) - (orderItem?.productId?.price * orderItem?.productId?.discount) / 100) + '/-'}
+                    <p className="text-gray-600 font-[600] flex text-sm items-center"><BiRupee />{Math.floor((orderItem?.productId?.price) - (orderItem?.productId?.price * orderItem?.productId?.discount) / 100) + '/-'}
                       <span className='text-xs text-gray-500 font-[500]'>&nbsp; ({+ orderItem?.quantity} Item)</span>
                     </p>
                   </div>
@@ -140,18 +129,18 @@ export default function SellerOrderDetails() {
             <div className="space-y-4 bg-white p-6 rounded-lg shadow-sm">
               <p className='text-gray-500 fonr-md font-bold'>Personal Details :</p>
               <div className='flex sm:items-center gap-y-5 sm:gap-10 flex-col sm:flex-row'>
-                <p className="text-yellow-600  text-md font-bold flex items-center gap-1"><FaRegUserCircle className='text-blue-600 text-2xl' />{orderDetails?.seller?.firstName + " " + orderDetails?.seller?.lastName}</p>
-                <p className="text-gray-500  text-sm font-semibold flex items-center gap-1"><MdMarkEmailRead className='text-blue-600 text-2xl' />{orderDetails?.seller?.email}</p>
-                <p className="text-gray-600  text-sm font-bold flex items-center gap-1"><MdOutlinePhone className='text-blue-600 text-xl' />{orderDetails?.seller?.contact?.[0]}</p>
+                <p className="text-yellow-600  text-md font-bold flex items-center gap-1"><FaRegUserCircle className='text-blue-600 text-2xl' />{subOrderDetails?.seller?.firstName + " " + subOrderDetails?.seller?.lastName}</p>
+                <p className="text-gray-500  text-sm font-semibold flex items-center gap-1"><MdMarkEmailRead className='text-blue-600 text-2xl' />{subOrderDetails?.seller?.email}</p>
+                <p className="text-gray-600  text-sm font-bold flex items-center gap-1"><MdOutlinePhone className='text-blue-600 text-xl' />{subOrderDetails?.seller?.contact?.[0]}</p>
               </div>
               <p className='text-gray-500 fonr-md font-bold'>Company / Store / Shop Details :</p>
               <div className='flex items-center gap-2'>
                 <p className="text-blue-600  text-2xl  font-semibold"><AiTwotoneShop /></p>
-                <p className="text-gray-500  text-[1rem]  font-semibold">{orderDetails?.SellerDetails?.companyName}</p>
+                <p className="text-gray-500  text-[1rem]  font-semibold">{subOrderDetails?.SellerDetails?.companyName}</p>
               </div>
               <div className='flex items-center gap-2'>
                 <p className="text-gray-600  text-sm font-semibold"><GiRotaryPhone className='text-blue-500  text-2xl  font-semibold' /></p>
-                {orderDetails?.SellerDetails?.contact?.map(contact => (
+                {subOrderDetails?.SellerDetails?.contact?.map(contact => (
                   <p className="text-gray-500  text-sm text-sm font-semibold">{contact}</p>
                 ))}
               </div>
@@ -160,14 +149,14 @@ export default function SellerOrderDetails() {
                 <p className="text-gray-500 text-sm  font-semibold">Delivery Address</p>
 
                 <div className='flex items-center gap-2'>
-                  <span className='text-gray-600 text-sm font-[600]'>{orderDetails?.deliveryAddress?.firstName + " " + orderDetails?.deliveryAddress?.lastName + "  -"}</span>
+                  <span className='text-gray-600 text-sm font-[600]'>{subOrderDetails?.deliveryAddress?.firstName + " " + subOrderDetails?.deliveryAddress?.lastName + "  -"}</span>
 
-                  <span className='text-gray-600 text-sm font-[600]'>{orderDetails?.deliveryAddress?.contact[0]}</span>
+                  <span className='text-gray-600 text-sm font-[600]'>{subOrderDetails?.deliveryAddress?.contact[0]}</span>
                 </div>
 
                 <div className='w-[93%]'>
-                  <span className='text-gray-500 text-sm font-[600]'>{orderDetails?.deliveryAddress?.streetAddress + ", " + orderDetails?.deliveryAddress?.city + ", " + orderDetails?.deliveryAddress?.state}</span>
-                  <span className='text-gray-500 text-sm font-[600]'>- {orderDetails?.deliveryAddress?.postalCode}</span>
+                  <span className='text-gray-500 text-sm font-[600]'>{subOrderDetails?.deliveryAddress?.streetAddress + ", " + subOrderDetails?.deliveryAddress?.city + ", " + subOrderDetails?.deliveryAddress?.state}</span>
+                  <span className='text-gray-500 text-sm font-[600]'>- {subOrderDetails?.deliveryAddress?.postalCode}</span>
                 </div>
 
               </div> */}

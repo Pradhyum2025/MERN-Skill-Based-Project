@@ -1,6 +1,6 @@
 import express from 'express'
-import { createOrder, getMyOrder, getOrderDetails } from '../controllers/order.js';
-import { isAuth, isBuyer, isMultiRoll } from '../middlewares/Auth.js';
+import { createOrder, getAllOrdersForAdmin, getMyOrder, getOrderDetails, getOrderDetailsforAdmin } from '../controllers/order.js';
+import { isAdmin, isAuth, isBuyer, isBuyerOrSelller, isMultiRoll } from '../middlewares/Auth.js';
 
 const orderRouter = express.Router();
 
@@ -8,10 +8,12 @@ const orderRouter = express.Router();
 orderRouter.get('/create',isAuth,isBuyer,createOrder);
 
 //get all order
-orderRouter.post('/my-order',isAuth,isMultiRoll,getMyOrder)
+orderRouter.post('/my-order',isAuth,isBuyerOrSelller,getMyOrder)
 
 //get specific order
 orderRouter.get('/my-order/:orderId',isAuth,isMultiRoll,getOrderDetails)
+ 
+orderRouter.post('/admin',isAuth,isAdmin,getAllOrdersForAdmin)
 
-
+orderRouter.get('/admin/:orderId',isAuth,isAdmin,getOrderDetailsforAdmin)
 export default orderRouter;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { profileSliceAction } from "../store/profile";
+import { profileSliceAction } from "../../../store/profile";
 import { loadingSliceAction } from "../store/loading";
 import SellerListingCard from "./SellerListingCard";
 import { Toaster } from "react-hot-toast";

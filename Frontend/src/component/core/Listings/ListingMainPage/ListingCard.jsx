@@ -12,12 +12,12 @@ export default function ListingCard({listing,myBag}) {
     return navigate(`/show/${listingId}`)
   }
   return (
-     <div class="rounded-lg border border-gray-200 bg-white px-2 pt-2 pb-4 shadow-sm w-full sm:w-[19rem] md:w-[21rem] lg:w-[20rem] xl:w-[19rem] 2xl:w-[21rem]">
+     <div class="bg-white px-2 pt-2 pb-4 shadow-lg w-full sm:w-[19rem] md:w-[21rem] lg:w-[20rem] xl:w-[19rem] 2xl:w-[21rem]">
             {/*  ------ Product Image ------   */}
             <div
             onClick={()=>handleClickToView(listing._id)}
              class="h-[200px] xl:h-[220px] w-full cursor-pointer">
-                <img class="mx-auto h-full w-full object-contains rounded-tr-md rounded-tl-md" src={listing?.images[0]} alt="" />
+                <img class="mx-auto h-full w-full object-contains " src={listing?.images[0]} alt="" />
             </div>
     
             <div class="pt-4">
@@ -25,7 +25,7 @@ export default function ListingCard({listing,myBag}) {
             {/*  ----------- Descount and Wishlist -----------  */}
               <div class="mb-2 flex items-center justify-between gap-4">
                 {/*  ------- Discount ------- */}
-                <span class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-white dark:bg-primary-500  pt-[4px]">
+                <span class="me-2 rounded bg-blue-500 px-2.5 py-0.5 text-xs font-medium text-white   pt-[4px]">
                    Up to {listing?.discount}% off
                     </span>
     

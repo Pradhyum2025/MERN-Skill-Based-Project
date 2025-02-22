@@ -54,10 +54,10 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
               <>
                 <Link
                   onClick={handleSelectSubSection}
-                  to='/dashbord/all-listings'
+                  to='/dashbord/admin/all-listings'
                 >
                   <li>
-                    <a href="#MyCourse" class={`${currLocation === '/dashbord/all-listings' ? 'bg-gray-700 ' : ''} text-white flex items-center p-2  rounded-lg  group`}>
+                    <a href="#MyCourse" class={`${currLocation === '/dashbord/admin/all-listings' ? 'bg-gray-700 ' : ''} text-white flex items-center p-2  rounded-lg  group`}>
 
                       <svg
                         class={`flex-shrink-0 w-4 h-4 text-white transition duration-75`}
@@ -71,10 +71,10 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
                 </Link>
                 <Link
                   onClick={handleSelectSubSection}
-                  to='/dashbord/categories'
+                  to='/dashbord/admin/all-orders'
                 >
                   <li>
-                    <a href="#MyCourse" class={`${currLocation === '/dashbord/categories' ? 'bg-gray-700 ' : ''}  text-white flex items-center p-2  rounded-lg  group`}>
+                    <a href="#MyCourse" class={`${currLocation === '/dashbord/admin/all-orders' ? 'bg-gray-700 ' : ''}  text-white flex items-center p-2  rounded-lg  group`}>
 
                       <RiListUnordered />
 

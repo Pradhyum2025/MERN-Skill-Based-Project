@@ -23,9 +23,6 @@ export const SellerOrderHistory = () => {
     }
   }
 
-
-
-
   return (
     <div className="bg-gray-50 sm:px-6 mt-0 w-full">
       <div className="max-w-4xl mx-auto bg-card rounded-lg shadow-sm sm:p-6">

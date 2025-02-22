@@ -6,7 +6,7 @@ import { FiPackage, FiTruck, FiCheck, FiAlertCircle, FiPrinter, FiDownload, FiPh
 import { BiRupee } from "react-icons/bi";
 import { LiaRupeeSignSolid } from 'react-icons/lia';
 
-export default function OrderDetails() {
+export default function BuyerOrderDetails() {
   const currUser = useSelector(store => store.auth);
   const dispatch = useDispatch();
   const { orderId } = useParams();
@@ -29,21 +29,21 @@ export default function OrderDetails() {
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
       case "delivered":
-        return "bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-green-100 text-green-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
       case "pending":
-        return "bg-yellow-100 text-yellow-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-yellow-100 text-yellow-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
       case "shipped":
-        return "bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-green-100 text-green-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
       case "failed":
-        return "bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-red-100 text-red-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
       case "refunded":
-        return "bg-pink-100 text-pink-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-pink-100 text-pink-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
       case "processing":
-        return "bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-blue-100 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
       case "cancelled":
-        return "bg-gray-100 text-gray-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-gray-100 text-gray-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
       default:
-        return "bg-pink-100 text-pink-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-pink-100 text-pink-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
     }
   };
 
@@ -81,9 +81,12 @@ export default function OrderDetails() {
               <p className="font-semibold  text-sm text-gray-500">{orderDetails._id}</p>
             </div>
             <div>
-              <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1">Order Date</p>
+              <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1 ">Order Date</p>
               <p className="font-semibold  text-sm text-gray-500 ">
-                {dateFormate(orderDetails?.createdAt) + " " + time}
+                <span>{dateFormate(orderDetails?.createdAt)}</span>
+                <span className='text-lg font-[300] text-black mx-1'>||</span>
+                <span>{time}</span>
+                
               </p>
             </div>
             <div>
@@ -120,8 +123,8 @@ export default function OrderDetails() {
                     className="font-semibold text-blue-700 cursor-pointer hover:text-blue-600">{orderItem?.product?.productName}</h3>
                   {/* <p className="text-gray-500  text-sm font-[600] pl-0">Items: {orderItem?.quantity}</p> */}
                   <p className="text-gray-600 font-[600] flex text-sm items-center"><BiRupee />{((orderItem?.product?.price) - (orderItem?.product?.price * orderItem?.product?.discount) / 100)+'/-'}
-                    <span className='text-xs text-gray-400 font-[500]'>&nbsp; ({+ orderItem?.quantity}Items)</span>
                   </p>
+                    <span className='text-xs text-gray-700 font-[600]'>&nbsp;Quantity : {+ orderItem?.quantity}</span>
                 </div>
 
               </div>
@@ -237,7 +240,7 @@ export default function OrderDetails() {
                 <div className='flex items-center gap-2'>
                   <span className='text-gray-600 text-sm font-[600]'>{orderDetails?.deliveryAddress?.firstName + " " + orderDetails?.deliveryAddress?.lastName + "  -"}</span>
 
-                  <span className='text-gray-600 text-sm font-[600]'>{orderDetails?.deliveryAddress?.contact[0]}</span>
+                  <span className='text-gray-600 text-sm font-[600]'>{orderDetails?.deliveryAddress?.contact?.[0]}</span>
                 </div>
 
                 <div className='w-[93%]'>

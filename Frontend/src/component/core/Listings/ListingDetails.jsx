@@ -98,12 +98,12 @@ export default function ListingDetails() {
                       return <img
                         onClick={() => setMainImage(img)}
                         src={img} alt="Product1"
-                        class="aspect-[64/85] object-cover object-top w-full cursor-pointer  border-b-2 border-black" />
+                        class="object-fill aspect-[2/2] cursor-pointer" />
                     })}
                   </div>
                   <div class="flex-1">
                     <img src={mainImage ? mainImage : listing?.images[0]} alt="Product"
-                      class="w-full  aspect-[548/612]  object-fill" />
+                      class="aspect-[540/510]  object-fill" />
                   </div>
                 </div>
               </div>

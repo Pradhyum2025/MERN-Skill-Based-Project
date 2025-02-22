@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FiBook } from "react-icons/fi";
+import { FiBook, FiUploadCloud } from "react-icons/fi";
 import { createCategory } from "../../../operations/category";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -20,18 +20,19 @@ const CategoryCreation = () => {
     formState: { errors }
   } = useForm();
 
-  const currUser  = useSelector(store=>store.auth);
+  const currUser = useSelector(store => store.auth);
 
   const onSubmit = async (data) => {
-    if(currUser.token==='undefined') return ;
-    try{
-      await createCategory(dispatch,navigate, data,currUser.token);
-    }catch(error){
+
+    if (!currUser.token || currUser.accountType!=='Admin') return;
+    try {
+      await createCategory(dispatch, navigate, data, currUser.token);
+    } catch (error) {
       console.log(error)
     }
   }
-  
-  const  fetching = useSelector(store=>store.fetching);
+
+  const fetching = useSelector(store => store.fetching);
 
   return (
     <div className="w-full bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -63,7 +64,42 @@ const CategoryCreation = () => {
               )}
             </div>
 
-            {/* Description Input */}
+            {/* Related image Input */}
+            <div className="mb-10">
+
+              <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
+              <div className="mt-1 w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                <div className="space-y-1 text-center">
+                  <FiUploadCloud className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="flex text-sm text-gray-600">
+                    <label className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                      <span>Upload Image</span>
+                      <input
+                        type="file"
+                        name="image"
+                        accept="image/*"
+                        className="sr-only"
+                        {...register("relatedImage", {
+                          required: { true : false, message: 'Images  is reuired' }
+                        }
+                        )}
+                        
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    PNG, JPG, WEBP
+                  </p>
+                </div>
+              </div>
+
+            
+
+              {errors.relatedImage && <p className="text-red-500 text-sm">{errors.relatedImage.message}</p>}
+            </div>
+
+             {/* Discription */}
             <div>
               <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
                 Description <span className="text-red-500">*</span>
@@ -106,7 +142,7 @@ const CategoryCreation = () => {
                 disabled={isLoading}
                 className="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {fetching ? <LoadingBtn working={'Creating....'}/>: "Create Category"}
+                {fetching ? <LoadingBtn working={'Creating....'} /> : "Create Category"}
               </button>
             </div>
           </form>

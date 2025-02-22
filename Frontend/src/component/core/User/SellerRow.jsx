@@ -1,11 +1,12 @@
 import React from 'react'
+import { FaUserCircle } from 'react-icons/fa'
 
 export default function SellerRow({seller}) {
   return (
     <tr>
     <td class="p-4 text-sm">
       <div class="flex items-center cursor-pointer w-max">
-        <img src='https://readymadeui.com/profile_4.webp' class="w-9 h-9 rounded-full shrink-0" />
+      <FaUserCircle className='text-3xl'/>
         <div class="ml-4">
           <p class="text-sm text-black">{seller.firstName +" "+seller.lastName}</p>
           <p class="text-xs text-gray-500">{seller.email}</p>

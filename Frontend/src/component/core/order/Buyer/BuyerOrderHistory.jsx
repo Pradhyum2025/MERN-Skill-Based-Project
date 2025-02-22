@@ -3,40 +3,10 @@ import React, { useState, useEffect } from "react";
 import { FiSearch, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { getMyOrder } from "../../../../operations/order";
 import { useSelector, useDispatch } from 'react-redux';
-import OrderCart from "./orderCart";
+import OrderCart from "./OrderCart";
 
-const OrderHistory = () => {
+export const   BuyerOrderHistory = () => {
   const ordersPerPage = 5;
-
-  const mockOrders = [
-    {
-      orderId: "ORD-001",
-      orderDate: new Date(2024, 0, 15),
-      totalAmount: 299.99,
-      status: "completed",
-      items: [
-        { id: 1, name: "Product 1", quantity: 2, price: 149.99 }
-      ]
-    },
-    {
-      orderId: "ORD-002",
-      orderDate: new Date(2024, 0, 14),
-      totalAmount: 159.99,
-      status: "pending",
-      items: [
-        { id: 2, name: "Product 2", quantity: 1, price: 159.99 }
-      ]
-    },
-    {
-      orderId: "ORD-003",
-      orderDate: new Date(2024, 0, 13),
-      totalAmount: 499.99,
-      status: "cancelled",
-      items: [
-        { id: 3, name: "Product 3", quantity: 1, price: 499.99 }
-      ]
-    },
-  ];
 
   const currUser = useSelector(store => store.auth);
   const dispatch = useDispatch();
@@ -68,7 +38,7 @@ const OrderHistory = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 sm:p-6 mt-10">
-      <div className="max-w-7xl mx-auto bg-card rounded-lg shadow-sm sm:p-6">
+      <div className="max-w-7xl mx-auto bg-card rounded-lg sm:p-6">
         <div className="flex items-center justify-between">
           <h1 className="text-lg font-[700] text-gray-500 mb-3">MY ORDERS</h1>
 
@@ -106,5 +76,3 @@ const OrderHistory = () => {
     </div>
   );
 };
-
-export default OrderHistory;

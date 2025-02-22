@@ -12,6 +12,10 @@ const categorySchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    relatedImage:{
+      type: String,
+      required: true,
+    },
     listingItems: [
       {
        type:mongoose.Schema.Types.ObjectId,

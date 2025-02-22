@@ -56,7 +56,7 @@ export default function Categories() {
                     <span className='' >
                       <MdOutlineKeyboardArrowDown size={25} />
                     </span>
-                    <h3 className="text-[1.1rem] font-bold text-blue-600">{category.name}</h3>
+                    <h3 className="text-md font-bold text-yellow-600 ">{category.name}</h3>
                   </div>
 
                   <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">

@@ -9,7 +9,8 @@ export const createCategory = async (dispatch,navigate,categoryData,token)=>{
     dispatch(fetchSliceAction.serializeFetching());
     const res = await axios.post('http://localhost:8080/category', categoryData, {
       headers:{
-        'Authorisation':`Bearer ${token}`
+        'Authorisation':`Bearer ${token}`,
+        "Content-Type": "multipart/form-data", 
       }
     });
     dispatch(fetchSliceAction.deserializeFetching());
@@ -74,12 +75,13 @@ export const deleteCategory = async (dispatch,categoryId,token)=>{
 }
 
 //Edit category
-export const updateCategory = async(dispatch,updatedData,token)=>{
+export const updateCategory = async(dispatch,categoryId,updatedData,token)=>{
   try {
     dispatch(fetchSliceAction.serializeFetching());
-    const res = await axios.patch(`http://localhost:8080/category/${updatedData._id}`, updatedData, {
+    const res = await axios.patch(`http://localhost:8080/category/${categoryId}`, updatedData, {
       headers:{
-        'Authorisation':`Bearer ${token}`
+        'Authorisation':`Bearer ${token}`,
+        "Content-Type": "multipart/form-data", 
       }
     });
     dispatch(fetchSliceAction.deserializeFetching());

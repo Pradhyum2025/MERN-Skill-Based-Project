@@ -2,14 +2,14 @@ import React, { useEffect } from 'react'
 import ListingCard from './ListingCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllListings, getFilteredListing } from '../../../../operations/listing';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import ListingSkeletonCard from './ListingSkeletonCard';
 import { getMyBag } from '../../../../operations/bag';
 
 
 export default function ListingContainer() {
   const dispatch = useDispatch();
-  const { categoryId } = useParams();
+  const { categoryId } = useLocation().state?.categoryId;
   const currUser = useSelector(store=>store.auth);
 
   useEffect(() => {

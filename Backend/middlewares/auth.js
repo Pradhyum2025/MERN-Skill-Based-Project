@@ -116,8 +116,30 @@ export const isAdmin = (req,res,next)=>{
   }
 }
 
-// check user is seller or NOT
+// check user is Multiroll or NOT
 export const isMultiRoll = (req,res,next)=>{
+  
+  try{
+    let payload = req.user;
+    console.log(payload.role)
+    if(payload.role!=='Seller' && payload.role!=='Buyer' && payload.role!=='Admin' ){
+      return res.status(401).json({
+        success:false,
+        message:'Protected route for Authentic Admin'
+      })
+    }
+    return next();
+
+  }catch(error){
+    console.log("isMultiRoll  middleware error ",error.message)
+    return res.status(500).json({
+      success:false,
+      message:'Somethin Went Wrong'
+    })
+  }
+}
+
+export const isBuyerOrSelller = (req,res,next)=>{
   
   try{
     let payload = req.user;
@@ -125,7 +147,7 @@ export const isMultiRoll = (req,res,next)=>{
     if(payload.role!=='Seller' && payload.role!=='Buyer'){
       return res.status(401).json({
         success:false,
-        message:'Protected route for sellers'
+        message:'Protected route for sellers or buyers'
       })
     }
     return next();

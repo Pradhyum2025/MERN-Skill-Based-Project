@@ -14,7 +14,7 @@ export default function OrderCart({order,index}) {
   return (
     <tr
     key={order._id}
-    className={`hover:bg-blue-100 transition-colors`}
+    className={`hover:bg-blue-100 transition-colors border-b-2`}
   >
     <td className="py-4 px-6 text-sm font-[600] text-gray-800">
       <span 

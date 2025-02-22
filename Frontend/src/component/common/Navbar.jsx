@@ -68,7 +68,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-8">
             {categories.map((category) => (
               <div
                 key={category.name}
@@ -97,7 +97,7 @@ const Navbar = () => {
           </div>
 
           {/* Search, User, and Cart Section */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden sm:flex items-center space-x-6">
             <div className="relative">
               <input
                 type="text"
@@ -217,8 +217,118 @@ const Navbar = () => {
                 }
 
               </div>
-               
-               {currUser.accountType==='Buyer' &&
+
+              {currUser.accountType === 'Buyer' &&
+                <div className="relative">
+                  <Link to={'/bag'}>
+                    <FiShoppingCart className="h-6 w-6 cursor-pointer" />
+                    <span className="absolute -top-2 -right-2 bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                      {bag?.length || 0}
+                    </span>
+                  </Link>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end pr-5 space-x-4 w-full sm:hidden">
+
+            <div className="relative group"
+              onMouseEnter={() => setUserDropdown(() => true)}
+              onMouseLeave={() => setUserDropdown(() => false)}
+            >
+              <FiUser className="h-6 w-6 cursor-pointer" />
+
+
+              {userDropdown ?
+                <>
+                  {(currUser?.email) ? (
+                    <div className="absolute top-full  right-[-70px] w-[8.2rem] bg-white  shadow-lg rounded-md py-2 mt-0">
+                      {currUser.accountType === 'Buyer'
+                        &&
+                        <>
+                          <Link
+                            to={'/profile'}
+                            className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                          >
+                            Profile
+                          </Link>
+                          <Link
+                            to={'/my-order'}
+                            className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                          >
+                            My Order
+                          </Link>
+                          <Link
+                            to={'/wishlist'}
+                            className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                          >
+                            Wishlist
+                          </Link>
+                          <Link
+                            to={'/become-seller'}
+                            className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                          >
+                            Become a seller
+                          </Link>
+                        </>
+                      }
+                      {(currUser.accountType === 'Admin' || currUser.accountType === 'Seller')
+                        &&
+                        <>
+                          <Link
+                            to={'/dashbord'}
+                            className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                          >
+                            Dashbord
+                          </Link>
+
+                        </>
+                      }
+                      <Link
+                        to={'/dashbord'}
+                        className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                      >
+                        Settings
+                      </Link>
+
+                      <p
+                        onClick={handleSignOut}
+                        className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                      >
+                        Logout
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="absolute top-full  right-[-70px] w-[8.2rem] bg-white  shadow-lg rounded-md py-2 mt-0">
+                      <Link
+                        to={'/signup'}
+                        className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 "
+                      >
+                        Signup
+                      </Link>
+
+                      <p
+                        onClick={handleNavigateLogin}
+                        className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                      >
+                        Login
+                      </p>
+
+                      <p
+                        className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                      >
+                        Help
+                      </p>
+                    </div>
+                  )}
+                </> :
+                null
+              }
+
+            </div>
+
+            {currUser.accountType === 'Buyer' &&
               <div className="relative">
                 <Link to={'/bag'}>
                   <FiShoppingCart className="h-6 w-6 cursor-pointer" />
@@ -227,12 +337,11 @@ const Navbar = () => {
                   </span>
                 </Link>
               </div>
-               }
-            </div>
+            }
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          <div className="sm:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-gray-500 hover:text-gray-600 focus:outline-none"

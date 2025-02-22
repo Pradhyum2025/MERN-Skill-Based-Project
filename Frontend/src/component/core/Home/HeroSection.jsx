@@ -1,83 +1,57 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FaArrowRightLong } from "react-icons/fa6";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { getAllCategories } from '../../../operations/category';
+import { useDispatch, useSelector } from 'react-redux';
 export default function HeroSection() {
-  const data = [
-    {
-      type:'Smart Tv',
-      imageURL:'https://m.media-amazon.com/images/I/71JQ3kUrR9L._SX522_.jpg'
-    }
-    ,
-    {
-      type:'Trimmers',
-      imageURL:'https://cdn.anscommerce.com/image/tr:e-sharpen-01,h-350,w-350,cm-pad_resize/catalog/philipspc/product/BT1233-18/BT1233-18_1.jpg'
-    },
-    {
-      type:'Earbuds',
-      imageURL:'https://www.reliancedigital.in/medias/Realme-TWS-T110-Buds-494410458-i-1-1200Wx1200H?context=bWFzdGVyfGltYWdlc3wzMzE2Mzd8aW1hZ2UvanBlZ3xpbWFnZXMvaGZiL2gxZS8xMDE1Njg1NDYwNzkwMi5qcGd8OTE4NWQzMTU3NTAwMDExYTk3NTA2ODU5ZDkwYmI4YjRlMzIxZDJlMzVjMmFhZDFmOTAzZWJjMjkyOGM3ZmRlZA'
-    },
-    {
-      type:'Smartphones',
-      imageURL:'https://images.samsung.com/is/image/samsung/assets/in/explore/brand/5-best-android-mobile-phones-2022-in-india/banner-mobile-720x761-080422.jpg?$720_N_JPG$'
-    },
-    {
-      type:'Headsets',
-      imageURL:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJhp-Wzac529pjTQC1EdITo8ngv6mp9iCDeg&s'
-    },
-    {
-      type:'Laptops',
-      imageURL:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmF4Hu43izxHPPB1Y-ClV36ZgXf_lWBPJwng&s'
-    },
-    {
-      type:'Chargers',
-      imageURL:'https://rukminim2.flixcart.com/image/416/416/xif0q/battery-charger/m/q/g/adapter-galaxy-original-imah756bfpm2s7wj.jpeg?q=70&crop=false'
-    },
-    {
-      type:'Speakers',
-      imageURL:'https://rukminim2.flixcart.com/image/416/416/ko62xzk0/speaker/mobile-tablet-speaker/s/u/y/jblclip4blko-jbl-original-imag2zffvcnjyzex.jpeg?q=70&crop=false'
-    },
-    {
-      type:'Tablets',
-      imageURL:'https://rukminim2.flixcart.com/image/312/312/xif0q/tablet/z/b/t/zadb0092in-lenovo-original-imahfpsfrpxghhhg.jpeg?q=70'
-    },
-    {
-      type:'CPUs',
-      imageURL:'https://rukminim2.flixcart.com/image/612/612/xif0q/cpu/x/b/k/2-8-intel-core-i5-7400-lga1151-7th-generation-core-desktop-16gb-original-imahyg9cdmgdxakt.jpeg?q=70'
-    },
-  ]
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const cateory =['67a62b169edfdc7872e5d807']
+
+  useEffect(() => {
+    getAllCategories(dispatch)
+  },[])
+
+  const allCategories = useSelector(store => store.category);
+
+  const ammount = 999;
+ const handleNavigate = (categoryId)=>{
+  return navigate('/listings',{state:{categoryId:categoryId}})
+ }
   return (
     <>
       <div className='flex flex-col gap-y-5 px-2 py-5'>
         
-        <div className='sm:grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-y-5 gap-x-3 w-full py-5 justify-between'>
+        <div className='grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-y-5 gap-x-3 w-full py-5 justify-between'>
 
-        {data.map(entry=>{
-          return  <div className='rounded shadow-2xl hover:shadow-2xl flex justify-start items-center flex-col p-1'>
-          <Link to={`/listings/${cateory[0]}`}>
-          <h1 className='w-full  flex  items-center justify-center  gap-x-2 text-lg text-blue-600 font-bold py-2 px-2  hover:underline cursor-pointer group'>
-            <span>{entry.type}</span> 
-            <FaArrowRightLong className='group-hover:translate-x-[2px]'/>
-            </h1>
-          </Link>
+        {allCategories.map(category=>{
+          return  <div 
+          className='rounded shadow-lg hover:shadow-xl flex justify-end  items-center flex-col gap-[200px] p-1'
+          onClick={()=>handleNavigate(category._id)}
+          >
 
-          <div className='flex justify-center items-center w-[15rem] '>
-
-            <img src={entry.imageURL}
+            {/* Image */}
+          <div className='flex justify-center items-center'>
+            <img src={category?.relatedImage}
               alt=""
-              className='w-[15rem] h-[13rem]'
-            />
-
+              className='aspect-[3/2] mix-blend-multiply w-full h-full'
+              />
           </div>
+            {/* About */}
+          <div 
+          className='w-full flex flex-col  items-start justify-start  gap-x-2 py-2 px-2 '>
+            <span className='text-md text-gray-800 font-[600'>
+            {category.name}
+            </span>
+            <span className='text-sm text-green-700 font-bold'>
+              Start from {ammount.toLocaleString('en-IN',{style:'currency',currency:'INR'})}
+            </span>
+            </div>
 
+        
         </div>
         })}
-         
-
-
-      
-
+        
         </div>
 
       </div>

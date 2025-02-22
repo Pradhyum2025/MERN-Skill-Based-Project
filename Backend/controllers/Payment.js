@@ -8,6 +8,7 @@ import { Bag } from "../models/bag.js";
 import { Order } from "../models/order.js";
 import { Listing } from '../models/listing.js'
 import { SubOrder } from "../models/subOrder.js";
+import OrderConfirmation from "../emailTemplate/OrderConfirmation.js";
 
 
 
@@ -211,7 +212,7 @@ const enrollStudents = async (courseId, userId, res, razorpay_payment_id) => {
 
 const createOrder = async (userId,razorpay_payment_id,res) => {
 
-    const customer = await User.findById(userId, { bag: true, addresses: true });
+    const customer = await User.findById(userId, { bag: true, addresses: true,email:true });
     
     const bagItems = await Bag.find({ _id: { $in: customer.bag }, quantity: { $gt: 0 } }).populate('product', "productName stock price discount seller");
 
@@ -227,9 +228,10 @@ const createOrder = async (userId,razorpay_payment_id,res) => {
     }
 
     //Calculate total 
-    const totalAmount = orderList.reduce((sum, orderItem) => sum + (((orderItem.product.price) - ((orderItem.product.discount * orderItem.product.price) / 100)) * orderItem.quantity), 0);
+    let totalAmount = orderList.reduce((sum, orderItem) => sum + (((orderItem.product.price) - ((orderItem.product.discount * orderItem.product.price) / 100)) * orderItem.quantity), 0);
 
-
+    totalAmount = Math.floor(totalAmount);
+    
     //Find user address 
     const deliveryAddress = await Address.findOne({ _id: { $in: customer.addresses }, isDefault: true })
 
@@ -332,5 +334,7 @@ const createOrder = async (userId,razorpay_payment_id,res) => {
       }
     },{new:true})
   
-
+        //Send Mail to buyer for their order
+      await mailSender(customer.email,'Thank you for Order - E-commerce',OrderConfirmation(newOrder._id,"UPI",razorpay_payment_id))
+    
 }

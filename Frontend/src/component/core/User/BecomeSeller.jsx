@@ -2,9 +2,9 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import LoadingBtn from "./common/LoadingBtn";
+import LoadingBtn from "../../common/LoadingBtn";
 import { useDispatch, useSelector } from "react-redux";
-import { becomeSeller } from "../operations/auth";
+import { becomeSeller } from "../../../operations/auth";
 import { useNavigate } from "react-router-dom";
 
 

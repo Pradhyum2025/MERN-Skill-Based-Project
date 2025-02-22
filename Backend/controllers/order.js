@@ -4,13 +4,15 @@ import { SubOrder } from "../models/subOrder.js";
 import { User } from "../models/user.js";
 import { Bag } from "../models/bag.js";
 import { Address } from "../models/address.js";
+import { mailSender } from "../utils/mailSender.js";
+import OrderConfirmation from "../emailTemplate/OrderConfirmation.js";
 
 export const createOrder = async (req, res) => {
   try {
 
     const userId = req.user.id;
 
-    const customer = await User.findById(userId, { bag: true, addresses: true });
+    const customer = await User.findById(userId, { bag: true, addresses: true ,email:true});
 
     const bagItems = await Bag.find({ _id: { $in: customer.bag }, quantity: { $gt: 0 } }).populate('product', "productName stock price discount seller");
 
@@ -26,9 +28,10 @@ export const createOrder = async (req, res) => {
     }
 
     //Calculate total 
-    const totalAmount = orderList.reduce((sum, orderItem) => sum + (((orderItem.product.price) - ((orderItem.product.discount * orderItem.product.price) / 100)) * orderItem.quantity), 0);
-
-
+    let totalAmount = orderList.reduce((sum, orderItem) => sum + (((orderItem.product.price) - ((orderItem.product.discount * orderItem.product.price) / 100)) * orderItem.quantity), 0);
+    
+    totalAmount = Math.floor(totalAmount);
+   
     //Find user address 
     const deliveryAddress = await Address.findOne({ _id: { $in: customer.addresses }, isDefault: true })
 
@@ -134,6 +137,8 @@ export const createOrder = async (req, res) => {
       }
     }}, { new: true })
 
+    //Send Mail to buyer for their order
+    await mailSender(customer.email,'Thank you for Order - E-commerce',OrderConfirmation(newOrder._id,"Cash on Delivery"))
 
     //Retern response
     return res.status(200).json({
@@ -222,13 +227,103 @@ export const getOrderDetails = async (req, res) => {
       .populate('deliveryAddress')
       .populate({path:'products',populate:{path:'product',select:'price images productName discount'}})
 
-    }else{
+    }else if(req.user.role==='Seller'){
       orderDetails = await SubOrder.findOne({ _id: orderId ,seller:userId})
+      .populate({path:'products',populate:{path:'productId',select:"price images productName discount" ,populate:{path:'shippingAddress'}} })
+      .populate('SellerDetails')
+      .populate({path:'seller', select:'firstName lastName email contact'})
+    }else{
+      orderDetails = await SubOrder.findOne({ _id: orderId })
       .populate({path:'products',populate:{path:'productId',select:"price images productName discount" ,populate:{path:'shippingAddress'}} })
       .populate('SellerDetails')
       .populate({path:'seller', select:'firstName lastName email contact'})
     }
 
+    // Check for validation
+    return res.status(200).json({
+      success: true,
+      message: 'Order details fetched success',
+      orderDetails
+    })
+
+
+  } catch (err) {
+    console.log("GET ORDER ERROR : ", err?.message)
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error!'
+    })
+  }
+}
+
+export const getAllOrdersForAdmin = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const {status} = req.body;
+    if(!userId){
+      return res.status(400).json({
+        success: false,
+        message: 'Something missing, please try again!'
+      })
+    }
+    const currUser = await User.findOne({_id:userId,accountType:'Admin'})
+    if (!currUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+
+    let  currOrders = []
+    if(status==="*"){
+      currOrders = await Order.find({},{createdAt: true, orderStatus: true, totalAmount: true,paymentStatus:true });
+    }else{
+      currOrders = await Order.find({orderStatus:status }, { createdAt: true, orderStatus: true, totalAmount: true,paymentStatus:true })
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Order get successfully',
+      currOrders
+    })
+
+
+  } catch (err) {
+    console.log("GET ORDER FOR ADMIN ERROR : ", err.message)
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error!'
+    })
+  }
+}
+
+export const getOrderDetailsforAdmin = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const {orderId} = req.params;
+
+    const currUser = await User.findOne({_id:userId,accountType:'Admin' })
+
+    if (!currUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+
+    let  orderDetails = await Order.findById(orderId,{subOrders:false,products:false})
+    .populate('deliveryAddress')
+    .populate('buyer','firstName lastName email contact');
+
+    const subOrderDetails = await SubOrder.find({ order: orderId})
+      .populate({path:'products',populate:{path:'productId',select:"price images productName discount" ,populate:{path:'shippingAddress'}} })
+      .populate('SellerDetails')
+      .populate({path:'seller', select:'firstName lastName email contact'})
+     
+
+    orderDetails.subOrders = subOrderDetails;
+   
+    console.log(orderDetails);
 
     // Check for validation
     return res.status(200).json({

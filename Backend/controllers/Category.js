@@ -1,4 +1,5 @@
 import Category from '../models/category.js'
+import { uploadImageToCloudinary } from '../utils/imageUploader.js';
 
 //Create Category ka handler function
 export const createCategory = async (req, res) => {
@@ -6,7 +7,10 @@ export const createCategory = async (req, res) => {
     let { name, description } = req.body;
     name = name.trim();
     //Validation
-    if(!name || !description) {
+    const relatedImage  =  req?.files?.['relatedImage[]'];
+
+
+    if(!name || !description || !relatedImage) {
       return res.status(401).json({
         success: false,
         message: 'All fields are required'
@@ -21,17 +25,21 @@ export const createCategory = async (req, res) => {
         message: 'Current category is already present and we need to unique catagories, Please try again,'
       })
     }
+
+    const relatedImageResponse = await uploadImageToCloudinary(relatedImage);
     //Create category payload
     const categoryPayload = {
       name,
-      description
+      description,
+      relatedImage:relatedImageResponse.secure_url
     }
 
     let response = await Category.create(categoryPayload);
-    
+    console.log(response);
+
     return res.status(200).json({
       success: true,
-      message: "category created successful!",
+      message: "category creation successful!",
       response
     })
 
@@ -48,7 +56,7 @@ export const createCategory = async (req, res) => {
 //get all category handler function
 export const getAllCategory = async (req, res) => {
   try {
-    const allCatagories = await Category.find({}, { name: true, description: true })
+    const allCatagories = await Category.find({}, { name: true, description: true, relatedImage:true })
 
     return res.status(200).json({
       success: true,
@@ -94,10 +102,11 @@ export const updateCategory = async(req,res)=>{
   try{
     const { name, description } = req.body;
     const {categoryId}= req.params;
-    
-    
+
+    const relatedImage  =  req?.files?.['relatedImage[]'];
+
     //Validation
-    if(!name || !description || !categoryId) {
+    if(!name || !description || !categoryId ) {
       return res.status(401).json({
         success: false,
         message: 'All fields are required'
@@ -112,11 +121,19 @@ export const updateCategory = async(req,res)=>{
         message: 'Category not found'
       })
     }
-    
-    const response = await Category.findByIdAndUpdate({_id:categoryId},{
+
+    let updatedCategoryPayLoad = {
       name,
       description
-    },{new:true})
+    }
+
+    if(relatedImage){
+      const relatedImageResponse = await uploadImageToCloudinary(relatedImage);
+      updatedCategoryPayLoad.relatedImage = relatedImageResponse.secure_url;
+    }
+
+    
+    const response = await Category.findByIdAndUpdate({_id:categoryId},updatedCategoryPayLoad,{new:true})
     
 
     return res.status(200).json({
@@ -127,7 +144,7 @@ export const updateCategory = async(req,res)=>{
 
 
   }catch(error){
-    console.log("Error occured to update category :",error,message);
+    console.log("Error occured to update category :",error.message);
     return res.status(500).json({
       success:false,
       message:'Failed to update category details'

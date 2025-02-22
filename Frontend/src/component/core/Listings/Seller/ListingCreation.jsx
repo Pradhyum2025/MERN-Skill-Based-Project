@@ -27,7 +27,7 @@ const ProductForm = () => {
   }, [])
   useEffect(() => {
     getAllCategories(dispatch)
-  })
+  },[])
 
   const allCategories = useSelector(store => store.category);
 
