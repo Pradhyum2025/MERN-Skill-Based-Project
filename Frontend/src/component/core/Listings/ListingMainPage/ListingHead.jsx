@@ -2,18 +2,21 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategories } from '../../../../operations/category';
 import { getFilteredListing } from '../../../../operations/listing';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function ListingHead() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const {categoryId} = useParams();
+
   useEffect(() => {
     getAllCategories(dispatch);
   }, []);
 
   const handleFilterCategory = (e)=>{
    if (e.target.value) {
-      return getFilteredListing(dispatch, e.target.value);
+      getFilteredListing(dispatch, e.target.value);
+      return navigate(`/listings/${e.target.value}`)
     }
   }
 
@@ -69,7 +72,7 @@ export default function ListingHead() {
           </svg>
           </option>
           {categories.map(category=>(
-            <option value={category._id}>{category.name}</option>
+            <option value={category._id} >{category.name}</option>
           ))}
           
         </select>

@@ -42,7 +42,7 @@ const router = createBrowserRouter([
         {path:"/",element:<HomePage/>},
         {path:'/signup',element:<Signup/>},
         {path:'/become-seller',element:<BecomeSeller/>},
-        {path:'/listings',element:<Listing/>},
+        {path:'/listings/:categoryId',element:<Listing/>},
         {path:'/show/:listingId',element: <ListingDetails/>},
         {path:'/address',element: <AddressForm/>},
         {path:'/my-order',element: <BuyerOrderHistory/>},

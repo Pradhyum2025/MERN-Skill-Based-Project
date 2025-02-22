@@ -16,7 +16,7 @@ export default function HeroSection() {
 
   const ammount = 999;
  const handleNavigate = (categoryId)=>{
-  return navigate('/listings',{state:{categoryId:categoryId}})
+  return navigate(`/listings/${categoryId}`)
  }
   return (
     <>
@@ -26,7 +26,7 @@ export default function HeroSection() {
 
         {allCategories.map(category=>{
           return  <div 
-          className='rounded shadow-lg hover:shadow-xl flex justify-end  items-center flex-col gap-[200px] p-1'
+          className='rounded shadow-lg hover:shadow-xl flex justify-end  items-center flex-col gap-3 p-1'
           onClick={()=>handleNavigate(category._id)}
           >
 
@@ -34,7 +34,7 @@ export default function HeroSection() {
           <div className='flex justify-center items-center'>
             <img src={category?.relatedImage}
               alt=""
-              className='aspect-[3/2] mix-blend-multiply w-full h-full'
+              className='aspect-[3/2] mix-blend-burn w-full'
               />
           </div>
             {/* About */}

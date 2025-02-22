@@ -9,7 +9,7 @@ import { getMyBag } from '../../../../operations/bag';
 
 export default function ListingContainer() {
   const dispatch = useDispatch();
-  const { categoryId } = useLocation().state?.categoryId;
+  const { categoryId } = useParams();
   const currUser = useSelector(store=>store.auth);
 
   useEffect(() => {

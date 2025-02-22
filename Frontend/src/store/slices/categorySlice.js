@@ -11,7 +11,7 @@ const categorySlice  = createSlice({
     return state.filter(category => category._id!== action.payload)
    },
    updateCate:(state,action)=>{
-    return [action.payload , ...state];
+    return [action.payload , ...state.filter(cate=>cate._id!==action.payload._id)];
    }
   }
 })

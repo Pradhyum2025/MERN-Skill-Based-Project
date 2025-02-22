@@ -62,7 +62,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo Section */}
           <Link to={'/'}>
-            <div className="flex-shrink-0 flex items-center btn">
+            <div className="flex items-center btn w-[8rem]">
               E-commerce
             </div>
           </Link>

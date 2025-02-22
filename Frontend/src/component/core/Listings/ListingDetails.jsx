@@ -145,7 +145,7 @@ export default function ListingDetails() {
                   {/* Prices and discount */}
                   <div class="flex items-center flex-wrap gap-5  mt-4">
                     <p class="text-gray-500 text-base  flex items-center gap-1"><HiCurrencyRupee /> <strike>{listing?.price}</strike></p>
-                    <h4 class="text-gray-800 text-2xl sm:text-3xl flex items-center gap-1 font-bold"><HiCurrencyRupee />{listing?.price - (listing?.price * (listing?.discount / 100))} </h4>
+                    <h4 class="text-gray-800 text-2xl sm:text-3xl flex items-center gap-1 font-bold"><HiCurrencyRupee />{Math.floor(listing?.price - (listing?.price * (listing?.discount / 100)))} </h4>
                     <div class="flex py-1 px-2 bg-blue-600 font-semibold !ml-4">
                       <span class="text-white text-sm">save {listing?.discount}%</span>
                     </div>
