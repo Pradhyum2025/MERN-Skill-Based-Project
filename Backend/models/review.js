@@ -1,6 +1,5 @@
 //require mongoose package
 import mongoose from 'mongoose'
-import { User } from "./user.js";
 
 const Schema=mongoose.Schema;
 
@@ -18,7 +17,7 @@ const reviewSchema=new Schema(
             type:Date,
             default:Date.now()
         },
-        author:{
+        customer:{
             type:Schema.Types.ObjectId,
             ref:"User"
         }

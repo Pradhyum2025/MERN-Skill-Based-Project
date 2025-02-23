@@ -55,7 +55,7 @@ export const getMyListings = async (dispatch, token) => {
 }
 
 // Delete listing  
-export const deleteLisitng = async (dispatch, token, listingId,setFetching) => {
+export const deleteLisitng = async (dispatch, token, listingId) => {
   console.log(token)
   try {
     setFetching(()=>true)
@@ -88,7 +88,7 @@ export const getSingleListing = async (dispatch,listingId) => {
     let res = await axios.get(`http://localhost:8080/listing/show/${listingId}`)
 
     if (res.data && res.data.success) {
-      // console.log("GET U SINGLE LISTING RESPONSE --->>>", res)
+      console.log("GET  SINGLE LISTING RESPONSE --->>>", res)
       dispatch(listinSlicegAction.setSingleListing(res.data.listingData));
     }
   } catch (error) {

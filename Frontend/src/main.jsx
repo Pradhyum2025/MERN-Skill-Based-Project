@@ -47,6 +47,7 @@ const router = createBrowserRouter([
         {path:'/address',element: <AddressForm/>},
         {path:'/my-order',element: <BuyerOrderHistory/>},
         {path:'/my-order/:orderId',element: <BuyerOrderDetails/>},
+        
       ]
     },
     {

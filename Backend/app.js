@@ -18,6 +18,7 @@ import sellerRouter from './routes/Seller.js';
 import orderRouter from './routes/order.js';
 import addressRoutes from './routes/Address.js';
 import paymentRoutes from './routes/Payment.js';
+import reviewRouter from './routes/review.js';
 
 //load env files
 dotenv.config();
@@ -48,7 +49,8 @@ app.use('/listing',listingRouter);
 app.use('/seller',sellerRouter);
 app.use('/order',orderRouter);
 app.use('/address',addressRoutes);
-app.use('/payment',paymentRoutes)
+app.use('/payment',paymentRoutes);
+app.use('/review',reviewRouter);
 
 
 const PORT  = process.env.PORT || 4040;

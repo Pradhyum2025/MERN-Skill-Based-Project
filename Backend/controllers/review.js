@@ -1,58 +1,156 @@
 import { Review } from "../models/review.js";
 import { User } from "../models/user.js";
 import { Listing } from "../models/listing.js";
+import mongoose, { Mongoose } from "mongoose";
+import { Order } from "../models/order.js";
 
 //post review
-export const postReview = async(req,res)=>{
-  try{
-   
-    let {listing_id}= req.params;
+export const postReview = async (req, res) => {
+  try {
 
-    let currListing = await Listing.findById(listing_id);
-   
-    // create and save review
-    let newReview = new Review({...req.body,author:req.user.id});
-    newReview = await newReview.save();
+    const { orderId, listingId } = req.params;
+    const { rating, comment } = req.body;
+    const userId = req.user.id;
 
-    //push review on currlisting and save it
-    currListing.reviews.push(newReview._id);
-    currListing = await currListing.save();
-    return res.status(200).json({
-      success:true,
-      message:'Review posted suceesfully'
+    if (!orderId || !listingId || !userId || !rating || !comment) {
+      return res.status(400).json({
+        success: false,
+        message: 'All fiels are required',
+      })
+    }
+
+    let currUser = await User.findOne({
+      _id: userId,
+      myOrders: {
+        $elemMatch: {
+          $eq: new mongoose.Types.ObjectId(orderId)
+        }
+      }
+    }, { myOrders: true });
+
+    if (!currUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'User not found',
+      })
+    }
+
+    const currOrder = await Order.findById(orderId, { products: true });
+
+    let isListingPresent = false;
+
+    let currListings = currOrder.products.map(itemObj => {
+      if (itemObj.product.equals(listingId)) {
+        isListingPresent = true;
+      }
     })
 
-  }catch(err){
-    console.log("ERROR:",err.message)
+    if (isListingPresent) {
+      const newReview = await Review.create({ rating, comment, customer: userId });
+      currListings = await Listing.findByIdAndUpdate(listingId, {
+        $push: {
+          reviews: {
+            $each: [newReview._id], $position: 0
+          }
+        }
+      }, { new: true })
+      console.log(newReview);
+      return res.status(200).json({
+        success: true,
+        message: 'Review posted suceesfully'
+      })
+
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Order issue occured'
+      })
+    }
+
+  } catch (err) {
+    console.log("ERROR TO POST REVIEW:", err.message)
     return res.status(500).json({
-      success:false,
-      message:'Internal server error!'
+      success: false,
+      message: 'Internal server error!'
     })
 
   }
 }
 
-//delete review
-export const deleteReview = async(req,res)=>{
-  try{
-    let {Listing_id,review_id}= req.params;
-    let currReview = await Review.findById(review_id);
+//post review
+export const getReviews = async (req, res) => {
+  try {
 
-    if(currReview && currReview.author.equals(req.user.id)){
-      //  console.log(currReview)
-        await Listing.findByIdAndUpdate(Listing_id,{$pull:{reviews:review_id}});
-        await Review.findByIdAndDelete(review_id);
-        // console.log(req.params)
-        return res.status(200).json({
-          success:true,
-          message:'Review deleted suceesfully'
-        })
+    const { listingId } = req.params;
+
+    if (!listingId) {
+      return res.status(400).json({
+        success: false,
+        message: 'All fiels are required',
+      })
     }
-  }catch(err){
-    console.log(err.message)
+    const currListing = await Listing.findById(listingId,{reviews:true});
+
+    if(!currListing){
+      return res.status(400).json({
+        success: false,
+        message: 'Product details not found',
+      })
+    }
+    const currReviews = await Review.find({_id:{$in:currListing.reviews}}).populate('customer','firstName lastName');
+    
+
+    return res.status(200).json({
+      success: true,
+      message: 'Get all reviews success',
+      allReviews:currReviews
+    })
+
+
+  } catch (err) {
+    console.log("ERROR TO GET REVIEW:", err.message)
     return res.status(500).json({
-      success:false,
-      message:'Internal server error!'
+      success: false,
+      message: 'Internal server error!'
+    })
+
+  }
+}
+
+// delete review
+export const deleteReview = async (req, res) => {
+  try {
+    let { listingId, reviewId } = req.params;
+    const userId = req.user.id;
+
+    if (!reviewId || !listingId || !userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'All fiels are required',
+      })
+    }
+    let currReview = await Review.findOne({ _id: reviewId, customer: userId });
+
+    if (currReview) {
+      await Listing.findByIdAndUpdate(listingId, {
+        $pull: {
+          reviews: reviewId
+        }
+      });
+
+      await Review.findByIdAndDelete(reviewId);
+
+      return res.status(200).json({
+        success: true,
+        message: 'Review delete suceesfully'
+      })
+    }
+
+  } catch (err) {
+    console.log("REVIEW DELETION ERROR :", err.message)
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error!'
     })
 
   }

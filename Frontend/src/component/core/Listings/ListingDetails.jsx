@@ -2,21 +2,23 @@ import React, { useEffect, useState } from 'react'
 import { HiCurrencyRupee } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { getSingleListing } from '../../../operations/listing';
+import { deleteLisitng, getSingleListing } from '../../../operations/listing';
 import { FaAngleLeft } from 'react-icons/fa';
 import DeleteModal from './Seller/DeleteModal';
 import { getMyBag } from '../../../operations/bag';
 import { BagButtons2 } from '../BagPage/BagButtons2';
 import { GoPlus } from "react-icons/go";
 import { LuMinus } from "react-icons/lu";
-
+import { FaUserLarge } from "react-icons/fa6";
+import { deleteReview, getReviews } from '../../../operations/review';
+import { reviewSliceAction } from '../../../store/slices/review';
 export default function ListingDetails() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const returnPath = useLocation().state?.returnPath;
   const { listingId } = useParams()
   const currUser = useSelector(store => store.auth);
-
+  const allReviews = useSelector(store => store.reviews);
   // Back to handler
   const handleBackTo = () => {
     return navigate(returnPath);
@@ -45,23 +47,30 @@ export default function ListingDetails() {
   const handleDeleteListing = () => {
     return document.getElementById('my_modal_3').showModal();
   }
+  const HandlefetchReviews = () => {
+    if (listing) {
+      return getReviews(dispatch, listing._id)
+    } else {
+      console.log('hello')
+    }
+  }
 
   //Set preview image
   const [mainImage, setMainImage] = useState(null);
   const myBag = useSelector(store => store.bag);
-  const handleGoToCard = ()=>{
-    if(currUser.accountType==='Buyer'){
+  const handleGoToCard = () => {
+    if (currUser.accountType === 'Buyer') {
       return navigate('/bag')
-    }else{
+    } else {
       toast("Login from buyer account",
         {
           icon: <FiAlertTriangle className="text-yellow-600" size={20} />,
           style: {
             background: "#00100d",
             color: "#b8971d",
-            fontWeight:900,
+            fontWeight: 900,
             padding: "10px",
-            borderRadius:'0px',
+            borderRadius: '0px',
           },
           position: 'bottom-center'
         });
@@ -69,12 +78,20 @@ export default function ListingDetails() {
       return document.getElementById('my_modal_3').showModal()
     }
   }
+
   if (!listing) {
     return (
       <p>Loading...</p>
     )
   }
 
+  const handleDeleteReview = (reviewId) => {
+    if (currUser.token && currUser.accountType === 'Buyer') {
+      return deleteReview(dispatch, listing._id, reviewId, currUser.token)
+    }
+  }
+
+  console.log(allReviews)
 
   return (
     <div className="w-full bg-gray-50 py-5 px-0 sm:px-3 lg:px-8">
@@ -173,23 +190,23 @@ export default function ListingDetails() {
                     </>
                     :
                     <>
-                    {/*  Stock */}
-                    {
-                      listing?.stock === 0 ?
-                        <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm ">Out of stock</span>
-                        :
-                        <div class="flex gap-2 items-center border border-gray-300 bg-white px-3 py-2.5 w-max">
-                          <button type="button" class="border-none outline-none">
-                            <LuMinus className='text-gray-900' />
-                          </button>
-                          <span class="text-gray-800 text-sm font-semibold px-3">1</span>
-                          <button type="button" class="border-none outline-none">
-                            <GoPlus className='text-gray-900' />
-                          </button>
-                        </div>
-                    }
-                  </>
-                  
+                      {/*  Stock */}
+                      {
+                        listing?.stock === 0 ?
+                          <span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm ">Out of stock</span>
+                          :
+                          <div class="flex gap-2 items-center border border-gray-300 bg-white px-3 py-2.5 w-max">
+                            <button type="button" class="border-none outline-none">
+                              <LuMinus className='text-gray-900' />
+                            </button>
+                            <span class="text-gray-800 text-sm font-semibold px-3">1</span>
+                            <button type="button" class="border-none outline-none">
+                              <GoPlus className='text-gray-900' />
+                            </button>
+                          </div>
+                      }
+                    </>
+
                   }
 
 
@@ -208,8 +225,8 @@ export default function ListingDetails() {
                     <div class="mt-4 flex flex-wrap gap-4">
                       <BagButtons2 listing={listing} myBag={myBag} quantity={1} />
                       <button
-                      onClick={handleGoToCard}
-                       type="button"
+                        onClick={handleGoToCard}
+                        type="button"
                         class="px-4 py-3 w-[45%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">Go to bag</button>
                     </div>
                   }
@@ -220,17 +237,17 @@ export default function ListingDetails() {
                 <hr class="my-6 border-gray-300" />
 
                 {/*  ---------- Delevery location ----------   */}
-                  <div>
-                    <h3 class="text-lg sm:text-xl font-bold text-gray-800">Select Delivery Location</h3>
-                    <p class="text-gray-500 text-sm mt-1">Enter the pincode of your area to check product availability.</p>
-                    <div class='flex items-center gap-2 mt-4 max-w-sm'>
-                      <input type='number' placeholder='Enter pincode'
-                        class='bg-white px-4 py-2.5 text-sm w-full  border border-gray-300 outline-0' />
-                      <button type='button'
-                        class='border border-blue-600 outline-none bg-blue-600 hover:bg-blue-700 text-white  px-4 py-2.5 text-sm'>Apply</button>
-                    </div>
+                <div>
+                  <h3 class="text-lg sm:text-xl font-bold text-gray-800">Select Delivery Location</h3>
+                  <p class="text-gray-500 text-sm mt-1">Enter the pincode of your area to check product availability.</p>
+                  <div class='flex items-center gap-2 mt-4 max-w-sm'>
+                    <input type='number' placeholder='Enter pincode'
+                      class='bg-white px-4 py-2.5 text-sm w-full  border border-gray-300 outline-0' />
+                    <button type='button'
+                      class='border border-blue-600 outline-none bg-blue-600 hover:bg-blue-700 text-white  px-4 py-2.5 text-sm'>Apply</button>
                   </div>
-                
+                </div>
+
 
                 <div class='flex justify-between gap-4 mt-6'>
                   <div class="text-center">
@@ -322,45 +339,94 @@ export default function ListingDetails() {
                   </div>
                 </div>
 
-                <div class="mt-6">
-                  <div class="flex items-start">
-                    <img src="https://readymadeui.com/team-2.webp" class="w-12 h-12 rounded-full border-2 border-white" />
-                    <div class="ml-3">
-                      <h4 class="text-sm font-bold">John Doe</h4>
-                      <div class="flex space-x-1 mt-1">
-                        <svg class="w-[14px] h-[14px] fill-blue-600" viewBox="0 0 14 13" fill="none"
-                          xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                        </svg>
-                        <svg class="w-[14px] h-[14px] fill-blue-600" viewBox="0 0 14 13" fill="none"
-                          xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                        </svg>
-                        <svg class="w-[14px] h-[14px] fill-blue-600" viewBox="0 0 14 13" fill="none"
-                          xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                        </svg>
-                        <svg class="w-[14px] h-[14px] fill-blue-600" viewBox="0 0 14 13" fill="none"
-                          xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                        </svg>
-                        <svg class="w-[14px] h-[14px] fill-[#CED5D8]" viewBox="0 0 14 13" fill="none"
-                          xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                        </svg>
-                        <p class="text-xs text-gray-500 !ml-2">2 months ago</p>
+                <div class="mt-6 flex flex-col gap-y-5">
+                  {listing && listing?.reviews && listing?.reviews?.map(review => (
+                    <div class="flex items-start justify-between">
+                      <div className='flex items-start'>
+                        <div class="rounded-full border-2 border-gray-300 flex items-center justify-center" >
+                          <FaUserLarge className='text-3xl p-[6px]' />
+                        </div>
+                        <div class="ml-3">
+                          <h4 class="text-sm font-bold">{`${review?.customer?.firstName || ""} ${review?.customer?.lastName}`}</h4>
+                          <div class="flex space-x-1 mt-1">
+                            {[1, 2, 3, 4, 5].map(ele => {
+                              if (ele <= review.rating) {
+                                return <svg class="w-[14px] h-[14px] fill-blue-600" viewBox="0 0 14 13" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                                  <path
+                                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                                </svg>
+                              } else {
+                                return <svg class="w-[14px] h-[14px] fill-[#CED5D8]" viewBox="0 0 14 13" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                                  <path
+                                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                                </svg>
+                              }
+                            })}
+                            <p class="text-xs text-gray-500 !ml-2">2 months ago</p>
+                          </div>
+                          <p class="text-sm text-gray-500 mt-4">{review.comment}</p>
+                        </div>
                       </div>
-                      <p class="text-sm text-gray-500 mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                      {allReviews.length === 0 && currUser?._id === review?.customer?._id &&
+                        <button className='text-xs font-bold text-red-500'
+                          onClick={() => handleDeleteReview(review._id)}
+                        >
+                          Delete</button>
+                      }
                     </div>
-                  </div>
-                  <a href="javascript:void(0)" class="block text-blue-600 hover:underline text-sm mt-6 font-semibold">Read all
-                    reviews</a>
+                  ))}
+
+                  {allReviews?.length > 0 && allReviews?.map(review => (
+                    <div class="flex items-start justify-between">
+                      <div className='flex items-start'>
+                        <div class="rounded-full border-2 border-gray-300 flex items-center justify-center" >
+                          <FaUserLarge className='text-3xl p-[6px]' />
+                        </div>
+                        <div class="ml-3">
+                          <h4 class="text-sm font-bold">{`${review?.customer?.firstName || ""} ${review?.customer?.lastName}`}</h4>
+                          <div class="flex space-x-1 mt-1">
+                            {[1, 2, 3, 4, 5].map(ele => {
+                              if (ele <= review.rating) {
+                                return <svg class="w-[14px] h-[14px] fill-blue-600" viewBox="0 0 14 13" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                                  <path
+                                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                                </svg>
+                              } else {
+                                return <svg class="w-[14px] h-[14px] fill-[#CED5D8]" viewBox="0 0 14 13" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                                  <path
+                                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                                </svg>
+                              }
+                            })}
+                            <p class="text-xs text-gray-500 !ml-2">2 months ago</p>
+                          </div>
+                          <p class="text-sm text-gray-500 mt-4">{review.comment}</p>
+                        </div>
+                      </div>
+                      {currUser?._id === review?.customer?._id &&
+                        <button className='text-xs font-bold text-red-500'
+                          onClick={() => handleDeleteReview(review._id)}
+                        >
+                          Delete</button>
+                      }
+                    </div>
+                  ))}
+
+                  {allReviews.lenght === 0 &&
+                    <button
+                      onClick={allReviews.length === 0 && HandlefetchReviews}
+                      class="block text-blue-600 text-left hover:underline text-sm mt-6 font-semibold">Read all
+                      reviews</button>
+                  }
+                  {allReviews.length > 0 &&
+                    <button
+                      onClick={() => dispatch(reviewSliceAction.setEmpty())}
+                      class="block text-blue-600 text-left hover:underline text-sm mt-6 font-semibold">See less</button>
+                  }
                 </div>
               </div>
 

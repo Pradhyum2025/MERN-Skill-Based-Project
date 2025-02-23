@@ -80,7 +80,7 @@ const CategoryCreation = () => {
                         accept="image/*"
                         className="sr-only"
                         {...register("relatedImage", {
-                          required: { true : false, message: 'Images  is reuired' }
+                          required: { value : true, message: 'Images  is reuired' }
                         }
                         )}
                         

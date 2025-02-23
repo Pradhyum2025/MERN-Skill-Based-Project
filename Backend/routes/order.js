@@ -1,6 +1,6 @@
 import express from 'express'
 import { createOrder, getAllOrdersForAdmin, getMyOrder, getOrderDetails, getOrderDetailsforAdmin } from '../controllers/order.js';
-import { isAdmin, isAuth, isBuyer, isBuyerOrSelller, isMultiRoll } from '../middlewares/Auth.js';
+import { isAdmin, isAuth, isBuyer, isBuyerOrSelller, isMultiRoll } from '../middlewares/auth.js'
 
 const orderRouter = express.Router();
 

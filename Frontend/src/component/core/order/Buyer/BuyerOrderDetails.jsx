@@ -5,16 +5,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FiPackage, FiTruck, FiCheck, FiAlertCircle, FiPrinter, FiDownload, FiPhone } from "react-icons/fi";
 import { BiRupee } from "react-icons/bi";
 import { LiaRupeeSignSolid } from 'react-icons/lia';
+import categorySlice from '../../../../store/slices/categorySlice';
+import ReviewModal from '../../Reviews/ReviewModal';
 
 export default function BuyerOrderDetails() {
   const currUser = useSelector(store => store.auth);
   const dispatch = useDispatch();
   const { orderId } = useParams();
   const navigate = useNavigate();
+ const [selectedListingId,setSelectedListingId]= useState('')
 
   useEffect(() => {
     if (currUser.token && orderId) {
-      getOrderDetails(dispatch, orderId, currUser.token,currUser.accountType)
+      getOrderDetails(dispatch, orderId, currUser.token, currUser.accountType)
     }
   }, []);
 
@@ -55,7 +58,27 @@ export default function BuyerOrderDetails() {
     );
   }
 
-  const time = new Date(orderDetails?.createdAt).toLocaleString().split(',')[1];
+  // let orderDate = new Date(orderDetails?.createdAt);
+  // const day = String(orderDate.getUTCDate()).padStart(2, '0');
+  // let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  // let shortMonth = monthNames[orderDate.getUTCMonth()]
+  // let year = String(orderDate.getUTCFullYear()).padStart(4, '0')
+
+  // const dateFormate = `${day}-${shortMonth}-${year}`
+
+  // const returnPolicyExpiryDate = (returnPlocyDay)=>{
+  //   console.log(orderDate.setDate(orderDate.getDate()+returnPlocyDay))
+
+  //   return orderDate.setDate(orderDate.getDate()+returnPlocyDay);
+  // }
+  // const currDate = new Date();
+
+
+  const handlePostReviewModal = (listingId)=>{
+    setSelectedListingId(listingId);
+    return document.getElementById('my_modal_1').showModal();
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8  mt-10">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -65,10 +88,10 @@ export default function BuyerOrderDetails() {
 
           <div className="flex gap-4  justify-end">
             <button className="flex text-[1rem] items-center gap-2 px-4 py-2 bg-primary text-gray-600  font-bold rounded hover:opacity-90 transition-opacity">
-              <FiPrinter /> <span className='hidden sm:block'>Print Order</span> 
+              <FiPrinter /> <span className='hidden sm:block'>Print Order</span>
             </button>
             <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-gray-100  font-bold rounded hover:opacity-90 transition-opacity">
-              <FiDownload /> <span className='hidden sm:block'>Download Invoice</span>  
+              <FiDownload /> <span className='hidden sm:block'>Download Invoice</span>
             </button>
           </div>
         </div>
@@ -83,10 +106,7 @@ export default function BuyerOrderDetails() {
             <div>
               <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1 ">Order Date</p>
               <p className="font-semibold  text-sm text-gray-500 ">
-                <span>{dateFormate(orderDetails?.createdAt)}</span>
-                <span className='text-lg font-[300] text-black mx-1'>||</span>
-                <span>{time}</span>
-                
+                <span>{dateFormate}</span>
               </p>
             </div>
             <div>
@@ -109,23 +129,31 @@ export default function BuyerOrderDetails() {
           <h2 className="text-lg text-gray-700 font-bold mb-3">Products</h2>
           <div className="space-y-4">
             {orderDetails?.products && orderDetails?.products.map((orderItem) => (
-              <div key={orderItem.product?._id} className="flex flex-col md:flex-row  bg-white items-start gap-4 p-4 border border-border rounded-lg hover:bg-gray-50 transition-colors">
+              <div key={orderItem.product?._id} className="flex flex-col md:flex-row  bg-white items-start md:justify-between gap-4 p-4 border border-border rounded-lg hover:bg-gray-50 transition-colors">
+                  <div className='flex flex-col md:flex-row  items-start md:justify-between gap-4'>
                 <img
                   onClick={() => handleNavigatation(orderItem?.product?._id)}
                   src={orderItem?.product?.images[0]}
                   alt={orderItem?.product?.productName}
                   className="w-24 h-24 object-cover rounded cursor-pointer"
-
                 />
+
                 <div className="flex flex-col justify-around h-full gap-2">
                   <h3
                     onClick={() => handleNavigatation(orderItem?.product?._id)}
                     className="font-semibold text-blue-700 cursor-pointer hover:text-blue-600">{orderItem?.product?.productName}</h3>
                   {/* <p className="text-gray-500  text-sm font-[600] pl-0">Items: {orderItem?.quantity}</p> */}
-                  <p className="text-gray-600 font-[600] flex text-sm items-center"><BiRupee />{((orderItem?.product?.price) - (orderItem?.product?.price * orderItem?.product?.discount) / 100)+'/-'}
+                  <p className="text-gray-600 font-[600] flex text-sm items-center"><BiRupee />{((orderItem?.product?.price) - (orderItem?.product?.price * orderItem?.product?.discount) / 100) + '/-'}
                   </p>
-                    <span className='text-xs text-gray-700 font-[600]'>&nbsp;Quantity : {+ orderItem?.quantity}</span>
+                  <span className='text-xs text-gray-700 font-[600]'>&nbsp;Quantity : {+ orderItem?.quantity}</span>
                 </div>
+                  </div>
+
+             {/* {orderDetails.orderStatus==="Delivered" || orderDetails.orderStatus==="Cancelled"|| orderDetails.orderStatus==="Refunded" &&
+                } */}
+                <button 
+                onClick={()=>{handlePostReviewModal(orderItem?.product?._id)}}
+                className='text-blue-700 font-bold hover:underline'>Review</button> 
 
               </div>
             ))}
@@ -135,50 +163,50 @@ export default function BuyerOrderDetails() {
         {/* Payment and Delivery */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {orderDetails?.paymentStatus?.method === 'COD' ?
-           <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h2 className="text-lg font-heading text-gray-600 font-semibold mb-6 flex items-center gap-5">Payment Details
-              <span class="bg-purple-300 text-gray-700 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm ">{'Cash on Delivery'}</span>
-            </h2>
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <p className="text-gray-500 text-sm font-semibold">Payment Method</p>
-                <p className="text-gray-700 text-sm">{orderDetails?.paymentStatus?.method}</p>
-              </div>
-              <div className="flex justify-between">
-                <p className="text-gray-500 text-sm font-semibold">Total Paid Amount</p>
-                <p className="text-gray-700 text-sm flex items-center"><LiaRupeeSignSolid />{'0.0'}</p>
-              </div>
-              <div className="flex justify-between">
-                <p className="text-gray-500 text-sm font-semibold">Payment Status</p>
-                <p className="text-gray-700 text-sm flex items-center">{orderDetails?.paymentStatus?.status}</p>
-              </div>
-              <div className="flex justify-between">
-                <p className="text-gray-500 text-sm font-semibold line-through">Transaction ID</p>
-                <p className="text-gray-700 text-sm ">{ }</p>
-              </div>
-              <div className="border-t border-border pt-4 mt-4">
-                <div className="flex justify-between mb-2">
-                  <p className="text-gray-500 text-sm font-semibold">Subtotal</p>
-                  <p className="text-gray-700 flex text-sm items-center"><LiaRupeeSignSolid />{orderDetails?.totalAmount}</p>
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h2 className="text-lg font-heading text-gray-600 font-semibold mb-6 flex items-center gap-5">Payment Details
+                <span class="bg-purple-300 text-gray-700 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm ">{'Cash on Delivery'}</span>
+              </h2>
+              <div className="space-y-4">
+                <div className="flex justify-between">
+                  <p className="text-gray-500 text-sm font-semibold">Payment Method</p>
+                  <p className="text-gray-700 text-sm">{orderDetails?.paymentStatus?.method}</p>
                 </div>
-
-                <div className="flex justify-between mb-2">
-                  <p className="text-gray-500 text-sm font-semibold">Delivery charges</p>
-                  <p className='flex items-center text-green-500 gap-1'>
-                    <span className="line-through text-sm flex items-center" >
-                      <LiaRupeeSignSolid /> 200
-                    </span>
-                    <span>FREE</span>
-
-                  </p>
+                <div className="flex justify-between">
+                  <p className="text-gray-500 text-sm font-semibold">Total Paid Amount</p>
+                  <p className="text-gray-700 text-sm flex items-center"><LiaRupeeSignSolid />{'0.0'}</p>
                 </div>
-                <div className="flex justify-between font-semibold border-t border-border pt-2">
-                  <p className='text-blue-500 font-semibold'>Total Payble Amount</p>
-                  <p className='flex items-center text-blue-500'><LiaRupeeSignSolid />{orderDetails.totalAmount}</p>
+                <div className="flex justify-between">
+                  <p className="text-gray-500 text-sm font-semibold">Payment Status</p>
+                  <p className="text-gray-700 text-sm flex items-center">{orderDetails?.paymentStatus?.status}</p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-gray-500 text-sm font-semibold line-through">Transaction ID</p>
+                  <p className="text-gray-700 text-sm ">{ }</p>
+                </div>
+                <div className="border-t border-border pt-4 mt-4">
+                  <div className="flex justify-between mb-2">
+                    <p className="text-gray-500 text-sm font-semibold">Subtotal</p>
+                    <p className="text-gray-700 flex text-sm items-center"><LiaRupeeSignSolid />{orderDetails?.totalAmount}</p>
+                  </div>
+
+                  <div className="flex justify-between mb-2">
+                    <p className="text-gray-500 text-sm font-semibold">Delivery charges</p>
+                    <p className='flex items-center text-green-500 gap-1'>
+                      <span className="line-through text-sm flex items-center" >
+                        <LiaRupeeSignSolid /> 200
+                      </span>
+                      <span>FREE</span>
+
+                    </p>
+                  </div>
+                  <div className="flex justify-between font-semibold border-t border-border pt-2">
+                    <p className='text-blue-500 font-semibold'>Total Payble Amount</p>
+                    <p className='flex items-center text-blue-500'><LiaRupeeSignSolid />{orderDetails.totalAmount}</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
             :
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <h2 className="text-lg font-heading text-gray-600 font-semibold mb-6 flex items-center gap-5">Payment Details
@@ -267,6 +295,7 @@ export default function BuyerOrderDetails() {
           </button>
         </div>
       </div>
+      <ReviewModal orderId={orderId} listingId={selectedListingId}/>
     </div>
   );
 };

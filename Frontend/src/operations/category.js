@@ -17,12 +17,30 @@ export const createCategory = async (dispatch,navigate,categoryData,token)=>{
 
     if (res.data && res.data.success) {
       // console.log("CREATE Category RESPONSE --->>>", res)
-      toast.success(res.data.message, { position: 'bottom-right', duration: 2000 });
+      toast.success(res?.data?.message, {
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
+        },
+        position: 'bottom-center'
+      })
       navigate('/dashbord/categories');
     }
   } catch (error) {
     dispatch(fetchSliceAction.deserializeFetching());
-    toast.error(error.response?.data?.message, { position: 'bottom-right', duration: 2000 });
+    toast.error(error.response?.data?.message, {
+      style: {
+        background: '#001a00',
+        color: '#f2f2f2',
+        borderRadius: '0px',
+        width: '400px',
+        fontWeight: 900
+      },
+      position: 'right-center'
+    })
     console.log('Category creation error : ', error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."
@@ -62,11 +80,30 @@ export const deleteCategory = async (dispatch,categoryId,token)=>{
       // console.log(res)
       dispatch(categorySliceAction.deleteCategory(categoryId))
       document.getElementById('my_modal_1').close();
-      toast.success(res.data.message, { position: 'top-right', duration: 2000 });
+      toast.success(res?.data?.message, {
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
+        },
+        position: 'bottom-center'
+      })
     }
   } catch (error) {
     document.getElementById('my_modal_1').close()
-    toast.error(error.response?.data?.message, { position: 'top-right', duration: 2000 });
+    dispatch(fetchSliceAction.deserializeFetching());
+    toast.error(error.response?.data?.message, {
+      style: {
+        background: '#001a00',
+        color: '#f2f2f2',
+        borderRadius: '0px',
+        width: '400px',
+        fontWeight: 900
+      },
+      position: 'right-center'
+    })
     console.log('Delete Category error : ', error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."
@@ -90,12 +127,31 @@ export const updateCategory = async(dispatch,categoryId,updatedData,token)=>{
       dispatch(categorySliceAction.deleteCategory(updatedData._id))
       dispatch(categorySliceAction.updateCate(res.data.response))
       document.getElementById('my_modal_1').close();
-      toast.success(res.data.message, { position: 'top-right', duration: 2000 });
+      toast.success(res?.data?.message, {
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
+        },
+        position: 'bottom-center'
+      })
     }
 
   } catch (error) {
+    dispatch(fetchSliceAction.deserializeFetching());
     document.getElementById('my_modal_1').close()
-    toast.error(error.response?.data?.message, { position: 'top-right', duration: 2000 });
+    toast.error(error.response?.data?.message, {
+      style: {
+        background: '#001a00',
+        color: '#f2f2f2',
+        borderRadius: '0px',
+        width: '400px',
+        fontWeight: 900
+      },
+      position: 'bottom-center'
+    })
     console.log('Category updation error : ', error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."

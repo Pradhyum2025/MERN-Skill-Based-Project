@@ -28,8 +28,7 @@ export const showListing = async(req,res)=>{
     let {listingId} = req.params;
     
     let listingData = await Listing.findById(listingId)
-    // .populate('seller')
-    // .exce();
+    .populate({path:'reviews', options: { limit: 1 },populate:{path:'customer',select:'firtsName lastName'}})
 
     return res.status(200).json({
       success:true,

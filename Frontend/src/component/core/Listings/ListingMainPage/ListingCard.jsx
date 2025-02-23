@@ -12,37 +12,34 @@ export default function ListingCard({listing,myBag}) {
     return navigate(`/show/${listingId}`)
   }
   return (
-     <div class="bg-white px-2 pt-2 pb-4 shadow-lg w-full sm:w-[19rem] md:w-[21rem] lg:w-[20rem] xl:w-[19rem] 2xl:w-[21rem]">
+     <div class="bg-white px-2 pt-2 pb-4 shadow-lg w-full">
             {/*  ------ Product Image ------   */}
             <div
             onClick={()=>handleClickToView(listing._id)}
-             class="h-[200px] xl:h-[220px] w-full cursor-pointer">
-                <img class="mx-auto h-full w-full object-contains " src={listing?.images[0]} alt="" />
-            </div>
-    
-            <div class="pt-4">
-    
+             class="w-full cursor-pointer relative">
+                <img class="mx-auto h-full w-full aspect-[5/4] " src={listing?.images[0]} alt="" />
             {/*  ----------- Descount and Wishlist -----------  */}
-              <div class="mb-2 flex items-center justify-between gap-4">
+              
                 {/*  ------- Discount ------- */}
-                <span class="me-2 rounded bg-blue-500 px-2.5 py-0.5 text-xs font-medium text-white   pt-[4px]">
+                <span class="me-2 rounded bg-blue-500 px-2.5 py-0.5 text-xs font-medium text-white   pt-[4px] absolute bottom-[.3rem] left-[.2rem]">
                    Up to {listing?.discount}% off
                     </span>
     
                {/*  -------Heart icons ------- */}
     
-                  <button type="button" data-tooltip-target="tooltip-add-to-favorites" class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                  <button type="button" data-tooltip-target="tooltip-add-to-favorites" class="rounded-lg p-2 text-white  hover:bg-gray-100 hover:text-gray-900  absolute top-[.3rem] right-[.2rem]">
                     <span class="sr-only"> Add to Favorites </span>
                     <FaRegHeart/>
                   </button>
+  
+            </div>
     
-              </div>
-           
+            <div class="pt-3">         
            {/* ---------  Product name ---------  */}
            <div className='h-[2.8rem]'>
               <p
                onClick={()=>handleClickToView(listing._id)}
-               href="#" class="text-lg font-semibold leading-tight text-gray-900 hover:underline cursor-pointer">{listing?.productName.length>50?listing?.productName.substring(0,50)+'...':listing?.productName}</p>
+               href="#" class="text-lg font-semibold leading-tight text-blue-600 hover:underline cursor-pointer">{listing?.productName.length>50?listing?.productName.substring(0,50)+'...':listing?.productName}</p>
            </div>
                
                {/* ----------  Ratings  ---------- */}
@@ -59,22 +56,8 @@ export default function ListingCard({listing,myBag}) {
                 <p class="text-sm font-medium text-gray-500 dark:text-gray-400">(455)</p>
               </div>
             
-            {/* Award and bset price */}
-              <ul class="mt-2 flex items-center gap-4">
-                <li class="flex items-center gap-2">
-                 <FaAward className='text-gray-400'/>
-                  <p class="text-sm font-medium text-gray-500 ">Fast Delivery</p>
-                </li>
     
-                <li class="flex items-center gap-2">
-                  <svg class="h-4 w-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M8 7V6c0-.6.4-1 1-1h11c.6 0 1 .4 1 1v7c0 .6-.4 1-1 1h-1M3 18v-7c0-.6.4-1 1-1h11c.6 0 1 .4 1 1v7c0 .6-.4 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-                  </svg>
-                  <p class="text-sm font-medium text-gray-500">Best Price</p>
-                </li>
-              </ul>
-    
-              <div class="mt-4 flex items-center justify-between gap-4">
+              <div class="mt-2 flex items-center justify-between gap-4">
                 {/* Price */}
                 <p class="text-2xl font-extrabold leading-tight text-gray-900 flex items-center"><FaIndianRupeeSign/>1,699</p>
     

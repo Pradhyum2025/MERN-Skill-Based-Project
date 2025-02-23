@@ -7,6 +7,7 @@ import listingSlice from '../slices/listings';
 import sellerSlice from '../slices/seller';
 import AddressSlice from '../slices/Address';
 import orderSlice from '../slices/order';
+import reviewSlice from '../slices/review';
 
 const appStore = configureStore({
   reducer:{
@@ -17,7 +18,8 @@ const appStore = configureStore({
    listings:listingSlice.reducer,
    seller:sellerSlice.reducer,
    addresses:AddressSlice.reducer,
-   orders:orderSlice.reducer
+   orders:orderSlice.reducer,
+   reviews:reviewSlice.reducer
   }
 })
 

@@ -225,7 +225,7 @@ export const getOrderDetails = async (req, res) => {
     if(req.user.role==='Buyer'){
       orderDetails = await Order.findOne({ _id: orderId ,buyer:userId},{subOrders:false})
       .populate('deliveryAddress')
-      .populate({path:'products',populate:{path:'product',select:'price images productName discount'}})
+      .populate({path:'products',populate:{path:'product',select:'price images productName discount returnPolicy'}})
 
     }else if(req.user.role==='Seller'){
       orderDetails = await SubOrder.findOne({ _id: orderId ,seller:userId})
