@@ -30,6 +30,7 @@ export const postReview = async (dispatch,orderId,listingId, token, reviewData) 
     }
   } catch (error) {
     dispatch(fetchSliceAction.deserializeFetching());
+    document.getElementById('my_modal_1').close();
     toast.error(error?.response?.data?.message, {
       style: {
         background: '#001a00',

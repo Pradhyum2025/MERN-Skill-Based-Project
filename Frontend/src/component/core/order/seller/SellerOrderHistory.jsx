@@ -7,6 +7,7 @@ import OrderCart from "./OrderCart";
 
 export const SellerOrderHistory = () => {
   const currUser = useSelector(store => store.auth);
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (currUser.token) {
@@ -14,7 +15,6 @@ export const SellerOrderHistory = () => {
     }
   }, []);
 
-  const myOrders = useSelector(store => store.orders);
   const handleGetFiltersOrder = (e)=>{
     if(currUser.token && e.target.value!==''){
       getMyOrder(dispatch, currUser.token,{status:e.target.value})
@@ -22,7 +22,9 @@ export const SellerOrderHistory = () => {
       return;
     }
   }
-
+  
+  const myOrders = useSelector(store => store.orders);
+  // console.log(myOrders)
   return (
     <div className="bg-gray-50 sm:px-6 mt-0 w-full">
       <div className="max-w-4xl mx-auto bg-card rounded-lg shadow-sm sm:p-6">
@@ -32,7 +34,7 @@ export const SellerOrderHistory = () => {
        
          <select onChange={(e)=>handleGetFiltersOrder(e)}
          className="font-[600] text-sm border-2 border-blue-400 rounded mb-1" name="" id="">
-         <option value="Processing">Processing</option>
+         <option value="Processing">Pending</option>
          <option value="Shipped">Shipped</option>
          <option value="Delivered">Delivered</option>
          <option value="Cancelled">Cancelled</option>
@@ -51,8 +53,8 @@ export const SellerOrderHistory = () => {
             </thead>
   
             <tbody> 
-              {myOrders.map((order, index) => {
-                return <OrderCart key={order._id} order={order} index={index} />
+              {myOrders.map((subOrder) => {
+                return <OrderCart key={subOrder._id} subOrder={subOrder} />
               })}
             </tbody>
           </table>

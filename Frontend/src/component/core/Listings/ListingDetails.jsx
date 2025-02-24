@@ -416,17 +416,18 @@ export default function ListingDetails() {
                     </div>
                   ))}
 
-                  {allReviews.lenght === 0 &&
+                  {allReviews.lenght === 0 ?
+                    <button
+                      onClick={() => dispatch(reviewSliceAction.setEmpty())}
+                      class="block text-blue-600 text-left hover:underline text-sm mt-6 font-semibold">See less</button>
+
+                    :
                     <button
                       onClick={allReviews.length === 0 && HandlefetchReviews}
                       class="block text-blue-600 text-left hover:underline text-sm mt-6 font-semibold">Read all
                       reviews</button>
                   }
-                  {allReviews.length > 0 &&
-                    <button
-                      onClick={() => dispatch(reviewSliceAction.setEmpty())}
-                      class="block text-blue-600 text-left hover:underline text-sm mt-6 font-semibold">See less</button>
-                  }
+
                 </div>
               </div>
 

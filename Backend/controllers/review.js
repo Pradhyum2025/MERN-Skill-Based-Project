@@ -35,8 +35,14 @@ export const postReview = async (req, res) => {
       })
     }
 
-    const currOrder = await Order.findById(orderId, { products: true });
+    const currOrder = await Order.findById(orderId, { products: true ,orderStatus:true });
 
+   if(currOrder.orderStatus==='Processing'){
+    return res.status(400).json({
+      success: false,
+      message: 'Cannot create review before delivery of item',
+    })
+   }
     let isListingPresent = false;
 
     let currListings = currOrder.products.map(itemObj => {

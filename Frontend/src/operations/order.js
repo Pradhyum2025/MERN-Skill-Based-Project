@@ -1,7 +1,7 @@
 import axios from "axios";
 import toast from "react-hot-toast";
-import { fetchSliceAction } from "../store/slices/fetchSlice";
-import { orderSliceAction } from "../store/slices/order";
+import { fetchSliceAction } from "../store/slices/fetchSlice.js";
+import { orderSliceAction } from "../store/slices/order.js";
 
 export const createOrder = async (navigate, dispatch, token) => {
   const toastId = toast.loading("Creating your order...");
@@ -16,7 +16,7 @@ export const createOrder = async (navigate, dispatch, token) => {
     if (res.data && res.data.success) {
       // console.log("CREATE ORDER RESPONSE --->>>", res)
       navigate('/my-order', "")
-      setTimeout(() => toast(`✅${res?.data?.message}`,
+      setTimeout(() => toast.success(res?.data?.message,
         {
           style: {
             background: '#001a00',
@@ -110,13 +110,14 @@ export const getAllOrdersForAdmin = async (dispatch, token, data) => {
 
 
 export const dateFormate = (date) => {
-  const monthStr = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+  let orderDate = new Date(date);
+  const day = String(orderDate.getUTCDate()).padStart(2, '0');
+  let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  let shortMonth = monthNames[orderDate.getUTCMonth()]
+  let year = String(orderDate.getUTCFullYear()).padStart(4, '0')
 
-  const monthIndx = parseInt(date.substring(5, 7));
-  const yearStr = date.substring(0, 4);
-  const dateStr = date.substring(8, 10);
-
-  return `${dateStr} ${monthStr[monthIndx - 1]} ${yearStr}`
+  return  `${day}-${shortMonth}-${year}`
+  
 }
 
 export const calTotalPrice = (products) => {
@@ -139,7 +140,7 @@ export const getOrderDetails = async (dispatch, orderId, token) => {
     });
     dispatch(fetchSliceAction.deserializeFetching());
     if (res.data && res.data.success) {
-      console.log("GET MY ORDER  DETAILS RESPONSE --->>>", res);
+      // console.log("GET MY ORDER  DETAILS RESPONSE --->>>", res);
       dispatch(orderSliceAction.setSingleOrder(res?.data.orderDetails));
     }
   } catch (error) {
@@ -169,7 +170,7 @@ export const getOrderDetailsforAdmin = async (dispatch, orderId, token) => {
     });
     dispatch(fetchSliceAction.deserializeFetching());
     if (res.data && res.data.success) {
-      console.log("GET  ORDER  DETAILS RESPONSE --->>>", res);
+      // console.log("GET  ORDER  DETAILS RESPONSE --->>>", res);
       dispatch(orderSliceAction.setSingleOrder(res?.data.orderDetails));
     }
   } catch (error) {
@@ -186,5 +187,147 @@ export const getOrderDetailsforAdmin = async (dispatch, orderId, token) => {
         duration: 2000
       });
 
+  }
+}
+
+export const cancleOrder = async (dispatch, orderId, token) => {
+  try {
+    dispatch(fetchSliceAction.serializeFetching())
+    const res = await axios.get(`http://localhost:8080/order/${orderId}/cancle`, {
+      headers: {
+        'Authorisation': `Bearer ${token}`
+      }
+    });
+    
+    dispatch(fetchSliceAction.deserializeFetching())
+    if (res.data && res.data.success) {
+      console.log("CANCLE  ORDER  DETAILS RESPONSE --->>>", res);
+      document.getElementById('my_modal_1').close();
+      dispatch(orderSliceAction.cancleOrder(orderId));
+      toast.success(res?.data?.message,
+        {
+          style: {
+            background: '#001a00',
+            color: '#f2f2f2',
+            borderRadius: '0px',
+            width: '30vw'
+          },
+          position: 'bottom-center',
+          duration: 3000
+        })
+    }
+  } catch (error) {
+    dispatch(fetchSliceAction.deserializeFetching())
+    console.log('CANCLE ORDER  DETAILS  ERROR :', error)
+    toast.error(error?.response?.data?.message,
+      {
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '500px'
+        },
+        position: 'bottom-center',
+        duration: 3000
+      })
+
+  }
+}
+
+export const setDeliveredOrder = async (dispatch,navigate,orderId,otp,token) => {
+  try {
+    
+    dispatch(fetchSliceAction.serializeFetching())
+    const res = await axios.post(`http://localhost:8080/order/${orderId}/delivered`,{otp}, {
+      headers: {
+        'Authorisation': `Bearer ${token}`
+      }
+    });
+    dispatch(fetchSliceAction.deserializeFetching())
+    if (res.data && res.data.success) {
+      console.log("SET DELIVERED ORDER RESPONSE --->>>", res);
+      dispatch(orderSliceAction.setDelivered(orderId));
+      navigate(`/dashbord/admin/orderDetails/${orderId}`)
+      setTimeout(()=>{
+        toast.success(res?.data?.message,
+          {
+            style: {
+              background: '#001a00',
+              color: '#f2f2f2',
+              borderRadius: '0px',
+              width: '30vw'
+            },
+            position: 'bottom-center',
+            duration: 3000
+          })
+      },200)
+    }
+  } catch (error) {
+    dispatch(fetchSliceAction.deserializeFetching())
+    console.log('SET DELEVERD ORDER    ERROR :', error)
+    toast.error(error?.response?.data?.message,
+      {
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '500px'
+        },
+        position: 'bottom-center',
+        duration: 3000
+      })
+
+  }
+}
+
+//Send otp request for user function
+export const sendOtp = async (navigate,orderId,setOtpFetching, token, resend)=>{
+  try {
+    setOtpFetching(()=>true)
+    let res = await axios.get(`http://localhost:8080/order/${orderId}/otp`,{
+      headers: {
+        'Authorisation': `Bearer ${token}`
+      }
+    });
+    console.log("SEND OTP RESPONSE ---->>:", res);
+    setOtpFetching(()=>false)
+    if (res && res.data.success && resend ) {
+      toast.success('OTP Regenerated Successfully', { 
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '500px'
+        },
+        position: 'bottom-center',
+        duration: 2000
+       });
+    }
+    if (res && res.data.success && !resend) {
+      toast.success('OTP Generated Successfully', { 
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '500px'
+        },
+        position: 'bottom-center',
+        duration: 3000
+      });
+      navigate(`/dashbord/otp/${orderId}`);
+    }
+  } catch (err) {
+    setOtpFetching(()=>false)
+    toast.error(err?.response?.data?.message, {
+      style: {
+        background: '#001a00',
+        color: '#f2f2f2',
+        borderRadius: '0px',
+        width: '500px'
+      },
+      position: 'bottom-center',
+      duration: 3000
+     });
+    console.log("Error to send otp request : ", err)
   }
 }

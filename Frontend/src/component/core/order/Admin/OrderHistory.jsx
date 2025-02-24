@@ -35,10 +35,8 @@ export const OrderHistory = () => {
        
          <select onChange={(e)=>handleGetFiltersOrder(e)}
          className="font-[600] text-sm border-2 border-blue-100 rounded mb-1 bg-white text-gray-600" name="" id="">
-          <option value="*">All</option>
+          <option value="*">All Orders</option>
          <option value="Processing">Processing</option>
-         <option value="Pending">Pending</option>
-         <option value="Completed">Completed</option>
          <option value="Refunded">Refunded</option>
          <option value="Delivered">Delivered</option>
          <option value="Cancelled">Cancelled</option>

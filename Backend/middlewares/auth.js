@@ -9,7 +9,7 @@ export const isAuth = (req,res,next)=>{
   try{
     const token = req.cookies?.token
     || req?.body?.token
-    || req.header('authorisation').replace('Bearer ',"");
+    || req.header('Authorisation').replace('Bearer ',"");
 
   //  let token = req.headers.token;
   
@@ -24,7 +24,7 @@ export const isAuth = (req,res,next)=>{
     let payload={};
     try{
       payload = jwt.verify(token,process.env.JWT_SECRET);
-
+      
       // console.log('payload',payload)
     }catch(err){
       console.log(err.message); 
@@ -139,7 +139,7 @@ export const isMultiRoll = (req,res,next)=>{
   }
 }
 
-export const isBuyerOrSelller = (req,res,next)=>{
+export const isBuyerOrSeller = (req,res,next)=>{
   
   try{
     let payload = req.user;
@@ -154,6 +154,27 @@ export const isBuyerOrSelller = (req,res,next)=>{
 
   }catch(error){
     console.log("isMultiRoll  middleware error ",error.message)
+    return res.status(500).json({
+      success:false,
+      message:'Somethin Went Wrong'
+    })
+  }
+}
+export const isBuyerOrAdmin = (req,res,next)=>{
+  
+  try{
+    let payload = req.user;
+ 
+    if(payload.role!=='Admin' && payload.role!=='Buyer'){
+      return res.status(401).json({
+        success:false,
+        message:'Protected route for Admins or buyers'
+      })
+    }
+    return next();
+
+  }catch(error){
+    console.log("Admin or buyer  middleware error ",error.message)
     return res.status(500).json({
       success:false,
       message:'Somethin Went Wrong'

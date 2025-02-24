@@ -4,12 +4,15 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 
-export default function OrderCart({subOrder,index}) {
+export default function OrderCart({subOrder}) {
   const currUser = useSelector(store=>store.auth);
   const navigate = useNavigate();
 
  const handleShowOrderDetails =()=>{
-  return navigate(`/dashbord/my-orders/${subOrder._id}`)
+  if(subOrder?._id){
+    return navigate(`/dashbord/my-orders/${subOrder._id}`)
+
+  }
  }
 
  const getStatusColor = (status) => {
@@ -20,14 +23,8 @@ export default function OrderCart({subOrder,index}) {
       return "bg-yellow-100 text-yellow-800 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm";
     case "shipped":
       return "bg-green-100 text-green-800 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm";
-    case "failed":
-      return "bg-red-100 text-red-800 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm";
-    case "refunded":
-      return "bg-pink-100 text-pink-800 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm";
-    case "processing":
-      return "bg-blue-100 text-blue-800 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm";
     case "cancelled":
-      return "bg-gray-100 text-gray-800 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm";
+      return "bg-red-100 text-red-800 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm";
     default:
       return "bg-pink-100 text-pink-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
   }
@@ -35,20 +32,20 @@ export default function OrderCart({subOrder,index}) {
 
   return (
     <tr
-    key={subOrder._id}
+    key={subOrder?._id}
     className={`hover:bg-blue-50 transition-colors border-b-2`}
   >
     <td className="py-4 px-6 text-sm font-[600] text-gray-800">
       <span 
-      className='cursor-pointer hover:text-gray-700 hover:underline'>{subOrder._id}</span>
+      className='cursor-pointer hover:text-gray-700 hover:underline'>{subOrder?._id}</span>
       </td>
     <td className="py-4 px-6 text-sm font-[600] text-gray-800">
-      {dateFormate(subOrder.createdAt)}
+      {dateFormate(subOrder?.createdAt)}
     </td>
    
     <td className="py-4 px-6">
 
-      <span className={`${getStatusColor(subOrder.status)}` }>{subOrder.status}</span>
+      <span className={`${subOrder?.status && getStatusColor(subOrder?.status)}` }>{subOrder?.status}</span>
     </td>
 
     <td className="py-4 px-6">

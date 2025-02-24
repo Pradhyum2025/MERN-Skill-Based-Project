@@ -140,12 +140,12 @@ export const ListingUpdation = () => {
 
 
   return (
-    <div className="w-full bg-gray-50 py-5 px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-gray-50 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
 
-        <section className="bg-white rounded-lg shadow-md p-6 sm:p-8">
-          <div className="max-w-3xl px-4 py-8 mx-auto lg:py-0">
-            <h2 className="mb-10 text-xl md:text-2xl text-center font-extrabold text-blue-600">--- Update Product Details ---</h2>
+        <section className="bg-white rounded-lg shadow-md  sm:p-8">
+          <div className="max-w-3xl p-4 sm:py-8 mx-auto lg:py-0">
+            <h2 className="mb-4 sm:mb-10 text-xl md:text-2xl text-center font-extrabold text-gray-500"> UPDATE PRODUCT DETAILS </h2>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
                 {/* -----------Product Name ----------- */}

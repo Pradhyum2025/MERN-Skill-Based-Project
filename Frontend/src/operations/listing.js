@@ -20,12 +20,31 @@ export const postListing = async (dispatch, navigate, productDetails, token) => 
     dispatch(fetchSliceAction.deserializeFetching());
     if (res.data && res.data.success) {
       console.log("CREATE LISING RESPONSE --->>>", res)
-      toast.success(res.data.message, { position: 'bottom-right', duration: 2000 });
+      toast.success(res?.data?.message, {
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
+        },
+        position: 'bottom-center',
+        duration: 2000
+      })
       navigate('/dashbord');
     }
   } catch (error) {
     dispatch(fetchSliceAction.deserializeFetching());
-    toast.error(error.response?.data?.message, { position: 'bottom-right', duration: 2000 });
+    toast.error(error.response?.data?.message, { 
+      style: {
+      background: '#001a00',
+      color: '#f2f2f2',
+      borderRadius: '0px',
+      width: '400px',
+      fontWeight: 900
+    },
+    position: 'bottom-center',
+    duration: 2000});
     console.log('Category creation error : ', error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."
@@ -58,23 +77,43 @@ export const getMyListings = async (dispatch, token) => {
 export const deleteLisitng = async (dispatch, token, listingId) => {
   console.log(token)
   try {
-    setFetching(()=>true)
+    setFetching(() => true)
     let res = await axios.delete(`http://localhost:8080/seller/${listingId}`, {
       headers: {
         'Authorisation': `Bearer ${token}` // Include token as a Bearer token
       }
     })
-    setFetching(()=>false);
+    setFetching(() => false);
     if (res.data && res.data?.success) {
       // console.log("DELETE USER LISTING RESPONSE --->>>", res)
       dispatch(listinSlicegAction.deleteListing(listingId));
       document.getElementById('my_modal_3').close()
-      toast.success(res?.data?.message, { position: 'bottom-right', duration: 2000 });
+      toast.success(res?.data?.message, { 
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
+        },
+        position: 'bottom-center',
+        duration: 2000
+      });
     }
   } catch (error) {
-    setFetching(()=>false)
+    setFetching(() => false)
     document.getElementById('my_modal_3').close()
-    toast.error(error.response?.data?.message, { position: 'bottom-right', duration: 2000 });
+    toast.error(error.response?.data?.message, { 
+      style: {
+        background: '#001a00',
+        color: '#f2f2f2',
+        borderRadius: '0px',
+        width: '400px',
+        fontWeight: 900
+      },
+      position: 'bottom-center',
+      duration: 2000
+    });
     console.log('delete Listing error : ', error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."
@@ -83,7 +122,7 @@ export const deleteLisitng = async (dispatch, token, listingId) => {
 }
 
 //Get singleListing  
-export const getSingleListing = async (dispatch,listingId) => {
+export const getSingleListing = async (dispatch, listingId) => {
   try {
     let res = await axios.get(`http://localhost:8080/listing/show/${listingId}`)
 
@@ -100,7 +139,7 @@ export const getSingleListing = async (dispatch,listingId) => {
 }
 
 // Update new listing
-export const updateListing = async (dispatch, navigate,listingId, formData, token) => {
+export const updateListing = async (dispatch, navigate, listingId, formData, token) => {
   try {
 
     dispatch(fetchSliceAction.serializeFetching());
@@ -115,12 +154,32 @@ export const updateListing = async (dispatch, navigate,listingId, formData, toke
     dispatch(fetchSliceAction.deserializeFetching());
     if (res.data && res?.data?.success) {
       console.log("UPDATE LISING RESPONSE --->>>", res)
-      toast.success(res?.data?.message, { position: 'bottom-right', duration: 2000 });
+      toast.success(res?.data?.message, { 
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          fontWeight: 900
+        },
+        position: 'bottom-center',
+        duration: 2000
+       });
       navigate('/dashbord');
     }
   } catch (error) {
     dispatch(fetchSliceAction.deserializeFetching());
-    toast.error(error.response?.data?.message, { position: 'bottom-right', duration: 2000 });
+    toast.error(error.response?.data?.message, { 
+      style: {
+        background: '#001a00',
+        color: '#f2f2f2',
+        borderRadius: '0px',
+        width: '400px',
+        fontWeight: 900
+      },
+      position: 'bottom-center',
+      duration: 2000
+    });
     console.log(' UPDATE LISING ERROR : ', error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."
@@ -128,10 +187,10 @@ export const updateListing = async (dispatch, navigate,listingId, formData, toke
   }
 }
 
-export const getFilteredListing = async(dispatch,categoryId)=>{
+export const getFilteredListing = async (dispatch, categoryId) => {
 
   try {
-    const res = await axios.get(`http://localhost:8080/listing/filter/${categoryId}`,{
+    const res = await axios.get(`http://localhost:8080/listing/filter/${categoryId}`, {
     });
     if (res.data && res.data.success) {
       console.log("GET Filter Listing Response --->>>", res)
@@ -145,9 +204,9 @@ export const getFilteredListing = async(dispatch,categoryId)=>{
   }
 }
 
-export const getAllListings = async(dispatch)=>{
+export const getAllListings = async (dispatch) => {
   try {
-    const res = await axios.get(`http://localhost:8080/listing`,{
+    const res = await axios.get(`http://localhost:8080/listing`, {
     });
 
     if (res.data && res.data.success) {

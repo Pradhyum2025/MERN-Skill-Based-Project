@@ -6,13 +6,18 @@ import { Bag } from "../models/bag.js";
 import { Address } from "../models/address.js";
 import { mailSender } from "../utils/mailSender.js";
 import OrderConfirmation from "../emailTemplate/OrderConfirmation.js";
+import OrderCancellationEmail from "../emailTemplate/orderCancle.js";
+import { OTP } from "../models/otp.js";
+import otpGenerator from 'otp-generator'
+import dotenv from 'dotenv'
+dotenv.config();
 
 export const createOrder = async (req, res) => {
   try {
 
     const userId = req.user.id;
 
-    const customer = await User.findById(userId, { bag: true, addresses: true ,email:true});
+    const customer = await User.findById(userId, { bag: true, addresses: true, email: true });
 
     const bagItems = await Bag.find({ _id: { $in: customer.bag }, quantity: { $gt: 0 } }).populate('product', "productName stock price discount seller");
 
@@ -29,9 +34,9 @@ export const createOrder = async (req, res) => {
 
     //Calculate total 
     let totalAmount = orderList.reduce((sum, orderItem) => sum + (((orderItem.product.price) - ((orderItem.product.discount * orderItem.product.price) / 100)) * orderItem.quantity), 0);
-    
+
     totalAmount = Math.floor(totalAmount);
-   
+
     //Find user address 
     const deliveryAddress = await Address.findOne({ _id: { $in: customer.addresses }, isDefault: true })
 
@@ -103,9 +108,9 @@ export const createOrder = async (req, res) => {
         // Push mew subOrder into order;
         newOrder = await Order.findByIdAndUpdate(newOrder._id, {
           $push: {
-            subOrders:{
+            subOrders: {
               $each: [newSubOrder._id],
-              $position:0
+              $position: 0
             }
           }
         }, { new: true })
@@ -114,7 +119,7 @@ export const createOrder = async (req, res) => {
         await User.findByIdAndUpdate(sellerId, {
           $push: {
             myOrders: {
-              $each:[newSubOrder._id],
+              $each: [newSubOrder._id],
               $position: 0
             }
           }
@@ -131,14 +136,15 @@ export const createOrder = async (req, res) => {
     //Push order in customer account 
     let user = await User.findByIdAndUpdate(customer._id, {
       $push: {
-        myOrders:{
-        $each : [newOrder._id],
-        $position: 0
+        myOrders: {
+          $each: [newOrder._id],
+          $position: 0
+        }
       }
-    }}, { new: true })
+    }, { new: true })
 
     //Send Mail to buyer for their order
-    await mailSender(customer.email,'Thank you for Order - E-commerce',OrderConfirmation(newOrder._id,"Cash on Delivery"))
+    await mailSender(customer.email, 'Thank you for Order - E-commerce', OrderConfirmation(newOrder._id, "Cash on Delivery"))
 
     //Retern response
     return res.status(200).json({
@@ -159,10 +165,10 @@ export const createOrder = async (req, res) => {
 export const getMyOrder = async (req, res) => {
   try {
     const userId = req.user.id;
-    const {status} = req.body;
-    
+    const { status } = req.body;
+
     const currUser = await User.findById(userId, { myOrders: true })
-    if(!status || !userId){
+    if (!status || !userId) {
       return res.status(400).json({
         success: false,
         message: 'Something missing, please try again!'
@@ -175,18 +181,18 @@ export const getMyOrder = async (req, res) => {
       })
     }
 
-    let  currOrders = []
-    if(req.user.role==='Buyer'){
-      if(status==="*"){
-        currOrders = await Order.find({ _id: { $in: currUser.myOrders } }, { createdAt: true, orderStatus: true, totalAmount: true,paymentStatus:true })
-      }else{
-        currOrders = await Order.find({ _id: { $in: currUser.myOrders },orderStatus:status }, { createdAt: true, orderStatus: true, totalAmount: true,paymentStatus:true })
+    let currOrders = []
+    if (req.user.role === 'Buyer') {
+      if (status === "*") {
+        currOrders = await Order.find({ _id: { $in: currUser.myOrders } }, { createdAt: true, orderStatus: true, totalAmount: true, paymentStatus: true })
+      } else {
+        currOrders = await Order.find({ _id: { $in: currUser.myOrders }, orderStatus: status }, { createdAt: true, orderStatus: true, totalAmount: true, paymentStatus: true })
       }
-    }else{
-      if(status==="*"){
-        currOrders = await SubOrder.find({ _id: { $in: currUser.myOrders }}, {order:true, createdAt: true, status: true,products:true})
-      }else{
-        currOrders = await SubOrder.find({ _id: { $in: currUser.myOrders },status:status }, {order:true, createdAt: true, status: true,products:true})
+    } else {
+      if (status === "*") {
+        currOrders = await SubOrder.find({ _id: { $in: currUser.myOrders } }, { order: true, createdAt: true, status: true, products: true })
+      } else {
+        currOrders = await SubOrder.find({ _id: { $in: currUser.myOrders }, status: status }, { order: true, createdAt: true, status: true, products: true })
       }
     }
 
@@ -210,7 +216,7 @@ export const getMyOrder = async (req, res) => {
 export const getOrderDetails = async (req, res) => {
   try {
     const userId = req.user.id;
-    const {orderId} = req.params;
+    const { orderId } = req.params;
 
     const currUser = await User.findById(userId, { myOrders: true })
 
@@ -221,22 +227,22 @@ export const getOrderDetails = async (req, res) => {
       })
     }
 
-    let  orderDetails = null;
-    if(req.user.role==='Buyer'){
-      orderDetails = await Order.findOne({ _id: orderId ,buyer:userId},{subOrders:false})
-      .populate('deliveryAddress')
-      .populate({path:'products',populate:{path:'product',select:'price images productName discount returnPolicy'}})
+    let orderDetails = null;
+    if (req.user.role === 'Buyer') {
+      orderDetails = await Order.findOne({ _id: orderId, buyer: userId }, { subOrders: false })
+        .populate('deliveryAddress')
+        .populate({ path: 'products', populate: { path: 'product', select: 'price images productName discount returnPolicy' } })
 
-    }else if(req.user.role==='Seller'){
-      orderDetails = await SubOrder.findOne({ _id: orderId ,seller:userId})
-      .populate({path:'products',populate:{path:'productId',select:"price images productName discount" ,populate:{path:'shippingAddress'}} })
-      .populate('SellerDetails')
-      .populate({path:'seller', select:'firstName lastName email contact'})
-    }else{
+    } else if (req.user.role === 'Seller') {
+      orderDetails = await SubOrder.findOne({ _id: orderId, seller: userId })
+        .populate({ path: 'products', populate: { path: 'productId', select: "price images productName discount", populate: { path: 'shippingAddress' } } })
+        .populate('SellerDetails')
+        .populate({ path: 'seller', select: 'firstName lastName email contact' })
+    } else {
       orderDetails = await SubOrder.findOne({ _id: orderId })
-      .populate({path:'products',populate:{path:'productId',select:"price images productName discount" ,populate:{path:'shippingAddress'}} })
-      .populate('SellerDetails')
-      .populate({path:'seller', select:'firstName lastName email contact'})
+        .populate({ path: 'products', populate: { path: 'productId', select: "price images productName discount", populate: { path: 'shippingAddress' } } })
+        .populate('SellerDetails')
+        .populate({ path: 'seller', select: 'firstName lastName email contact' })
     }
 
     // Check for validation
@@ -259,14 +265,14 @@ export const getOrderDetails = async (req, res) => {
 export const getAllOrdersForAdmin = async (req, res) => {
   try {
     const userId = req.user.id;
-    const {status} = req.body;
-    if(!userId){
+    const { status } = req.body;
+    if (!userId) {
       return res.status(400).json({
         success: false,
         message: 'Something missing, please try again!'
       })
     }
-    const currUser = await User.findOne({_id:userId,accountType:'Admin'})
+    const currUser = await User.findOne({ _id: userId, accountType: 'Admin' })
     if (!currUser) {
       return res.status(400).json({
         success: false,
@@ -274,11 +280,11 @@ export const getAllOrdersForAdmin = async (req, res) => {
       })
     }
 
-    let  currOrders = []
-    if(status==="*"){
-      currOrders = await Order.find({},{createdAt: true, orderStatus: true, totalAmount: true,paymentStatus:true });
-    }else{
-      currOrders = await Order.find({orderStatus:status }, { createdAt: true, orderStatus: true, totalAmount: true,paymentStatus:true })
+    let currOrders = []
+    if (status === "*") {
+      currOrders = await Order.find({}, { createdAt: true, orderStatus: true, totalAmount: true, paymentStatus: true });
+    } else {
+      currOrders = await Order.find({ orderStatus: status }, { createdAt: true, orderStatus: true, totalAmount: true, paymentStatus: true })
     }
 
     return res.status(200).json({
@@ -300,9 +306,8 @@ export const getAllOrdersForAdmin = async (req, res) => {
 export const getOrderDetailsforAdmin = async (req, res) => {
   try {
     const userId = req.user.id;
-    const {orderId} = req.params;
-
-    const currUser = await User.findOne({_id:userId,accountType:'Admin' })
+    const { orderId } = req.params;
+    const currUser = await User.findOne({ _id: userId, accountType: 'Admin' })
 
     if (!currUser) {
       return res.status(400).json({
@@ -311,19 +316,17 @@ export const getOrderDetailsforAdmin = async (req, res) => {
       })
     }
 
-    let  orderDetails = await Order.findById(orderId,{subOrders:false,products:false})
-    .populate('deliveryAddress')
-    .populate('buyer','firstName lastName email contact');
+    let orderDetails = await Order.findById(orderId, { subOrders: false, products: false })
+      .populate('deliveryAddress')
+      .populate('buyer', 'firstName lastName email contact');
 
-    const subOrderDetails = await SubOrder.find({ order: orderId})
-      .populate({path:'products',populate:{path:'productId',select:"price images productName discount" ,populate:{path:'shippingAddress'}} })
+    const subOrderDetails = await SubOrder.find({ order: orderId })
+      .populate({ path: 'products', populate: { path: 'productId', select: "price images productName discount", populate: { path: 'shippingAddress' } } })
       .populate('SellerDetails')
-      .populate({path:'seller', select:'firstName lastName email contact'})
-     
+      .populate({ path: 'seller', select: 'firstName lastName email contact' })
+
 
     orderDetails.subOrders = subOrderDetails;
-   
-    console.log(orderDetails);
 
     // Check for validation
     return res.status(200).json({
@@ -340,6 +343,217 @@ export const getOrderDetailsforAdmin = async (req, res) => {
       message: 'Internal server error!'
     })
   }
+}
+
+export const cancleOrder = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { orderId } = req.params;
+
+    const currUser = await User.findOne({
+      _id: userId,
+      $or: [{ accountType: 'Admin' }, { accountType: 'Buyer' }]
+    },{accountType:true})
+
+    if (!currUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+    let orderDetails = await Order.findById(orderId, {buyer:true, orderStatus: true, products: true, subOrders: true })
+    
+    if(currUser.accountType!=='Admin' && !orderDetails.buyer.equals(currUser._id)){
+      return res.status(400).json({
+        success: false,
+        message: 'Unautherized access'
+      })
+    }
+
+    if (orderDetails.orderStatus === 'Cancelled') {
+      return res.status(400).json({
+        success: false,
+        message: 'Your order aleady cancelled'
+      })
+    }
+
+    if (orderDetails.orderStatus === 'Processing') {
+      //Increase stock of each item by quantity
+      for (let productItem of orderDetails.products) {
+        const listingId = productItem.product;
+        const quantity = productItem.quantity;
+
+        await Listing.findByIdAndUpdate(listingId, {
+          $inc: { stock: quantity }
+        })
+      }
+
+      //change sub orders status
+      await SubOrder.updateMany({ _id: { $in: orderDetails.subOrders } }, { status: 'Cancelled' })
+
+      //finaly cancle the order to chnage status
+      orderDetails = await Order.findByIdAndUpdate(orderId, { orderStatus: 'Cancelled' }, { buyer: true, paymentStatus: true }).populate('buyer', 'firstName lastName email')
+
+
+      const fullName = `${orderDetails.buyer.firstName} ${orderDetails.buyer.lastName}`
+
+      await mailSender(orderDetails.buyer.email, 'Order Cancle Confirmation - E-commerce', OrderCancellationEmail(orderDetails._id, fullName, currUser.accountType, orderDetails.paymentStatus.method))
+
+      // Return response
+      return res.status(200).json({
+        success: true,
+        message: `Your Order has Been Cancelled`,
+      })
+
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Order can be cancle during processing phase'
+      })
+    }
+
+  } catch (err) {
+    console.log("GET ORDER ERROR : ", err?.message)
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error!'
+    })
+  }
+}
+
+export const setDeliveredOrder = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { orderId } = req.params;
+    const {otp} =req.body;
+    const actulOtp = parseInt(otp, 10);
+
+    if (!orderId || !userId || !otp) {
+      return res.status(400).json({
+        success: false,
+        message: 'All feilds are required'
+      })
+    }
+    const currUser = await User.findOne({
+      _id: userId,
+      accountType: 'Admin'
+    })
+
+    if (!currUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+
+    
+    let orderDetails = await Order.findById(orderId, {buyer:true, orderStatus: true, products: true, subOrders: true }).populate('buyer','email')
+
+    
+    const email = orderDetails.buyer.email;
+    const storedOtp = await OTP.findOne({orderId:orderId ,email:email}).sort({createdAt:-1}).limit(1);
+
+    if(!storedOtp){
+      return res.status(400).json({
+        success: false,
+        message: 'OTP expired, Please try again!'
+      })
+    }
+ 
+    if (actulOtp !== storedOtp.otp) {
+      return res.status(400).json({
+        success: false,
+        message: 'Inavalid OTP'
+      })
+    }
+
+    if (orderDetails.orderStatus === 'Processing' || orderDetails.orderStatus ==='Cancelled') {
+      //change sub orders status
+      await SubOrder.updateMany({ _id: { $in: orderDetails.subOrders } }, { status: 'Delivered' })
+
+      //finaly cancle the order to chnage status
+      orderDetails = await Order.findByIdAndUpdate(
+        orderId,
+        {
+          orderStatus: 'Delivered',
+          paymentStatus: {
+            status: 'Completed',
+            method: 'COD',
+            transactionId: null
+          }
+        },{new:true})
+  
+      // Return response
+      return res.status(200).json({
+        success: true,
+        message: `Order has been delivered`,
+      })
+
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Order can be cancle before during processing phase'
+      })
+    }
+
+  } catch (err) {
+    console.log("SET ORDER  DELIVERERD ERROR : ", err?.message)
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error!'
+    })
+  }
+}
+
+
+// ----- Send otp for order delever ------
+export const sendOTP = async (req, res) => {
+ 
+  try {
+    const {orderId} = req.params;
+    const userId= req.user.id;
+   
+    if(!orderId || !userId){
+      return res.status(400).json({
+        success: false,
+        message: 'all fiiled are required! '
+      })
+    }
+  
+    //Check if user already exist
+    const currOrder = await Order.findOne({ _id: orderId , 
+      $or:[{orderStatus :'Processing'},{orderStatus :'Cancelled'}]
+    },{buyer:true}).populate('buyer','email')
+   console.log(currOrder)
+    if (!currOrder) {
+      return res.status(409).json({
+        success: false,
+        message: 'Order not found'
+      })
+    }
+
+    const email = currOrder?.buyer?.email;
+
+    //Generate OTP   
+    const otp = otpGenerator.generate(process.env.OTP_LENGTH, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
+
+    //Entery of otp in database
+    let otpPayload = { email, otp ,orderId };
+     let newOtp = await OTP.create(otpPayload);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Otp generated successfully!',
+    })
+
+  } catch (error) {
+    console.log('error in OTP generation!', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Otp generate failed!'
+    })
+  }
+
 }
 
 

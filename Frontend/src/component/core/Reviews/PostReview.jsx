@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { postReview } from '../../../operations/review';
+import LoadingBtn from '../../common/LoadingBtn';
 
 
 export default function PostReview({orderId,listingId }) {
@@ -36,7 +37,7 @@ export default function PostReview({orderId,listingId }) {
      return; 
     }
   }
-
+  const fetching = useSelector(store=>store.fetching);
   return (
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -74,8 +75,15 @@ export default function PostReview({orderId,listingId }) {
             ))}
           </div>
 
-          <button type="submit" className="font-bold bg-blue-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >Submit Review</button>
+          <button
+          disabled={fetching}
+           type="submit"
+           className="font-bold bg-blue-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed"
+          >
+            {fetching?
+            <LoadingBtn working={'Submiting'}/>:"Submit Review"}
+            
+          </button>
         </form>
   );
 };

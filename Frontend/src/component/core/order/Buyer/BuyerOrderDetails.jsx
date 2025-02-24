@@ -33,18 +33,12 @@ export default function BuyerOrderDetails() {
     switch (status.toLowerCase()) {
       case "delivered":
         return "bg-green-100 text-green-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
-      case "shipped":
-        return "bg-green-100 text-green-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
-      case "failed":
-        return "bg-red-100 text-red-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
       case "refunded":
-        return "bg-pink-100 text-pink-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-yellow-100 text-yellow-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
       case "processing":
         return "bg-blue-100 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
       case "cancelled":
-        return "bg-gray-100 text-gray-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-red-100 text-red-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
       default:
         return "bg-pink-100 text-pink-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
     }
@@ -57,21 +51,6 @@ export default function BuyerOrderDetails() {
       </div>
     );
   }
-
-  // let orderDate = new Date(orderDetails?.createdAt);
-  // const day = String(orderDate.getUTCDate()).padStart(2, '0');
-  // let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  // let shortMonth = monthNames[orderDate.getUTCMonth()]
-  // let year = String(orderDate.getUTCFullYear()).padStart(4, '0')
-
-  // const dateFormate = `${day}-${shortMonth}-${year}`
-
-  // const returnPolicyExpiryDate = (returnPlocyDay)=>{
-  //   console.log(orderDate.setDate(orderDate.getDate()+returnPlocyDay))
-
-  //   return orderDate.setDate(orderDate.getDate()+returnPlocyDay);
-  // }
-  // const currDate = new Date();
 
 
   const handlePostReviewModal = (listingId)=>{
@@ -101,12 +80,12 @@ export default function BuyerOrderDetails() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div>
               <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1">Order ID</p>
-              <p className="font-semibold  text-sm text-gray-500">{orderDetails._id}</p>
+              <p className="font-semibold  text-sm text-gray-500">#{orderDetails._id}</p>
             </div>
             <div>
               <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1 ">Order Date</p>
               <p className="font-semibold  text-sm text-gray-500 ">
-                <span>{dateFormate}</span>
+                <span>{dateFormate(orderDetails.createdAt)}</span>
               </p>
             </div>
             <div>

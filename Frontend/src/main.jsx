@@ -33,6 +33,7 @@ import SellerOrderDetails from './component/core/order/seller/SellerOrderDetails
 import isUserAAdmin from './loader/loader.js'
 import { OrderHistory } from './component/core/order/Admin/OrderHistory.jsx'
 import OrderDetailsForAdmin from './component/core/order/Admin/OrderDetailsForAdmin.jsx'
+import OTP from './component/core/order/Admin/OTP.jsx'
 
 const router = createBrowserRouter([
     {
@@ -66,8 +67,9 @@ const router = createBrowserRouter([
         {path:'/dashbord/my-orders',element: <SellerOrderHistory/>},
         {path:'/dashbord/my-orders/:orderId',element: <SellerOrderDetails/>},
         {path:'/dashbord/admin/all-orders/',element: <OrderHistory/>},
-        {path:'/dashbord/admin/orderDetails/:orderId',element: <OrderDetailsForAdmin/>}
-      ]
+        {path:'/dashbord/admin/orderDetails/:orderId',element: <OrderDetailsForAdmin/>},
+        {path:'/dashbord/otp/:orderId',element: <OTP/>}
+      ] 
     },
     {
       path: '/bag',

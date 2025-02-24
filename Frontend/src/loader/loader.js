@@ -9,6 +9,6 @@ export default function isUserAAdmin() {
    }else if(currUser.accountType==='Buyer'){
     return redirect('/');
    }else{
-    return;
+    return null;
    }
 }

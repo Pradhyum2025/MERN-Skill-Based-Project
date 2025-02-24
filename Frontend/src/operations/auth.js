@@ -22,16 +22,29 @@ export const signUp = async (navigate, dispatch, signUpData) => {
           color: '#f2f2f2',
           borderRadius: '0px',
           width: '400px',
+          height:'60px',
+          padding:'0px 20px',
           fontWeight: 900
         },
-        position: 'right-center'
+        position: 'bottom-center'
       })
       navigate('/');
     }
   } catch (error) {
     dispatch(fetchSliceAction.deserializeFetching());
     console.log('SignUp error :',error)
-    toast.error(error?.response?.data?.message, { position: 'top-right', duration: 2000 });
+    toast.error(error?.response?.data?.message, {
+      style: {
+        background: '#001a00',
+        color: '#f2f2f2',
+        borderRadius: '0px',
+        width: '400px',
+        height:'60px',
+        padding:'0px 20px',
+        fontWeight: 900
+      },
+      position: 'bottom-center'
+    });
   }
 
 }
@@ -52,16 +65,29 @@ export const signIn = async (navigate,dispatch,formData) => {
           color: '#f2f2f2',
           borderRadius: '0px',
           width: '400px',
+          height:'60px',
+          padding:'0px 20px',
           fontWeight: 900
         },
-        position: 'right-center'
+        position: 'bottom-center'
       })
       document.getElementById('my_modal_3').close()
       navigate('/');
     }
   } catch (error) {
     dispatch(fetchSliceAction.deserializeFetching());
-    toast.error(error?.response?.data?.message, { position: 'top-right', duration: 2000 });
+    toast.error(error?.response?.data?.message, { 
+      style: {
+        background: '#001a00',
+        color: '#f2f2f2',
+        borderRadius: '0px',
+        width: '400px',
+        height:'60px',
+        padding:'0px 20px',
+        fontWeight: 900
+      },
+      position: 'right-center'
+     });
     console.log('Login error : ', error)
   }
 
@@ -83,13 +109,35 @@ export const becomeSeller = async (navigate,dispatch,formData,token) => {
       console.log("BECOME SELLER RESPONSE --->>>", res)
       dispatch(authSliceAction.setUserData(res.data.currUser));
       window.localStorage.setItem('currUser', JSON.stringify(res.data.currUser));
-      toast.success(res?.data?.message, { position: 'right-bottom', duration: 2000 });
+      toast.success(res?.data?.message, { 
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          height:'60px',
+          padding:'0px 20px',
+          fontWeight: 900
+        },
+        position: 'bottom-center'
+      });
       navigate('/dashbord');
 
     }
   } catch (error) {
     dispatch(fetchSliceAction.deserializeFetching());
-    toast.error(error?.response?.data?.message, { position: 'top-right', duration: 2000 });
+    toast.error(error?.response?.data?.message, { 
+      style: {
+        background: '#001a00',
+        color: '#f2f2f2',
+        borderRadius: '0px',
+        width: '400px',
+        height:'60px',
+        padding:'0px 20px',
+        fontWeight: 900
+      },
+      position: 'bottom-center'
+     });
     console.log('Become seller error : ', error)
   }
 
@@ -108,9 +156,11 @@ export const signOut = (dispatch, navigate,setUserDropDown) => {
       color: '#f2f2f2',
       borderRadius: '0px',
       width: '400px',
+      height:'60px',
+      padding:'0px 20px',
       fontWeight: 900
     },
-    position: 'right-center'
+    position: 'bottom-center'
   })
   navigate('/')
 }
@@ -131,12 +181,34 @@ export const updateProfileDetails = async(dispatch,updatedData,token,setIsEditin
       dispatch(authSliceAction.setFormData(res.data.currUser));
       setIsEditing(()=>false)
       // console.log("Profile Details Updation Response  --->>>", res)
-      toast.success(res?.data?.message, { position: 'top-right', duration: 2000 });
+      toast.success(res?.data?.message, { 
+        style: {
+          background: '#001a00',
+          color: '#f2f2f2',
+          borderRadius: '0px',
+          width: '400px',
+          height:'60px',
+          padding:'0px 20px',
+          fontWeight: 900
+        },
+        position: 'bottom-center'
+       });
     }
 
   } catch (error) {
     dispatch(fetchSliceAction.deserializeFetching());
-    toast.error(error.response?.data?.message, { position: 'top-right', duration: 2000 });
+    toast.error(error.response?.data?.message, { 
+      style: {
+        background: '#001a00',
+        color: '#f2f2f2',
+        borderRadius: '0px',
+        width: '400px',
+        height:'60px',
+        padding:'0px 20px',
+        fontWeight: 900
+      },
+      position: 'bottom-center'
+    });
     console.log('Category updation error : ', error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."
