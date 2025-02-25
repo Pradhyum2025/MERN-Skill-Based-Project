@@ -78,12 +78,13 @@ export default function ListingDetails() {
       return document.getElementById('my_modal_3').showModal()
     }
   }
-
-  if (!listing) {
-    return (
-      <p>Loading...</p>
-    )
+  
+  if (!listing?.description || listing?.features?.length===0) {
+    return <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
+    <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+  </div>
   }
+
 
   const handleDeleteReview = (reviewId) => {
     if (currUser.token && currUser.accountType === 'Buyer') {
@@ -91,18 +92,16 @@ export default function ListingDetails() {
     }
   }
 
-  console.log(allReviews)
-
   return (
     <div className="w-full bg-gray-50 py-5 px-0 sm:px-3 lg:px-8">
       <div className=" mx-auto">
         {/*  --------- Back to btn ---------  */}
-        <button
+        {/* <button
           onClick={handleBackTo}
           className='btn group bg-yellow-500 hover:bg-yellow-600  border-0 text-black min-h-[2rem] h-[2.5rem] px-3'>
           <FaAngleLeft className='group-hover:text-black text-lg group-hover:translate-x-[-3px] tansition delay-0 duration-500' />
           Back
-        </button>
+        </button> */}
         <div class="p-4 mt-4 bg-gray-100">
           <div class="lg:max-w-7xl max-w-xl mx-auto">
             <div class="grid items-start grid-cols-1 lg:grid-cols-2 gap-8 max-lg:gap-12 max-sm:gap-8">
@@ -161,8 +160,8 @@ export default function ListingDetails() {
 
                   {/* Prices and discount */}
                   <div class="flex items-center flex-wrap gap-5  mt-4">
-                    <p class="text-gray-500 text-base  flex items-center gap-1"><HiCurrencyRupee /> <strike>{listing?.price}</strike></p>
-                    <h4 class="text-gray-800 text-2xl sm:text-3xl flex items-center gap-1 font-bold"><HiCurrencyRupee />{Math.floor(listing?.price - (listing?.price * (listing?.discount / 100)))} </h4>
+                    <p class="text-gray-500 text-base  flex items-center gap-1"><HiCurrencyRupee /> <strike>{new Intl.NumberFormat('en-IN').format(listing?.price)}</strike></p>
+                    <h4 class="text-gray-800 text-2xl sm:text-3xl flex items-center gap-1 font-bold"><HiCurrencyRupee />{new Intl.NumberFormat('en-IN').format(Math.floor(listing?.price - (listing?.price * (listing?.discount / 100))))} </h4>
                     <div class="flex py-1 px-2 bg-blue-600 font-semibold !ml-4">
                       <span class="text-white text-sm">save {listing?.discount}%</span>
                     </div>
@@ -408,7 +407,8 @@ export default function ListingDetails() {
                         </div>
                       </div>
                       {currUser?._id === review?.customer?._id &&
-                        <button className='text-xs font-bold text-red-500'
+                        <button
+                          className="flex px-2 py-1 items-center gap-1 text-sm font-bold text-red-600  rounded-md hover:opacity-90 transition-opacity bg-gray-200 hover:bg-gray-400 hover:text-red-700 disabled:cursor-not-allowed disabled:hover:bg-gray-200 disabled:text-red-400"
                           onClick={() => handleDeleteReview(review._id)}
                         >
                           Delete</button>

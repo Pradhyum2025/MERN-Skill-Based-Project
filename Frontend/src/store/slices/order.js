@@ -39,6 +39,9 @@ const orderSlice = createSlice({
         order.paymentStatus=newPaymentStatus
         return order;
       })
+    },
+    setEmptyOrders:(state)=>{
+      return [];
     }
 
     }

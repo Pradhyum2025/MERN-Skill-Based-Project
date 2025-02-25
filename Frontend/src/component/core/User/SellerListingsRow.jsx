@@ -1,7 +1,7 @@
 import { FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-export const FilteredListingCard = ({ listing }) => {
+export const SellerListingRow = ({ listing }) => {
 
   const navigate = useNavigate();
 
@@ -67,23 +67,6 @@ export const FilteredListingCard = ({ listing }) => {
             d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z"
             fill="#CED5D8" />
         </svg>
-      </td>
-
-      {/* Action btns */}
-      <td class="py-2 text-sm relative">
-        <div
-          onClick={() => navigate(`/dashbord/sellerDetails/${listing?.seller?._id}`)}
-          class="flex items-center cursor-pointer gap-2">
-          <FaUserCircle className='text-3xl' />
-          <div class="ml-0">
-            <p class="text-xs text-black">{listing?.seller?.firstName + " " + listing?.seller.lastName}</p>
-            <p 
-            class="text-xs text-gray-500">{
-              (listing?.seller?.email?.length>20)?
-              (listing?.seller?.email.substring(0,7)+'...'+listing?.seller?.email.substring(listing?.seller?.email?.length-12,listing?.seller?.email?.length))
-              :(listing?.seller?.email)}</p>
-          </div>
-        </div>
       </td>
     </tr>
   )

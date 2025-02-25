@@ -210,7 +210,27 @@ export const getAllListings = async (dispatch) => {
     });
 
     if (res.data && res.data.success) {
-      console.log("Get All Listing Response --->>>", res)
+      // console.log("Get All Listing Response --->>>", res)
+      dispatch(listinSlicegAction.SetListingData(res.data.allListings));
+    }
+  } catch (error) {
+    console.log('Get all listing error : ', error);
+    throw new Error(
+      error.response?.data?.message || error.message || "An unknown error occurred."
+    );
+  }
+}
+
+export const getAllListingsForAdmin = async (dispatch,token) => {
+  try {
+    const res = await axios.get(`http://localhost:8080/listing/admin`, {
+      headers: {
+        "Authorisation": `Bearer ${token}`,
+      },
+    });
+
+    if (res.data && res.data.success) {
+      console.log("Get All Listing for Admin Response --->>>", res)
       dispatch(listinSlicegAction.SetListingData(res.data.allListings));
     }
   } catch (error) {

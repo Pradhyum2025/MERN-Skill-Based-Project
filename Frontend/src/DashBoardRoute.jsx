@@ -42,6 +42,7 @@ export default function DashBoardRoute() {
             className='lg:hidden bg-black h-[2.3rem] w-[3rem] rounded-tr-lg rounded-br-lg  flex items-center justify-end p-2 fixed z-20 '><FaAnglesRight className='text-[1.5rem]' />
           </button>
         }
+        
         <Outlet />
       </div>
       <Footer />

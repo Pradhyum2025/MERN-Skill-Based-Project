@@ -43,7 +43,7 @@ export default function DeleteModal({listingDetails}) {
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
 
-                <p className='text-gray-100 my-1'>{listingDetails?.productName}</p>
+                <p className='text-gray-500 text-md font-semibold my-1'>{listingDetails?.productName}</p>
                  
                 <h3 class="mb-5 text-sm font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this product?</h3>
 

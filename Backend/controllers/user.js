@@ -14,7 +14,7 @@ export const signup = async(req,res)=>{
     const {firstName,lastName,email,contact,password} = req.body;
 
     let currUser = await User.findOne({email});
-    
+      
     //check user exist
     if(currUser){
       return res.status(405).json({

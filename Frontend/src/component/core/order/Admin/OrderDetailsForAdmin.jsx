@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { cancleOrder, dateFormate, getOrderDetailsforAdmin, sendOtp, } from '../../../../operations/order';
+import { dateFormate, getOrderDetailsforAdmin, sendOtp, } from '../../../../operations/order';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FiDownload, FiPhone, FiPrinter } from 'react-icons/fi';
 import { BiRupee } from 'react-icons/bi';
 import { LiaRupeeSignSolid } from 'react-icons/lia';
-// import SubOrderDetails from './SubOrderDetails';
-import OrderCart from '../seller/OrderCart';
-import { capturePayment, capturePaymentAtDelivery, verifyPaymentAtDelivery } from '../../../../operations/payment';
+
+import { capturePaymentAtDelivery, verifyPaymentAtDelivery } from '../../../../operations/payment';
 import CancleModal from '../Buyer/CancleOrderModal';
+import SubOrderCart from './SubOrderCart';
+import { orderSliceAction } from '../../../../store/slices/order';
 
 export default function OrderDetailsForAdmin() {
   const [otpFetching, setOtpFetching] = useState(false);
@@ -82,10 +83,9 @@ export default function OrderDetailsForAdmin() {
   };
 
 
-
-  if (!orderDetails) {
+  if (!orderDetails || orderDetails.orderStatus === undefined || orderDetails.paymentStatus === undefined) {
     return (
-      <div className="min-h-screen bg-background p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
       </div>
     );
@@ -128,7 +128,8 @@ export default function OrderDetailsForAdmin() {
             <div>
               <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1">Order Date</p>
               <p className="font-semibold  text-sm text-gray-500 ">
-                {dateFormate(orderDetails?.createdAt) + " " + time}
+                <span>{dateFormate(orderDetails?.createdAt)}</span>
+                <span className='text-blue-500'>{time}</span>
               </p>
             </div>
             <div>
@@ -156,8 +157,8 @@ export default function OrderDetailsForAdmin() {
                 }
                 {orderDetails.orderStatus == 'Processing' &&
                   ['Cancelled', 'Delivered', 'Processing'].map(status => (
-                    <option 
-                    className={`${status==='Cancelled'?'text-red-500':(status==='Delivered'?'text-green-500':'text-blue-500')} font-bold`} value={status}>{status}</option>
+                    <option
+                      className={`${status === 'Cancelled' ? 'text-red-500' : (status === 'Delivered' ? 'text-green-500' : 'text-blue-500')} font-bold`} value={status}>{status}</option>
                   ))
 
                 }
@@ -169,7 +170,7 @@ export default function OrderDetailsForAdmin() {
 
 
         {/* Payment and Delivery */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">     
           {orderDetails?.paymentStatus?.status === 'Pending' ?
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <h2 className="text-lg font-heading text-gray-600 font-semibold mb-6 flex items-center gap-5">Payment Details
@@ -292,7 +293,7 @@ export default function OrderDetailsForAdmin() {
         </div>
 
         {/* Payment btn */}
-        {orderDetails.orderStatus === 'Processing' &&
+        {orderDetails.orderStatus === 'Processing' && orderDetails.paymentStatus.status === 'Pending' &&
           <div className='bg-white p-4 rounded-lg shadow-sm flex sm:flex-row flex-col  sm:items-center items-start gap-5 justify-around'>
             <p className='text-gray-500 text-md font-semibold'>If customer choose to online payment options at delivery time click and  recieve payment</p>
             <button
@@ -319,8 +320,8 @@ export default function OrderDetailsForAdmin() {
                 </thead>
 
                 <tbody>
-                  {orderDetails?.subOrders?.map((subOrder, index) => {
-                    return <OrderCart key={subOrder._id} subOrder={subOrder} index={index} />
+                  {orderDetails?.subOrders?.map((subOrder) => {
+                    return <SubOrderCart key={subOrder._id} subOrder={subOrder} />
                   })}
                 </tbody>
               </table>

@@ -17,6 +17,9 @@ const authSlice  = createSlice({
       if(window.localStorage.getItem('currUser')){
         window.localStorage.removeItem('currUser');
       }
+      if(window.localStorage.getItem('SelectOrderStatus')){
+        window.localStorage.removeItem('SelectOrderStatus');
+      }
       return {};
     }
   }

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaRegUserCircle } from "react-icons/fa";
 import { signOut } from "../../operations/auth";
+import { MdOutlineLogout } from "react-icons/md";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -102,7 +103,7 @@ const Navbar = () => {
               <input
                 type="text"
                 placeholder="Search products..."
-                className="w-64 px-4 py-2 rounded-full border focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-100 "
+                className="xl:w-64 px-4 py-2 rounded-full border focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-100 "
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -139,25 +140,25 @@ const Navbar = () => {
                           <>
                             <Link
                               to={'/profile'}
-                              className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                              className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100"
                             >
                               Profile
                             </Link>
                             <Link
                               to={'/my-order'}
-                              className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                              className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100"
                             >
                               My Order
                             </Link>
                             <Link
                               to={'/wishlist'}
-                              className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                              className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100"
                             >
                               Wishlist
                             </Link>
                             <Link
                               to={'/become-seller'}
-                              className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                              className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100"
                             >
                               Become a seller
                             </Link>
@@ -175,18 +176,11 @@ const Navbar = () => {
 
                           </>
                         }
-                        <Link
-                          to={'/dashbord'}
-                          className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
-                        >
-                          Settings
-                        </Link>
-
                         <p
                           onClick={handleSignOut}
-                          className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                          className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 cursor-pointer flex items-center gap-1"
                         >
-                          Logout
+                           <MdOutlineLogout className="text-lg"/> Logout
                         </p>
                       </div>
                     ) : (
@@ -244,6 +238,7 @@ const Navbar = () => {
                 <>
                   {(currUser?.email) ? (
                     <div className="absolute top-full  right-[-70px] w-[8.2rem] bg-white  shadow-lg rounded-md py-2 mt-0">
+                      {/* Buyer */}
                       {currUser.accountType === 'Buyer'
                         &&
                         <>
@@ -365,7 +360,7 @@ const Navbar = () => {
                   {category.name}
                 </button>
                 {showDropdown === category.name && (
-                  <div className="ml-4 mt-2 space-y-2">
+                  <div className="lg:ml-4 mt-2 space-y-2">
                     {category.items.map((item) => (
                       <a
                         key={item}

@@ -1,11 +1,16 @@
 import React from 'react'
 import { FaUserCircle } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
 
 export default function SellerRow({seller}) {
+  const navigate = useNavigate();
+
   return (
     <tr>
     <td class="p-4 text-sm">
-      <div class="flex items-center cursor-pointer w-max">
+      <div
+      onClick={()=>navigate(`/dashbord/sellerDetails/${seller._id}`)}
+       class="flex items-center cursor-pointer w-max">
       <FaUserCircle className='text-3xl'/>
         <div class="ml-4">
           <p class="text-sm text-black">{seller.firstName +" "+seller.lastName}</p>

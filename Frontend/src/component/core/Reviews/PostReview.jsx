@@ -41,7 +41,7 @@ export default function PostReview({orderId,listingId }) {
   return (
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className=" bg-gray-100 p-8 rounded-lg " >
+          className=" bg-gray-100 px-8 py-5 rounded-lg " >
 
           <h2 className="text-xl font-bold mb-6 text-center text-gray-600">
             Rate & Review
@@ -49,19 +49,19 @@ export default function PostReview({orderId,listingId }) {
          
          {/* Comment */}
           <div className="mb-4">
-            <label htmlFor="comment" className="block text-sm  font-semibold text-gray-700">Comment:</label>
+            <label htmlFor="comment" className="block text-md  font-semibold text-gray-700">Comment</label>
             <textarea
               id="comment"
               name="comment"
               rows={4}
-              className={`mt-1 block w-full text-[1.05rem] font-[400]  text-[black] p-2 border bg-white rounded-md shadow-sm focus:ring-blue-600 focus:border-blue-500`}
+              className={`mt-1 block w-full text-[1.05rem] font-[400]  text-[black] ring-blue-400 ring-2 outline-0  p-2 border bg-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500`}
               {...register("comment", { required: true })}
             />
             {errors.comment && <span className='text-sm font-semibold text-red-500'>comment  is required*</span>}
           </div>
          
          {/* Rating */}
-          <div className="flex items-center space-x-1 mt-6 mb-10">
+          <div className="flex items-center space-x-1 mt-6 mb-8">
             {Array.from({ length: 5 }, (_, index) => (
               <button
                 key={index}

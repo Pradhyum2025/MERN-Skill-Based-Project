@@ -21,13 +21,14 @@ export const signUp = async (navigate, dispatch, signUpData) => {
           background: '#001a00',
           color: '#f2f2f2',
           borderRadius: '0px',
-          width: '400px',
-          height:'60px',
-          padding:'0px 20px',
+          width: '350px',
+          height:'40px',
+          padding:'0px 10px',
           fontWeight: 900
         },
         position: 'bottom-center'
       })
+
       navigate('/');
     }
   } catch (error) {
@@ -64,9 +65,9 @@ export const signIn = async (navigate,dispatch,formData) => {
           background: '#001a00',
           color: '#f2f2f2',
           borderRadius: '0px',
-          width: '400px',
-          height:'60px',
-          padding:'0px 20px',
+          width: '350px',
+          height:'40px',
+          padding:'0px 10px',
           fontWeight: 900
         },
         position: 'bottom-center'
@@ -115,8 +116,8 @@ export const becomeSeller = async (navigate,dispatch,formData,token) => {
           color: '#f2f2f2',
           borderRadius: '0px',
           width: '400px',
-          height:'60px',
-          padding:'0px 20px',
+          height:'40px',
+          padding:'0px 10px',
           fontWeight: 900
         },
         position: 'bottom-center'
@@ -155,9 +156,9 @@ export const signOut = (dispatch, navigate,setUserDropDown) => {
       background: '#001a00',
       color: '#f2f2f2',
       borderRadius: '0px',
-      width: '400px',
-      height:'60px',
-      padding:'0px 20px',
+      width: '350px',
+      height:'40px',
+      padding:'0px 10px',
       fontWeight: 900
     },
     position: 'bottom-center'

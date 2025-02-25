@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { FilteredListingCard } from './FilteredListingCard'
 import { HiCurrencyRupee } from 'react-icons/hi'
-import { getAllListings } from '../../../../operations/listing'
+import { getAllListingsForAdmin } from '../../../../operations/listing'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function AllListings() {
@@ -9,25 +9,25 @@ export default function AllListings() {
  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (currUser?.accountType === 'Admin') {
-      getAllListings(dispatch)
+    if (currUser.token && currUser?.accountType === 'Admin') {
+      getAllListingsForAdmin(dispatch,currUser.token)
     } else {
       return;
     }
   }, [])
 
   const allListings = useSelector(store => store.listings);
+
   return (
-   
        <div className="w-full min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-10">
-         <div className="max-w-4xl mx-auto">
+         <div className="max-w-5xl mx-auto">
    
-           <h1 className="w-full text-xl font-[800] text-blue-600 mb-8 text-center md:text-left">Your Listing Deatils
+           <h1 className="w-full text-xl font-[800] text-gray-500 mb-8 text-center md:text-left">All Products
            </h1>
    
            {allListings?.length === 0 ? (
              <div className="text-center py-12">
-               <p className="text-gray-500 text-xl">Your Listing is empty</p>
+               <p className="text-gray-500 text-xl">Empty</p>
              </div>
            ) : (
              <div
@@ -53,7 +53,7 @@ export default function AllListings() {
                        Rating
                      </th>
                      <th class="p-4 text-left text-sm font-semibold text-black">
-                       Action
+                       Seller
                      </th>
                    </tr>
                  </thead>
@@ -66,7 +66,8 @@ export default function AllListings() {
                  </tbody>
    
                </table>
-   
+              
+              {/* Pagging */}
                <div class="md:flex m-4">
                  <p class="text-sm text-gray-500 flex-1">Showind 1 to 5 of 100 entries</p>
                  <div class="flex items-center max-md:mt-4">

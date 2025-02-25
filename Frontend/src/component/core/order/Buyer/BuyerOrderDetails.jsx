@@ -13,7 +13,7 @@ export default function BuyerOrderDetails() {
   const dispatch = useDispatch();
   const { orderId } = useParams();
   const navigate = useNavigate();
- const [selectedListingId,setSelectedListingId]= useState('')
+  const [selectedListingId, setSelectedListingId] = useState('')
 
   useEffect(() => {
     if (currUser.token && orderId) {
@@ -53,7 +53,7 @@ export default function BuyerOrderDetails() {
   }
 
 
-  const handlePostReviewModal = (listingId)=>{
+  const handlePostReviewModal = (listingId) => {
     setSelectedListingId(listingId);
     return document.getElementById('my_modal_1').showModal();
   }
@@ -109,30 +109,31 @@ export default function BuyerOrderDetails() {
           <div className="space-y-4">
             {orderDetails?.products && orderDetails?.products.map((orderItem) => (
               <div key={orderItem.product?._id} className="flex flex-col md:flex-row  bg-white items-start md:justify-between gap-4 p-4 border border-border rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className='flex flex-col md:flex-row  items-start md:justify-between gap-4'>
-                <img
-                  onClick={() => handleNavigatation(orderItem?.product?._id)}
-                  src={orderItem?.product?.images[0]}
-                  alt={orderItem?.product?.productName}
-                  className="w-24 h-24 object-cover rounded cursor-pointer"
-                />
-
-                <div className="flex flex-col justify-around h-full gap-2">
-                  <h3
+                <div className='flex flex-col md:flex-row  items-start md:justify-between gap-4'>
+                  <img
                     onClick={() => handleNavigatation(orderItem?.product?._id)}
-                    className="font-semibold text-blue-700 cursor-pointer hover:text-blue-600">{orderItem?.product?.productName}</h3>
-                  {/* <p className="text-gray-500  text-sm font-[600] pl-0">Items: {orderItem?.quantity}</p> */}
-                  <p className="text-gray-600 font-[600] flex text-sm items-center"><BiRupee />{((orderItem?.product?.price) - (orderItem?.product?.price * orderItem?.product?.discount) / 100) + '/-'}
-                  </p>
-                  <span className='text-xs text-gray-700 font-[600]'>&nbsp;Quantity : {+ orderItem?.quantity}</span>
-                </div>
-                  </div>
+                    src={orderItem?.product?.images[0]}
+                    alt={orderItem?.product?.productName}
+                    className="w-24 h-24 object-cover rounded cursor-pointer"
+                  />
 
-             {/* {orderDetails.orderStatus==="Delivered" || orderDetails.orderStatus==="Cancelled"|| orderDetails.orderStatus==="Refunded" &&
-                } */}
-                <button 
-                onClick={()=>{handlePostReviewModal(orderItem?.product?._id)}}
-                className='text-blue-700 font-bold hover:underline'>Review</button> 
+                  <div className="flex flex-col justify-around h-full gap-2">
+                    <h3
+                      onClick={() => handleNavigatation(orderItem?.product?._id)}
+                      className="font-semibold text-blue-700 cursor-pointer hover:text-blue-600">{orderItem?.product?.productName}</h3>
+                    {/* <p className="text-gray-500  text-sm font-[600] pl-0">Items: {orderItem?.quantity}</p> */}
+                    <p className="text-gray-600 font-[600] flex text-sm items-center"><BiRupee />{((orderItem?.product?.price) - (orderItem?.product?.price * orderItem?.product?.discount) / 100) + '/-'}
+                    </p>
+                    <span className='text-xs text-gray-700 font-[600]'>&nbsp;Quantity : {+ orderItem?.quantity}</span>
+                  </div>
+                </div>
+
+                {(orderDetails.orderStatus==="Delivered" || orderDetails.orderStatus==="Refunded") &&
+                <button
+                  onClick={() => { handlePostReviewModal(orderItem?.product?._id) }}
+                  className="flex px-2 py-1 items-center gap-1 text-sm font-bold text-blue-600  rounded-md hover:opacity-90 transition-opacity bg-gray-200 hover:bg-gray-400 hover:text-blue-700"
+                >Review</button>
+                }
 
               </div>
             ))}
@@ -274,7 +275,7 @@ export default function BuyerOrderDetails() {
           </button>
         </div>
       </div>
-      <ReviewModal orderId={orderId} listingId={selectedListingId}/>
+      <ReviewModal orderId={orderId} listingId={selectedListingId} />
     </div>
   );
 };

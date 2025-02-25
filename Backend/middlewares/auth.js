@@ -11,9 +11,7 @@ export const isAuth = (req,res,next)=>{
     || req?.body?.token
     || req.header('Authorisation').replace('Bearer ',"");
 
-  //  let token = req.headers.token;
-  
-    if (!token){
+    if (!token || token===undefined){
       return res.status(422).json({
         success:false,
         message:'Token missing'
@@ -117,11 +115,10 @@ export const isAdmin = (req,res,next)=>{
 }
 
 // check user is Multiroll or NOT
-export const isMultiRoll = (req,res,next)=>{
+export const isMultiRoll = (req,res,next)=>{  
   
   try{
     let payload = req.user;
-    console.log(payload.role)
     if(payload.role!=='Seller' && payload.role!=='Buyer' && payload.role!=='Admin' ){
       return res.status(401).json({
         success:false,
@@ -175,6 +172,28 @@ export const isBuyerOrAdmin = (req,res,next)=>{
 
   }catch(error){
     console.log("Admin or buyer  middleware error ",error.message)
+    return res.status(500).json({
+      success:false,
+      message:'Somethin Went Wrong'
+    })
+  }
+}
+
+export const isSellerOrAdmin = (req,res,next)=>{
+  
+  try{
+    let payload = req.user;
+ 
+    if(payload.role!=='Admin' && payload.role!=='Seller'){
+      return res.status(401).json({
+        success:false,
+        message:'Protected route for Admins or Seller'
+      })
+    }
+    return next();
+
+  }catch(error){
+    console.log("Admin or Seller  middleware error ",error.message)
     return res.status(500).json({
       success:false,
       message:'Somethin Went Wrong'

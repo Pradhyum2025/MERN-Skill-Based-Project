@@ -57,7 +57,13 @@ export const createCategory = async (req, res) => {
 export const getAllCategory = async (req, res) => {
   try {
     const allCatagories = await Category.find({}, { name: true, description: true, relatedImage:true })
-
+    if(allCatagories.length===0){
+      return res.status(200).json({
+        success: false,
+        message: 'There is no category',
+        catagories: allCatagories
+      })
+    }
     return res.status(200).json({
       success: true,
       message: 'All catagories return successful',

@@ -30,7 +30,7 @@ const subOrderSchema = new mongoose.Schema({
   ],
   status: { 
     type: String, 
-    enum: ["Pending", "Shipped", "Delivered", "Cancelled"], 
+    enum: ["Pending", "Picked Up by Courier", "Delivered", "Cancelled"], 
     default: "Pending" 
   },
   

@@ -7,6 +7,9 @@ const sellerSlice = createSlice({
     setSellerData:(state,action)=>{
       return [...action.payload]
     },
+    setSingleSeller:(state,action)=>{
+      return [action.payload]
+    }
   }
 })
 

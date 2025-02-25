@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 //load env file
 dotenv.config();
 
-const MONGODB_URL = process.env.MONGODB_URL;
+const MONGODB_URL = process.env.ATLAS_MONGO_URL;
 
 
 export default function connectDB(){

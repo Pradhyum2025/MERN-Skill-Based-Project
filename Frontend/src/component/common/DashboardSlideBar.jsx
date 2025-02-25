@@ -24,7 +24,7 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
   return (
     <>
       {/*---------------- Aside slidebar ---------------- */}
-      <aside id="separator-sidebar" class="xl:w-64 w-ful  transition-transform  fixed z-20 lg:static lg:z-0" aria-label="Sidebar">
+      <aside id="separator-sidebar" class="xl:w-64 h-full lg:h-auto  transition-transform  fixed z-20 lg:static lg:z-0" aria-label="Sidebar">
 
         <div class="h-full px-3 pb-4 overflow-y-auto bg-gray-800 ">
 
@@ -115,68 +115,87 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
                       <span class="flex-1 ms-3 whitespace-nowrap">Create New Category</span>
                     </a>
                   </li>
-                </Link> 
+                </Link>
               </>}
 
-              {(currUser?.accountType === 'Seller') &&
+            {(currUser?.accountType === 'Seller') &&
               <>
-               <Link
-                onClick={handleSelectSubSection}
-                to={'/dashbord'}>
-                <li>
-                  <a href="#MyCourse" class={`${currLocation === '/dashbord' ? 'bg-gray-700 text-white ' : ''} flex items-center p-2 text-gray-900 rounded-lg text-white group`}>
+                <Link
+                  onClick={handleSelectSubSection}
+                  to={'/dashbord'}>
+                  <li>
+                    <a href="#MyCourse" class={`${currLocation === '/dashbord' ? 'bg-gray-700 text-white ' : ''} flex items-center p-2 text-gray-900 rounded-lg text-white group`}>
 
-                    <svg
-                      class={`${currLocation === '/dashbord' ? 'text-white' : 'text-white'}  flex-shrink-0 w-4 h-4  transition duration-75`}
-                      aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
-                      <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
-                    </svg>
+                      <svg
+                        class={`${currLocation === '/dashbord' ? 'text-white' : 'text-white'}  flex-shrink-0 w-4 h-4  transition duration-75`}
+                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                        <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
+                      </svg>
 
-                    <span class="flex-1 ms-3 whitespace-nowrap">My Products</span>
-                  </a>
-                </li>
-              </Link>
-              <Link
+                      <span class="flex-1 ms-3 whitespace-nowrap">My Products</span>
+                    </a>
+                  </li>
+                </Link>
+                <Link
                   onClick={handleSelectSubSection}
                   to='/dashbord/my-orders'
                 >
                   <li>
                     <a href="" class={`${currLocation === '/dashbord/my-orders' ? 'bg-gray-700 text-white ' : ''} flex items-center p-2 rounded-lg text-white group`}>
 
-                      <RiListUnordered  className='font-extrabold'/>
+                      <RiListUnordered className='font-extrabold' />
 
                       <span class="flex-1 ms-3 whitespace-nowrap">My Orders</span>
                     </a>
                   </li>
                 </Link>
+                <Link
+                  onClick={handleSelectSubSection}
+                  to='/dashbord/create-listing'>
+                  <li>
+                    <a href="#Profile" class={`${currLocation === '/dashbord/create-listing' ? 'bg-gray-700' : ''} text-md flex items-center pl-1 py-2 rounded-lg text-white `}>
+                      <HiViewGridAdd className={`flex-shrink-0 w-6 h-7  transition duration-75`} />
+                      <span class="flex-1 ms-3 whitespace-nowrap">Sell Products</span>
+                    </a>
+                  </li>
+                </Link>
+              </>
+            }
+
+            {/*------- My Profile------- */}
+            {currUser.accountType === 'Seller' &&
               <Link
                 onClick={handleSelectSubSection}
-                to='/dashbord/create-listing'>
+                to={`/dashbord/sellerDetails/${currUser._id}`}>
                 <li>
-                  <a href="#Profile" class={`${currLocation === '/dashbord/create-listing' ? 'bg-gray-700' : ''} text-md flex items-center pl-1 py-2 rounded-lg text-white `}>
-                    <HiViewGridAdd className={`flex-shrink-0 w-6 h-7  transition duration-75`} />
-                    <span class="flex-1 ms-3 whitespace-nowrap">Sell Products</span>
+                  <a href="#Profile" class={`${currLocation === `/dashbord/sellerDetails/${currUser._id}` ? 'bg-gray-700' : ''} flex items-center p-2 text-white rounded-lg dark:text-white  group`}>
+                    <svg
+                      class={`flex-shrink-0 w-5 h-5 text-white transition duration-75`}
+                      aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                      <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap ">Profile</span>
                   </a>
                 </li>
               </Link>
-              </>
-              }
-             
-            {/*------- My Profile------- */}
-            <Link
-              onClick={handleSelectSubSection}
-              to={'/dashbord/my-profile'}>
-              <li>
-                <a href="#Profile" class={`${currLocation === '/dashbord/my-profile' ? 'bg-gray-700' : ''} flex items-center p-2 text-white rounded-lg dark:text-white  group`}>
-                  <svg
-                    class={`flex-shrink-0 w-5 h-5 text-white transition duration-75`}
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                    <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
-                  </svg>
-                  <span class="flex-1 ms-3 whitespace-nowrap ">Profile</span>
-                </a>
-              </li>
-            </Link>
+            }
+
+            {currUser.accountType === 'Admin  ' &&
+              <Link
+                onClick={handleSelectSubSection}
+                to={`/dashbord/sellerDetails/${currUser._id}`}>
+                <li>
+                  <a href="#Profile" class={`${currLocation === '/dashbord/my-profile' ? 'bg-gray-700' : ''} flex items-center p-2 text-white rounded-lg dark:text-white  group`}>
+                    <svg
+                      class={`flex-shrink-0 w-5 h-5 text-white transition duration-75`}
+                      aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                      <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
+                    </svg>
+                    <span class="flex-1 ms-3 whitespace-nowrap ">Profile</span>
+                  </a>
+                </li>
+              </Link>
+            }
 
             {/*------- My Sign out------- */}
             <li onClick={handleSignOut}>

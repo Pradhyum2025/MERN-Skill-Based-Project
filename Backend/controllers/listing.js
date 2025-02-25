@@ -2,7 +2,7 @@ import {Listing} from "../models/listing.js";
 import Category from "../models/category.js";
 
 //get listing data 
-export const getAllListings= async(req,res)=>{
+export const getAllListings = async(req,res)=>{
   
   try{
     const allListings = await Listing.find({});
@@ -20,6 +20,24 @@ export const getAllListings= async(req,res)=>{
   }
 }
 
+//get listing data 
+export const getAllListingsforAdmin= async(req,res)=>{
+  
+  try{
+    const allListings = await Listing.find({},{productName:true ,images:true, price:true ,stock:true, seller:true}).populate({path:'seller', select:'firstName lastName email'});
+    return res.status(200).json({
+      success:true,
+      message:'fetch data Successfully!',
+      allListings
+    })
+  }catch(error){
+    // console.log(error.message)
+    return res.status(500).json({
+      success:false,
+      message:'Internal Server Error!'
+    })
+  }
+}
 
 //show product
 export const showListing = async(req,res)=>{

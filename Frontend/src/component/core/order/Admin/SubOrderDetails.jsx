@@ -9,7 +9,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { AiTwotoneShop } from "react-icons/ai";
 import { MdMarkEmailRead, MdOutlinePhone } from "react-icons/md";
 
-export default function SellerOrderDetails() {
+export default function SubOrderDetails() {
   const currUser = useSelector(store => store.auth);
   const dispatch = useDispatch();
   const { orderId } = useParams();
@@ -17,7 +17,7 @@ export default function SellerOrderDetails() {
 
   useEffect(() => {
     if (currUser.token && orderId) {
-      (dispatch, orderId, currUser.token)
+      getOrderDetails(dispatch, orderId, currUser.token)
     }
   }, []);
 
@@ -28,33 +28,34 @@ export default function SellerOrderDetails() {
     return navigate(`/show/${listingId}`)
   }
 
+
   if (!subOrderDetails) {
-    return;
+    return <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
+    <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+  </div>
   }
+
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
       case "delivered":
-        return "bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-green-100 text-green-800 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm";
       case "pending":
-        return "bg-yellow-100 text-yellow-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
-      case "shipped":
-        return "bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
-      case "failed":
-        return "bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
-      case "refunded":
-        return "bg-pink-100 text-pink-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
-      case "processing":
-        return "bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-pink-100 text-yellow-800 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm";
+      case "picked up by courier":
+        return "bg-pink-200 text-pink-800 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm";
       case "cancelled":
-        return "bg-gray-100 text-gray-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-red-100 text-red-800 text-sm font-bold me-2 px-2.5 py-0.5 rounded-sm";
       default:
-        return "bg-pink-100 text-pink-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-blue-100 text-pink-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-sm";
     }
   };
+
   const time = new Date(subOrderDetails?.createdAt).toLocaleString().split(',')[1];
+
   return (
+    <>
     <div className="min-h-screen bg-gray-100 p-4 w-full">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-5xl mx-auto space-y-8">
         <div className="py-4 rounded-lg flex flex-col gap-y-5">
           {/* Heading */}
           <div className="flex justify-between items-center">
@@ -73,33 +74,28 @@ export default function SellerOrderDetails() {
           <div className="bg-white p-6 rounded-lg shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className=''>
-                <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1">Order ID</p>
-                <p className="font-semibold  text-sm text-gray-500">{subOrderDetails?._id}</p>
+                <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1">Sub-Order ID</p>
+                <p className="font-semibold  text-sm text-gray-500">#{subOrderDetails?._id}</p>
               </div>
 
-              {/* <div>
-                <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1">Seller Id</p>
-                <p className="font-semibold  text-sm text-gray-500 flex items-center gap-0">{subOrderDetails?.seller?._id}</p>
-              </div> */}
 
               <div>
                 <p className="text-yellow-400 text-sm font-semibold sm:pl-3 mb-1">Order Date</p>
                 <p className="font-semibold  text-sm text-gray-500 ">
-                  {dateFormate(subOrderDetails?.createdAt) + " " + time}
+                  <span>{dateFormate(subOrderDetails?.createdAt)}</span>
+                  <span className='text-blue-500'>{time}</span>
                 </p>
               </div>
               <div>
                 <p className="text-yellow-400 font-semibold  text-sm sm:pl-3 mb-0">Status</p>
-                <span className={`${getStatusColor(subOrderDetails?.status)}`}>
-                  {subOrderDetails.status.toLowerCase()}
-                </span>
+                <span className={`${subOrderDetails?.status && subOrderDetails?.status==='Delivered'?getStatusColor('Picked Up by Courier'):getStatusColor(subOrderDetails?.status)}` }>{subOrderDetails?.status && subOrderDetails?.status==='Delivered'?'Picked Up by Courier':subOrderDetails?.status}</span>
               </div>
 
               <div>
                 <p className="text-yellow-400 font-semibold  text-sm sm:pl-3 mb-0">Total Ammount</p>
                 <span className={`font-semibold  text-sm text-gray-500 flex items-center gap-1 ml-2`}>
                   <BiRupee className='text-md' />
-                  {calTotalPrice(subOrderDetails?.products)}
+                  {new Intl.NumberFormat('en-IN').format(calTotalPrice(subOrderDetails?.products))}
                 </span>
               </div>
 
@@ -124,8 +120,8 @@ export default function SellerOrderDetails() {
                       onClick={() => handleNavigatation(orderItem?.productId?._id)}
                       className="font-semibold text-blue-700 cursor-pointer hover:text-blue-600">{orderItem?.productId?.productName}</h3>
                     <p className="text-gray-600  text-sm font-[600] pl-0">Piece : {orderItem?.quantity}</p>
-                    <p className="text-gray-600 font-[600] flex text-sm items-center"><BiRupee />{((orderItem?.productId?.price) - (orderItem?.productId?.price * orderItem?.productId?.discount) / 100) + '/-'}
-                      <span className='text-xs text-gray-500 font-[500]'>&nbsp; ({+ orderItem?.quantity} Item)</span>
+                    <p className="text-gray-600 font-[600] flex text-sm items-center"><BiRupee />{new Intl.NumberFormat('en-IN').format(Math.floor((orderItem?.productId?.price) - (orderItem?.productId?.price * orderItem?.productId?.discount) / 100))} / per
+                     
                     </p>
                   </div>
 
@@ -139,7 +135,10 @@ export default function SellerOrderDetails() {
             <div className="space-y-4 bg-white p-6 rounded-lg shadow-sm">
               <p className='text-gray-500 fonr-md font-bold'>Personal Details :</p>
               <div className='flex sm:items-center gap-y-5 sm:gap-10 flex-col sm:flex-row'>
-                <p className="text-yellow-600  text-md font-bold flex items-center gap-1"><FaRegUserCircle className='text-blue-600 text-2xl' />{subOrderDetails?.seller?.firstName + " " + subOrderDetails?.seller?.lastName}</p>
+                <p 
+                onClick={()=>subOrderDetails?.seller?._id && navigate(`/dashbord/sellerDetails/${subOrderDetails?.seller._id}`)}
+                className="text-yellow-600  text-md font-bold flex items-center cursor-pointer gap-1 hover:bg-gray-100 p-2 rounded"><FaRegUserCircle className='text-blue-600 text-2xl hover:' />{subOrderDetails?.seller?.firstName + " " + subOrderDetails?.seller?.lastName}</p>
+
                 <p className="text-gray-500  text-sm font-semibold flex items-center gap-1"><MdMarkEmailRead className='text-blue-600 text-2xl' />{subOrderDetails?.seller?.email}</p>
                 <p className="text-gray-600  text-sm font-bold flex items-center gap-1"><MdOutlinePhone className='text-blue-600 text-xl' />{subOrderDetails?.seller?.contact?.[0]}</p>
               </div>
@@ -178,6 +177,7 @@ export default function SellerOrderDetails() {
 
       </div>
     </div>
+    </>
 
   )
 }

@@ -3,6 +3,7 @@ import { User } from "../models/user.js";
 import Category from "../models/category.js";
 import { uploadMultipleImages } from '../utils/imageUploader.js'
 import mongoose, { Schema } from "mongoose";
+import {SubOrder} from '../models/subOrder.js'
 
 //post listing data
 export const postNewListing = async (req, res) => {
@@ -288,8 +289,9 @@ export const getAllSellers = async (req, res) => {
       firstName:true,
       lastName:true,
       contact:true,
-      email:true
-    }).populate('sellerDetails');
+      email:true,
+      sellerDetails:true
+    }).populate('sellerDetails', 'companyName contact');
 
     return res.status(200).json({
       success: true,
@@ -299,6 +301,66 @@ export const getAllSellers = async (req, res) => {
 
   } catch (error) {
     console.log('Get all seller error : ', error?.message)
+    return res.status(500).json({
+      success: false,
+      message: 'Internal sever error'
+    })
+  }
+}
+
+//Get my listings
+export const getSellersDetailsForAdmin = async (req, res) => {
+  try {
+
+    const userId = req.user.id;
+    const {sellerId}= req.params;
+    const currUser = await User.findOne({_id:userId,$or:[{accountType:'Admin'},{accountType:'Seller'}]});
+
+    if (!currUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'Unauthorized access'
+      })
+    }
+  
+    if(!sellerId){
+      return res.status(400).json({
+        success: false,
+        message: 'Seller ID not found'
+      })
+    }
+    let sellerDetals = await User.findOne({_id:sellerId,accountType:'Seller'},{
+      firstName:true,
+      lastName:true,
+      contact:true,
+      email:true,
+      sellerDetails:true,
+      myOrders:true
+    })
+    .populate('sellerDetails', 'companyName contact')
+    .populate('listing','productName images price stock seller')
+    
+    if(!sellerDetals){
+      return res.status(400).json({
+        success: false,
+        message: 'Seller Details not found'
+      })
+    }
+    
+    sellerDetals = sellerDetals.toObject();
+ 
+    const myOrders = await SubOrder.find({_id:{$in:sellerDetals.myOrders}},{status:true,createdAt:true});
+   
+    sellerDetals.myOrders = myOrders;
+
+    return res.status(200).json({
+      success: true,
+      message: 'Seller details fetch suceessfully',
+      sellerDetals
+    })
+
+  } catch (error) {
+    console.log('Get seller details error : ', error?.message)
     return res.status(500).json({
       success: false,
       message: 'Internal sever error'

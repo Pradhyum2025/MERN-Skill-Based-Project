@@ -140,7 +140,7 @@ export const getOrderDetails = async (dispatch, orderId, token) => {
     });
     dispatch(fetchSliceAction.deserializeFetching());
     if (res.data && res.data.success) {
-      // console.log("GET MY ORDER  DETAILS RESPONSE --->>>", res);
+      console.log("GET MY ORDER  DETAILS RESPONSE --->>>", res);
       dispatch(orderSliceAction.setSingleOrder(res?.data.orderDetails));
     }
   } catch (error) {
