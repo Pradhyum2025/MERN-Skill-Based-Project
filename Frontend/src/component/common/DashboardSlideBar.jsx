@@ -163,12 +163,12 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
             }
 
             {/*------- My Profile------- */}
-            {currUser.accountType === 'Seller' &&
+            {(currUser.accountType === 'Seller'|| currUser.accountType === 'Admin' )&&
               <Link
                 onClick={handleSelectSubSection}
-                to={`/dashbord/sellerDetails/${currUser._id}`}>
+                to={`/dashbord/profile`}>
                 <li>
-                  <a href="#Profile" class={`${currLocation === `/dashbord/sellerDetails/${currUser._id}` ? 'bg-gray-700' : ''} flex items-center p-2 text-white rounded-lg dark:text-white  group`}>
+                  <a href="#Profile" class={`${(currLocation === `/dashbord/profile`)? 'bg-gray-700' : ''} flex items-center p-2 text-white rounded-lg dark:text-white  group`}>
                     <svg
                       class={`flex-shrink-0 w-5 h-5 text-white transition duration-75`}
                       aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">

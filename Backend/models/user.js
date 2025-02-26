@@ -21,7 +21,12 @@ const userSchema = new mongoose.Schema({
     require:true
   },
   contact:{
-    type:[Number],
+    type:Number,
+    require:true
+  },
+  image:{
+    type:String,
+    require:true
   },
   accountType:{
     type:String,

@@ -1,6 +1,7 @@
 import express from 'express';
-import { isAuth, isBuyer } from '../middlewares/auth.js';
+
 import { deleteReview, getReviews, postReview } from '../controllers/review.js';
+import { isAuth, isBuyer } from '../middlewares/Auth.js';
 let reviewRouter = express.Router();
 
 // post review route

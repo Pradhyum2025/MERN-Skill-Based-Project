@@ -1,15 +1,16 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setDefaultAddress } from '../../../operations/Address';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function AdderessCart({ address }) {
   const currUser = useSelector(store => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const currRoute = useLocation().pathname;
 
   const handleSetDefault = async () => {
-    if (currUser.token && currUser.accountType === 'Buyer') {
+    if (currUser.token && (currUser.accountType === 'Buyer' || currUser.accountType === 'Seller')) {
       return await setDefaultAddress(dispatch, currUser.token, address._id)
     } else {
       return document.getElementById('my_modal_3').showModal();
@@ -55,13 +56,12 @@ export default function AdderessCart({ address }) {
           <span className='text-gray-900 text-[.80rem] font-[700]'>- {address?.postalCode}</span>
         </div>
 
-        {address.isDefault ?
+        {(address.isDefault && currUser.accountType==='Buyer' && currRoute!=='/profile') &&
           <button
             onClick={handleNavigate}
             className='px-4 py-3 w-[40%] md:w-[30%] border border-blue-600 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold'>
             CONTINUE
-          </button> :
-          null
+          </button> 
         }
 
       </div>

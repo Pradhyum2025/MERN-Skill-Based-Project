@@ -48,11 +48,9 @@ export default function ListingDetails() {
     return document.getElementById('my_modal_3').showModal();
   }
   const HandlefetchReviews = () => {
-    if (listing) {
+    if (listing && allReviews.length===0) {
       return getReviews(dispatch, listing._id)
-    } else {
-      console.log('hello')
-    }
+    } 
   }
 
   //Set preview image
@@ -93,7 +91,7 @@ export default function ListingDetails() {
   }
 
   return (
-    <div className="w-full bg-gray-50 py-5 px-0 sm:px-3 lg:px-8">
+    <div className="w-full bg-gray-50 py-5 px-0 sm:px-3 lg:px-8 pt-[3rem]">
       <div className=" mx-auto">
         {/*  --------- Back to btn ---------  */}
         {/* <button
@@ -339,11 +337,11 @@ export default function ListingDetails() {
                 </div>
 
                 <div class="mt-6 flex flex-col gap-y-5">
-                  {listing && listing?.reviews && listing?.reviews?.map(review => (
-                    <div class="flex items-start justify-between">
+                  {allReviews.length === 0 && listing && listing?.reviews && listing?.reviews?.map(review => (
+                     <div class="flex items-start justify-between">
                       <div className='flex items-start'>
-                        <div class="rounded-full border-2 border-gray-300 flex items-center justify-center" >
-                          <FaUserLarge className='text-3xl p-[6px]' />
+                        <div class="rounded-full border-[4px] border-gray-200 flex items-center justify-center" >
+                        <img src={review?.customer?.image} className='w-[3.2rem] h-[3.2rem] object-cover rounded-full' alt="" />
                         </div>
                         <div class="ml-3">
                           <h4 class="text-sm font-bold">{`${review?.customer?.firstName || ""} ${review?.customer?.lastName}`}</h4>
@@ -368,20 +366,15 @@ export default function ListingDetails() {
                           <p class="text-sm text-gray-500 mt-4">{review.comment}</p>
                         </div>
                       </div>
-                      {allReviews.length === 0 && currUser?._id === review?.customer?._id &&
-                        <button className='text-xs font-bold text-red-500'
-                          onClick={() => handleDeleteReview(review._id)}
-                        >
-                          Delete</button>
-                      }
+                    
                     </div>
                   ))}
 
                   {allReviews?.length > 0 && allReviews?.map(review => (
                     <div class="flex items-start justify-between">
                       <div className='flex items-start'>
-                        <div class="rounded-full border-2 border-gray-300 flex items-center justify-center" >
-                          <FaUserLarge className='text-3xl p-[6px]' />
+                        <div class="rounded-full border-[4px] border-gray-200 flex items-center justify-center" >
+                          <img src={review?.customer?.image} className='w-[3.2rem] h-[3.2rem] object-cover rounded-full' alt="" />
                         </div>
                         <div class="ml-3">
                           <h4 class="text-sm font-bold">{`${review?.customer?.firstName || ""} ${review?.customer?.lastName}`}</h4>
@@ -416,14 +409,14 @@ export default function ListingDetails() {
                     </div>
                   ))}
 
-                  {allReviews.lenght === 0 ?
+                  {allReviews.length !== 0 ?
                     <button
                       onClick={() => dispatch(reviewSliceAction.setEmpty())}
                       class="block text-blue-600 text-left hover:underline text-sm mt-6 font-semibold">See less</button>
 
                     :
                     <button
-                      onClick={allReviews.length === 0 && HandlefetchReviews}
+                      onClick={HandlefetchReviews}
                       class="block text-blue-600 text-left hover:underline text-sm mt-6 font-semibold">Read all
                       reviews</button>
                   }

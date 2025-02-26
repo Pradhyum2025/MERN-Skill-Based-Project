@@ -1,12 +1,12 @@
 import express from 'express'
 
 import { createNewAddress, getAddresses, setDefaultAddress } from '../controllers/Address.js';
-import { isAuth, isMultiRoll } from '../middlewares/Auth.js';
+import { isAuth, isBuyerOrSeller, isMultiRoll } from '../middlewares/Auth.js';
 
 const addressRoutes = express.Router();
 
 //Add to cart
-addressRoutes.get('/',isAuth,getAddresses);
+addressRoutes.get('/',isAuth,isBuyerOrSeller,getAddresses);
 
 //Add to cart
 addressRoutes.post('/',isAuth,isMultiRoll,createNewAddress);

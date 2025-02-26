@@ -19,15 +19,16 @@ export const postAddress = async (dispatch, navigate,FormData,token) => {
       console.log("CREATE NEW ADDRESS RESPONSE --->>>", res)
       dispatch(AddressSliceAction.SetSingleAddressData(res?.data?.address))
       
-      // toast(`✅${res?.data?.message}`,{
-      //   style:{
-      //     background:'#001a00',
-      //     color:'#f2f2f2',
-      //     borderRadius:'0px',
-      //     width:'500px'
-      //   },
-      //   position:'bottom-center'
-      //  })
+      toast.success(res?.data?.message,{
+        style:{
+          background:'#001a00',
+          color:'#f2f2f2',
+          borderRadius:'0px',
+          width:'500px',
+          fontWeight:'500'
+        },
+        position:'bottom-center'
+       })
     
     }
   } catch (error) {
@@ -40,9 +41,9 @@ export const postAddress = async (dispatch, navigate,FormData,token) => {
   }
 }
 
-
 //Get my listings
 export const getMyAddresses = async (dispatch, token) => {
+
   try {
     const res = await axios.get('http://localhost:8080/address', {
       headers: {
@@ -74,14 +75,15 @@ export const setDefaultAddress = async (dispatch, token, addressId) => {
 
     dispatch(fetchSliceAction.deserializeFetching());
     if (res.data && res.data.success) {
-      // console.log("SET DEFAULT ADDRESS RESPONSE --->>>", res)
+      console.log("SET DEFAULT ADDRESS RESPONSE --->>>", res)
       dispatch(AddressSliceAction.setDefaultAddress(addressId))
       toast(`✅${res?.data?.message}`,{
         style:{
           background:'#001a00',
           color:'#f2f2f2',
           borderRadius:'0px',
-          width:'500px'
+          width:'500px',
+          fontWeight:'600'
         },
         position:'bottom-center'
        })

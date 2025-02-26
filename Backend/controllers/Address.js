@@ -26,7 +26,6 @@ export const createNewAddress = async (req, res) => {
   try {
 
     let {lastName , firstName , contact, alternateContact, state, city, postalCode, country, landMark, streetAddress } = req.body;
-    console.log(req.body)
 
     if (!lastName || !firstName || !contact || !alternateContact || !state || !city || !postalCode || !country || !landMark || !streetAddress) {
 
@@ -92,6 +91,7 @@ export const setDefaultAddress = async (req, res) => {
         message: 'All feilds are reuire!'
       })
     }
+    
 
     const currUser = await User.findById(userId,{addresses:true})
 

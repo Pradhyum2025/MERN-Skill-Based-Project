@@ -39,12 +39,9 @@ export const signup = async(req,res)=>{
       lastName,
       email,
       password:hashPassword,
+      contact,
+      image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
     })
-   
-    let contactList = [];
-    contactList.push(contact);
-   
-    userPayload.contact = contactList;
     
     //save newUser
     currUser = await userPayload.save();

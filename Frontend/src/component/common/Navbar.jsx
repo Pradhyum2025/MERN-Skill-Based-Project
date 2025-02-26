@@ -5,7 +5,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaRegUserCircle } from "react-icons/fa";
 import { signOut } from "../../operations/auth";
 import { MdOutlineLogout } from "react-icons/md";
-
+import { RxDashboard } from "react-icons/rx";
+import { IoSettingsOutline } from "react-icons/io5";
+import { BiSolidDashboard } from "react-icons/bi";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -130,11 +132,11 @@ const Navbar = () => {
               >
                 <FiUser className="h-6 w-6 cursor-pointer" />
 
-
+               {/* User account options */}
                 {userDropdown ?
                   <>
                     {(currUser?.email) ? (
-                      <div className="absolute top-full  right-[-70px] w-[8.2rem] bg-white  shadow-lg rounded-md py-2 mt-0">
+                      <div className="absolute top-full  right-[-70px] w-[8.3rem] bg-white  shadow-lg rounded-md py-2 mt-0">
                         {currUser.accountType === 'Buyer'
                           &&
                           <>
@@ -169,9 +171,17 @@ const Navbar = () => {
                           <>
                             <Link
                               to={'/dashbord'}
-                              className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                              className="block px-4 py-2 text-sm  font-[600] hover:bg-gray-100 flex items-center gap-1"
                             >
+                              <RxDashboard className="text-"/>
                               Dashbord
+                            </Link>
+                            <Link
+                              to={'/dashbord'}
+                              className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 flex items-center gap-1"
+                            >
+                              <IoSettingsOutline/>
+                              Setting
                             </Link>
 
                           </>
@@ -180,27 +190,27 @@ const Navbar = () => {
                           onClick={handleSignOut}
                           className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 cursor-pointer flex items-center gap-1"
                         >
-                           <MdOutlineLogout className="text-lg"/> Logout
+                           <MdOutlineLogout className="text-gray-800"/> Logout
                         </p>
                       </div>
                     ) : (
                       <div className="absolute top-full  right-[-70px] w-[8.2rem] bg-white  shadow-lg rounded-md py-2 mt-0">
                         <Link
                           to={'/signup'}
-                          className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 "
+                          className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 "
                         >
                           Signup
                         </Link>
 
                         <p
                           onClick={handleNavigateLogin}
-                          className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                          className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 cursor-pointer"
                         >
                           Login
                         </p>
 
                         <p
-                          className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                          className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 cursor-pointer"
                         >
                           Help
                         </p>
@@ -233,7 +243,8 @@ const Navbar = () => {
             >
               <FiUser className="h-6 w-6 cursor-pointer" />
 
-
+          
+          {/* For responsive */}
               {userDropdown ?
                 <>
                   {(currUser?.email) ? (
@@ -275,7 +286,7 @@ const Navbar = () => {
                             to={'/dashbord'}
                             className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
                           >
-                            Dashbord
+                           <RxDashboard/> Dashbord
                           </Link>
 
                         </>
@@ -322,7 +333,8 @@ const Navbar = () => {
               }
 
             </div>
-
+           
+           {/* Bag */}
             {currUser.accountType === 'Buyer' &&
               <div className="relative">
                 <Link to={'/bag'}>

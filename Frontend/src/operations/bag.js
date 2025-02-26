@@ -44,7 +44,7 @@ export const addToBag = async (dispatch, listing, quantity, token, setFetching) 
           width: '400px',
           fontWeight: 900
         },
-        position: 'right-center',
+        position: 'bottom-center',
         duration:2000
       })
     }
@@ -58,7 +58,7 @@ export const addToBag = async (dispatch, listing, quantity, token, setFetching) 
         width: '400px',
         fontWeight: 900
       },
-      position: 'right-center'
+      position: 'bottom-center'
     })
 
     console.log('Add to cart error : ', error)

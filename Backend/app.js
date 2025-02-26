@@ -19,6 +19,7 @@ import orderRouter from './routes/order.js';
 import addressRoutes from './routes/Address.js';
 import paymentRoutes from './routes/Payment.js';
 import reviewRouter from './routes/review.js';
+import profileRoutes from './routes/Profile.js';
 
 //load env files
 dotenv.config();
@@ -51,6 +52,7 @@ app.use('/order',orderRouter);
 app.use('/address',addressRoutes);
 app.use('/payment',paymentRoutes);
 app.use('/review',reviewRouter);
+app.use('/profile',profileRoutes)
 
 
 const PORT  = process.env.PORT || 4040;

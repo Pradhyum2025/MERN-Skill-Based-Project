@@ -4,11 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 
 export default function CreateAddressModal() {
-  const currUser = useSelector(store=>store.auth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   
-  // onClick={() => document.getElementById('my_modal_1').close()}
   return (
     <div>
       <dialog id="my_modal_1" className="modal">

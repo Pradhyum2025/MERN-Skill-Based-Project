@@ -309,7 +309,7 @@ export const getAllSellers = async (req, res) => {
 }
 
 //Get my listings
-export const getSellersDetailsForAdmin = async (req, res) => {
+export const getSellerDetailsForAdmin = async (req, res) => {
   try {
 
     const userId = req.user.id;

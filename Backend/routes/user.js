@@ -1,6 +1,6 @@
 import express from 'express'
 import { becomeSeller, login, signup } from '../controllers/user.js';
-import { isAuth, isBuyer, isSeller } from '../middlewares/auth.js';
+import { isAuth, isBuyer } from '../middlewares/Auth.js';
 
 const userRouter = express.Router();
 

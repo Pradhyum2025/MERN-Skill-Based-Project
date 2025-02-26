@@ -36,8 +36,10 @@ export default function AddressForm() {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-5">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-2">
+        <p className="text-gray-500 font-[600] w-full text-center">NEW ADDRESS DETAILS</p>
+        <hr/>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-0">
 
           {/*  ------- FirstName -------  */}
           <div>
@@ -53,10 +55,10 @@ export default function AddressForm() {
                 maxLength: { value: 50, message: "Maximum 50 characters" },
                 pattern: { value: /^[A-Za-z]+$/, message: "Only alphabetic characters allowed" }
               })}
-              className={`w-full text-sm text-black py-1 px-2 rounded-0 ring-[1px] bg-white ring-gray-500  mt-1 ${errors.firstName ? 'border-red-500' : 'border-gray-300'} `}
-            />
+              className={`w-full text-sm text-black py-2 px-2 rounded-0 ring-[1px] outline-0 rounded  bg-white  mt-1 ${errors.firstName ? 'ring-red-500' : 'ring-blue-500'} `}
+            />  
             {errors.firstName && (
-              <p className="mt-1 text-sm text-red-600">{errors.firstName?.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.firstName?.message}</p>
             )}
           </div>
 
@@ -74,10 +76,10 @@ export default function AddressForm() {
                 maxLength: { value: 50, message: "Maximum 50 characters" },
                 pattern: { value: /^[A-Za-z]+$/, message: "Only alphabetic characters allowed" }
               })}
-              className={`w-full text-sm text-black py-1 px-2 rounded-0 ring-[1px] bg-white ring-gray-500  mt-1 ${errors.lastName ? 'border-red-500' : 'border-gray-300'} `}
+              className={`w-full text-sm text-black py-2 px-2 rounded-0 ring-[1px] outline-0 rounded  bg-white  mt-1 ${errors.lastName ? 'ring-red-500' : 'ring-blue-500'} `}
             />
             {errors.lastName && (
-              <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.lastName.message}</p>
             )}
           </div>
 
@@ -93,10 +95,10 @@ export default function AddressForm() {
                 required: "Contact number is required",
                 pattern: { value: /^[6-9]\d{9}$/, message: "Enter valid Indian mobile number" }
               })}
-              className={`w-full text-sm text-black py-1 px-2 rounded-0 ring-[1px] bg-white ring-gray-500  mt-1 ${errors.contact ? 'border-red-500' : 'border-gray-300'} `}
+              className={`w-full text-sm text-black py-2 px-2 rounded-0 ring-[1px] outline-0 rounded  bg-white  mt-1 ${errors.contact ? 'ring-red-500' : 'ring-blue-500'} `}
             />
             {errors.contact && (
-              <p className="mt-1 text-sm text-red-600">{errors.contact.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.contact.message}</p>
             )}
           </div>
 
@@ -112,10 +114,10 @@ export default function AddressForm() {
                 pattern: { value: /^[6-9]\d{9}$/, message: "Enter valid Indian mobile number" },
                 validate: value => !value || value !== watch("contact") || "Alternate contact must be different"
               })}
-              className={`w-full text-sm text-black py-1 px-2 rounded-0 ring-[1px] bg-white ring-gray-500  mt-1  ${errors.alternateContact ? 'border-red-500' : 'border-gray-300'} `}
+              className={`w-full text-sm text-black py-2 px-2 rounded-0 ring-[1px] outline-0 rounded  bg-white  mt-1 ${errors.alternateContact ? 'ring-red-500' : 'ring-blue-500'} `}
             />
             {errors.alternateContact && (
-              <p className="mt-1 text-sm text-red-600">{errors.alternateContact.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.alternateContact.message}</p>
             )}
           </div>
 
@@ -132,10 +134,10 @@ export default function AddressForm() {
                 maxLength: { value: 200, message: "Maximum 200 characters" }
               })}
               rows={3}
-              className={`w-full text-sm text-black py-1 px-2 rounded-0 ring-[1px] bg-white ring-gray-500  mt-1  ${errors.streetAddress ? 'border-red-500' : 'border-gray-300'}`}
+              className={`w-full text-sm text-black py-2 px-2 rounded-0 ring-[1px] outline-0 rounded  bg-white  mt-1 ${errors.streetAddress ? 'ring-red-500' : 'ring-blue-500'} `}
             />
             {errors.streetAddress && (
-              <p className="mt-1 text-sm text-red-600">{errors.streetAddress.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.streetAddress.message}</p>
             )}
           </div>
 
@@ -152,10 +154,10 @@ export default function AddressForm() {
                 minLength: { value: 3, message: "Minimum 3 characters" },
                 maxLength: { value: 100, message: "Maximum 100 characters" }
               })}
-              className={`w-full text-sm text-black py-1 px-2 rounded-0 ring-[1px] bg-white ring-gray-500  mt-1 ${errors.landMark ? 'border-red-500' : 'border-gray-300'} `}
+              className={`w-full text-sm text-black py-2 px-2 rounded-0 ring-[1px] outline-0 rounded  bg-white  mt-1 ${errors.landMark ? 'ring-red-500' : 'ring-blue-500'} `}
             />
             {errors.landMark && (
-              <p className="mt-1 text-sm text-red-600">{errors.landMark.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.landMark.message}</p>
             )}
           </div>
 
@@ -167,7 +169,7 @@ export default function AddressForm() {
             <select
               id="city"
               {...register("city", { required: "City is required" })}
-              className={`w-full text-sm text-black py-1 px-2 rounded-0 ring-[1px] bg-white ring-gray-500  mt-1  ${errors.city ? 'border-red-500' : 'border-gray-300'} `}
+              className={`w-full text-sm text-black py-2 px-2 rounded-0 ring-[1px] outline-0 rounded  bg-white  mt-1 ${errors.city ? 'ring-red-500' : 'ring-blue-500'} `}
             >
               <option value="">Select a city</option>
               {["Goa"].map((city) => (
@@ -175,7 +177,7 @@ export default function AddressForm() {
               ))}
             </select>
             {errors.city && (
-              <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.city.message}</p>
             )}
           </div>
 
@@ -187,7 +189,7 @@ export default function AddressForm() {
             <select
               id="state"
               {...register("state", { required: "State is required" })}
-              className={`w-full text-sm text-black py-1 px-2 rounded-0 ring-[1px] bg-white ring-gray-500  mt-1 ${errors.state ? 'border-red-500' : 'border-gray-300'} f`}
+              className={`w-full text-sm text-black py-2 px-2 rounded-0 ring-[1px] outline-0 rounded  bg-white  mt-1 ${errors.state ? 'ring-red-500' : 'ring-blue-500'} `}
             >
               <option value="">Select a state</option>
               {states.map((state) => (
@@ -195,7 +197,7 @@ export default function AddressForm() {
               ))}
             </select>
             {errors.state && (
-              <p className="mt-1 text-sm text-red-600">{errors.state.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.state.message}</p>
             )}
           </div>
 
@@ -211,10 +213,10 @@ export default function AddressForm() {
                 required: "Postal code is required",
                 pattern: { value: /^\d{6}$/, message: "Enter valid 6-digit postal code" }
               })}
-              className={`w-full text-sm text-black py-1 px-2 rounded-0 ring-[1px] bg-white ring-gray-500  mt-1  ${errors.postalCode ? 'border-red-500' : 'border-gray-300'} `}
+              className={`w-full text-sm text-black py-2 px-2 rounded-0 ring-[1px] outline-0 rounded  bg-white  mt-1 ${errors.postalCode ? 'ring-red-500' : 'ring-blue-500'} `}
             />
             {errors.postalCode && (
-              <p className="mt-1 text-sm text-red-600">{errors.postalCode.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.postalCode.message}</p>
             )}
           </div>
           {/* -----------   Country ------------------- */}
@@ -227,9 +229,9 @@ export default function AddressForm() {
               id="country"
               value="India"
               readOnly
-              className="w-full text-sm text-black py-1 px-2 rounded-0 ring-[1px] bg-white ring-gray-500  mt-1  "
+              className={`w-full text-sm text-black py-2 px-2 rounded-0 ring-[1px] outline-0 rounded  bg-white  mt-1 ${errors.country ? 'ring-red-500' : 'ring-blue-500'} `}
               {...register("country", {
-                required: "Postal code is required",
+                required: "Country code is required",
               })}
             />
           </div>

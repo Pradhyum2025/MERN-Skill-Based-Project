@@ -17,7 +17,6 @@ import { MyListing } from './component/core/Listings/Seller/MyListings.jsx'
 import ListingDetails from './component/core/Listings/ListingDetails.jsx'
 import { ListingUpdation } from './component/core/Listings/Seller/ListingUpdation.jsx'
 import AllListings from './component/core/Listings/Admin/AllListings.jsx'
-import MyProfile from './component/core/Listings/Seller/MyProfile.jsx'
 import BecomeSeller from './component/core/User/BecomeSeller.jsx'
 import AllSeller from './component/core/User/AllSeller.jsx'
 import Listing from './component/core/Listings/ListingMainPage/Listing.jsx'
@@ -35,7 +34,8 @@ import { OrderHistory } from './component/core/order/Admin/OrderHistory.jsx'
 import OrderDetailsForAdmin from './component/core/order/Admin/OrderDetailsForAdmin.jsx'
 import OTP from './component/core/order/Admin/OTP.jsx'
 import SubOrderDetails from './component/core/order/Admin/SubOrderDetails.jsx'
-import SellerDetails from './component/core/User/SellerDetails.jsx'
+import SellerDetailsForAdmin from './component/core/User/SellerDetailsForAdmin.jsx'
+import { MyProfile } from './component/core/User/Profile.jsx'
 
 const router = createBrowserRouter([
     {
@@ -50,6 +50,7 @@ const router = createBrowserRouter([
         {path:'/address',element: <AddressForm/>},
         {path:'/my-order',element: <BuyerOrderHistory/>},
         {path:'/my-order/:orderId',element: <BuyerOrderDetails/>},
+        {path:'/profile',element: <MyProfile/>}
         
       ]
     },
@@ -72,7 +73,9 @@ const router = createBrowserRouter([
         {path:'/dashbord/admin/orderDetails/:orderId',element: <OrderDetailsForAdmin/>},
         {path:'/dashbord/admin/sub-orderDetails/:orderId',element: <SubOrderDetails/>},
         {path:'/dashbord/otp/:orderId',element: <OTP/>},
-        {path:'/dashbord/sellerDetails/:sellerId',element: <SellerDetails/>}
+        {path:'/dashbord/sellerDetails/:sellerId',element: <SellerDetailsForAdmin/>},
+        {path:'/dashbord/profile',element: <MyProfile/>}
+
       ] 
     },
     {

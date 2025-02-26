@@ -103,7 +103,7 @@ export const getReviews = async (req, res) => {
         message: 'Product details not found',
       })
     }
-    const currReviews = await Review.find({_id:{$in:currListing.reviews}}).populate('customer','firstName lastName');
+    const currReviews = await Review.find({_id:{$in:currListing.reviews}}).populate('customer','firstName lastName image');
     
 
     return res.status(200).json({

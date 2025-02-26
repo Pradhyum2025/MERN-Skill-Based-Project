@@ -1,7 +1,6 @@
 import express from 'express'
-
-import { isAdmin, isAuth, isSeller, isSellerOrAdmin } from '../middlewares/auth.js';
-import { deleteListing, postNewListing, updateListing, getMyListing ,getAllSellers, getSellersDetailsForAdmin} from '../controllers/Seller.js';
+import { deleteListing, postNewListing, updateListing, getMyListing ,getAllSellers, getSellerDetailsForAdmin} from '../controllers/Seller.js';
+import { isAdmin, isAuth, isSeller, isSellerOrAdmin } from '../middlewares/Auth.js';
 
 const sellerRouter = express.Router();
 
@@ -21,6 +20,6 @@ sellerRouter.get('/listing',isAuth,isSeller,getMyListing);
 sellerRouter.get('/',isAuth,isAdmin,getAllSellers);
 
 // Get all sellers
-sellerRouter.get('/:sellerId',isAuth,isSellerOrAdmin,getSellersDetailsForAdmin);
+sellerRouter.get('/:sellerId',isAuth,isAdmin,getSellerDetailsForAdmin);
 
 export default sellerRouter;

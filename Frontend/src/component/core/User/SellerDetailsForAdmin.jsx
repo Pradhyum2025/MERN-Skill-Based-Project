@@ -10,13 +10,13 @@ import { HiCurrencyRupee } from 'react-icons/hi';
 import SubOrderCart from '../order/Admin/SubOrderCart';
 import { SellerListingRow } from './SellerListingsRow';
 
-export default function SellerDetails() {
+export default function SellerDetailsForAdmin() {
   const currUser = useSelector(store => store.auth);
   const dispatch = useDispatch();
   const { sellerId } = useParams();
 
   useEffect(() => {
-    if (currUser.token && sellerId) {
+    if (currUser.token && currUser.accountType==='Admin' && sellerId) {
       getSellersDetails(dispatch, sellerId, currUser.token);
     }
   }, [])
@@ -40,7 +40,6 @@ export default function SellerDetails() {
     }
   };
 
-console.log(sellerDetails)
   if (!sellerDetails) {
     return (
       <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full border-b-2 border-gray-900">
