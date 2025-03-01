@@ -17,7 +17,13 @@ export default function AllListings() {
   }, [])
 
   const allListings = useSelector(store => store.listings);
-
+  const fetching = useSelector(store => store.fetching)
+  
+  if (fetching) {
+    return <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
+      <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+    </div>
+  }
   return (
        <div className="w-full min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-10">
          <div className="max-w-5xl mx-auto">

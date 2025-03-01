@@ -51,7 +51,7 @@ export const signUp = async (navigate, dispatch, signUpData) => {
 }
 
 // Login / Signin function handler
-export const signIn = async (navigate,dispatch,formData) => {
+export const signIn = async (navigate,dispatch,formData,currPath) => {
   try {
     dispatch(fetchSliceAction.serializeFetching());
     const res = await axiosInstance.post('/auth/login', formData);
@@ -73,7 +73,7 @@ export const signIn = async (navigate,dispatch,formData) => {
         position: 'bottom-center'
       })
       document.getElementById('my_modal_3').close()
-      navigate('/');
+      navigate(`${currPath}`);
     }
   } catch (error) {
     dispatch(fetchSliceAction.deserializeFetching());

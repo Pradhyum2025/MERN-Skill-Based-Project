@@ -19,7 +19,7 @@ export const MyListingCard = ({ listing, setListingDetails }) => {
       productName: listing.productName,
       _id: listing._id
     })
-    return document.getElementById('my_modal_3').showModal();
+    return document.getElementById('my_modal_1').showModal();
   }
 
 

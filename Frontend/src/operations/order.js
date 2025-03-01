@@ -130,7 +130,7 @@ export const calTotalPrice = (products) => {
   return Math.floor(totalPrice);
 }
 
-export const getOrderDetails = async (dispatch, orderId, token) => {c
+export const getOrderDetails = async (dispatch, orderId, token) => {
   try {
     dispatch(fetchSliceAction.serializeFetching());
     const res = await axiosInstance.get(`/order/my-order/${orderId}`, {

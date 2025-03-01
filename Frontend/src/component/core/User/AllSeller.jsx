@@ -15,7 +15,14 @@ export default function AllSeller() {
     }
   }, [])
   const allSellers = useSelector(store => store.seller);
-  console.log('allSellers', allSellers)
+  const fetching = useSelector(store => store.fetching);
+
+  if (fetching) {
+    return <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
+      <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+    </div>
+  }
+  
   return (
     <div className="w-full min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-10">
       <div className="max-w-4xl mx-auto">
@@ -29,7 +36,7 @@ export default function AllSeller() {
           </div>
         ) : (<div class="overflow-x-auto font-[sans-serif]">
           {/* Table */}
-           <table class="min-w-full bg-white">
+          <table class="min-w-full bg-white">
             {/* Table head */}
             <thead class="bg-gray-100 whitespace-nowrap">
               <tr>
@@ -93,7 +100,7 @@ export default function AllSeller() {
                 </th>
               </tr>
             </thead>
-          
+
             {/* Table body */}
             <tbody class="whitespace-nowrap divide-y divide-gray-200">
               {allSellers.map(seller => {
@@ -102,8 +109,8 @@ export default function AllSeller() {
             </tbody>
 
           </table>
-           
-           {/* Pagging */}
+
+          {/* Pagging */}
           <div class="md:flex m-4">
             <p class="text-sm text-gray-500 flex-1">Showind 1 to 5 of 100 entries</p>
 

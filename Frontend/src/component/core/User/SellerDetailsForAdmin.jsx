@@ -40,13 +40,14 @@ export default function SellerDetailsForAdmin() {
     }
   };
 
-  if (!sellerDetails) {
-    return (
-      <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full border-b-2 border-gray-900">
+    const fetching = useSelector(store => store.fetching);
+  
+    if (fetching || !sellerDetails) {
+      return <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
       </div>
-    );
-  }
+    }
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 w-full">

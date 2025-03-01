@@ -4,15 +4,15 @@ import toast from "react-hot-toast";
 import { reviewSliceAction } from "../store/slices/review";
 
 //Post review
-export const postReview = async (dispatch,orderId,listingId, token, reviewData) => {
+export const postReview = async (dispatch,orderId,listingId, token, reviewData,setNewFetching) => {
   try {
-     dispatch(fetchSliceAction.serializeFetching());
+    setNewFetching(()=>true)
     let res = await axiosInstance.post(`/review/${orderId}/${listingId}`, reviewData, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
     })
-    dispatch(fetchSliceAction.deserializeFetching());
+    setNewFetching(()=>false)
     if (res.data && res.data.success) {
       // console.log("POST REVIEW RESPONSE --->>>", res)
       toast.success(res?.data?.message, {
@@ -29,7 +29,7 @@ export const postReview = async (dispatch,orderId,listingId, token, reviewData) 
       document.getElementById('my_modal_1').close();
     }
   } catch (error) {
-    dispatch(fetchSliceAction.deserializeFetching());
+    setNewFetching(()=>false)
     document.getElementById('my_modal_1').close();
     toast.error(error?.response?.data?.message, {
       style: {
@@ -47,17 +47,17 @@ export const postReview = async (dispatch,orderId,listingId, token, reviewData) 
 }
 
 //Get reviews
-export const getReviews = async (dispatch,listingId) => {
+export const getReviews = async (dispatch,listingId,setNewFetching) => {
   try {
-     dispatch(fetchSliceAction.serializeFetching());
+    setNewFetching(()=>true)
     let res = await axiosInstance.get(`/review/${listingId}`)
-    dispatch(fetchSliceAction.deserializeFetching());
+    setNewFetching(()=>false)
     if (res?.data && res?.data?.success) {
       // console.log("GET REVIEW RESPONSE --->>>", res)
       dispatch(reviewSliceAction.setReviewData(res.data.allReviews))
     }
   } catch (error) {
-    dispatch(fetchSliceAction.deserializeFetching());
+    setNewFetching(()=>false)
     toast.error(error?.response?.data?.message, {
       style: {
         background: '#001a00',
@@ -74,15 +74,15 @@ export const getReviews = async (dispatch,listingId) => {
 }
 
 //Delete review
-export const deleteReview = async (dispatch,listingId,reviewId,token) => {
+export const deleteReview = async (dispatch,listingId,reviewId,token,setNewFetching) => {
   try {
-     dispatch(fetchSliceAction.serializeFetching());
+    setNewFetching(()=>true)
     let res = await axiosInstance.delete(`/review/${listingId}/${reviewId}`,{
       headers: {
         'Authorisation': `Bearer ${token}`
       }
     })
-    dispatch(fetchSliceAction.deserializeFetching());
+    setNewFetching(()=>false)
     if (res.data && res.data.success) {
       // console.log("POST REVIEW RESPONSE --->>>", res)
       dispatch(reviewSliceAction.deleteReview(reviewId))
@@ -99,7 +99,7 @@ export const deleteReview = async (dispatch,listingId,reviewId,token) => {
       })
     }
   } catch (error) {
-    dispatch(fetchSliceAction.deserializeFetching());
+    setNewFetching(()=>false)
     toast.error(error?.response?.data?.message, {
       style: {
         background: '#001a00',

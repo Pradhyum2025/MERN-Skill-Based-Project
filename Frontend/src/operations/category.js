@@ -51,13 +51,15 @@ export const createCategory = async (dispatch,navigate,categoryData,token)=>{
 // Get all categories
 export const getAllCategories = async (dispatch)=>{
   try {
+    dispatch(fetchSliceAction.serializeFetching())
     const res = await axiosInstance.get('/category');
-     
+    dispatch(fetchSliceAction.deserializeFetching())
     if (res.data && res.data.success) {
       dispatch(categorySliceAction.setCatagory(res.data.catagories))
       // console.log("Get all category RESPONSE --->>>", res)
     }
   } catch (error) {
+    dispatch(fetchSliceAction.serializeFetching())
     toast.error(error.response?.data?.message, { position: 'top-right', duration: 2000 });
     console.log('Get All Category error EROR: ', error)
     throw new Error(

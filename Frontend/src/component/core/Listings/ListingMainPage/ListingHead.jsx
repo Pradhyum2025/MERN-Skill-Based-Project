@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategories } from '../../../../operations/category';
 import { getFilteredListing } from '../../../../operations/listing';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export default function ListingHead() {
+  const [newFetching,setNewFetching] = useState(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {categoryId} = useParams();
@@ -15,7 +16,7 @@ export default function ListingHead() {
 
   const handleFilterCategory = (e)=>{
    if (e.target.value) {
-      getFilteredListing(dispatch, e.target.value);
+      getFilteredListing(dispatch, e.target.value,setNewFetching);
       return navigate(`/listings/${e.target.value}`)
     }
   }

@@ -2,21 +2,23 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteLisitng } from '../../../../operations/listing';
 import LoadingBtn from '../../../common/LoadingBtn';
+import { useNavigate } from 'react-router-dom';
 export default function DeleteModal({listingDetails}) {
   const [fetching, setFetching] = useState(false);
+  const navigate = useNavigate()
   const currUser = useSelector(store => store.auth);
   const dispatch = useDispatch();
   //Add to cart Handler
   const handleDeleteListing = (listingId) => {
     if (currUser.token && currUser?.accountType == 'Seller') {
-      return deleteLisitng(dispatch, currUser.token, listingId, setFetching);
+      return deleteLisitng(dispatch,currUser.token, listingId, setFetching,navigate);
     } else {
       return document.getElementById('my_modal_3').showModal();
     }
   }
   return (
     <div>
-      <dialog id="my_modal_3" className="modal">
+      <dialog id="my_modal_1" className="modal">
         <div className="modal-box bg-gray-800 text-black p-0 ">
 
           <div class="relative  w-full  max-h-full">
@@ -26,7 +28,7 @@ export default function DeleteModal({listingDetails}) {
               <button 
               type="button"
               disabled={fetching}
-                onClick={() => document.getElementById('my_modal_3').close()}
+                onClick={() => document.getElementById('my_modal_1').close()}
                 class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white disabled:cursor-not-allowed" data-modal-hide="popup-modal">
 
                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">

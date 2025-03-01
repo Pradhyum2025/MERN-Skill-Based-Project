@@ -37,7 +37,13 @@ export const OrderHistory = () => {
         return "bg-pink-100 text-pink-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
     }
   };
-
+  const fetching = useSelector(store=>store.fetching);
+  
+  if (fetching) {
+    return <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
+    <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+  </div>
+  }
 
   return (
     <div className="bg-gray-50 sm:px-6 mt-0 w-full">

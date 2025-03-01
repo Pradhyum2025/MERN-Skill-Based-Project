@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ListingCard from './ListingCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllListings, getFilteredListing } from '../../../../operations/listing';
@@ -9,12 +9,13 @@ import { getMyBag } from '../../../../operations/bag';
 
 export default function ListingContainer() {
   const dispatch = useDispatch();
+  const [newFetching,setNewFetching] = useState(false)
   const { categoryId } = useParams();
   const currUser = useSelector(store=>store.auth);
 
   useEffect(() => {
     if (categoryId) {
-      getFilteredListing(dispatch, categoryId);
+      getFilteredListing(dispatch, categoryId,setNewFetching);
     }
   }, [])
   
@@ -26,6 +27,7 @@ export default function ListingContainer() {
 
   const filteredListing = useSelector(store => store.listings);
   const myBag = useSelector(store=>store.bag);
+  
   return (
     <>
       {filteredListing.length === 0 ?

@@ -29,8 +29,15 @@ export default function SellerOrderDetails() {
     return navigate(`/show/${listingId}`)
   }
 
-  if (!subOrderDetails) {
-    return;
+
+  const fetching = useSelector(store => store.fetching);
+
+  if (fetching || !subOrderDetails) {
+    return (
+      <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+      </div>
+    );
   }
 
 
@@ -83,7 +90,7 @@ export default function SellerOrderDetails() {
                 <p className="text-yellow-400 font-semibold  text-sm sm:pl-3 mb-0">Total Ammount</p>
                 <span className={`font-semibold  text-sm text-gray-500 flex items-center gap-1 ml-2`}>
                   <BiRupee className='text-md' />
-                  {subOrderDetails?.products?.length>0 && calTotalPrice(subOrderDetails?.products)}
+                  {subOrderDetails?.products?.length > 0 && calTotalPrice(subOrderDetails?.products)}
                 </span>
               </div>
 

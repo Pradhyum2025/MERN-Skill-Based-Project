@@ -8,6 +8,7 @@ const reviewSlice = createSlice({
       return [...action.payload]
     },
     deleteReview: (state, action) => {
+      console.log('hello')
       return state.filter(review => review._id != action.payload);
     },
     setEmpty :(state)=>{

@@ -12,9 +12,12 @@ import { LuMinus } from "react-icons/lu";
 import { FaUserLarge } from "react-icons/fa6";
 import { deleteReview, getReviews } from '../../../operations/review';
 import { reviewSliceAction } from '../../../store/slices/review';
+import LoadingBtn from '../../common/LoadingBtn';
+import DeleteReviewBtn from '../Reviews/DeleteReviewBtn';
 export default function ListingDetails() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [newFetching, setNewFetching] = useState(false);
   const returnPath = useLocation().state?.returnPath;
   const { listingId } = useParams()
   const currUser = useSelector(store => store.auth);
@@ -27,14 +30,11 @@ export default function ListingDetails() {
   // Fetch current listing from backend
   useEffect(() => {
     getSingleListing(dispatch, listingId)
-  }, [])
-
-  // Get my bag
-  useEffect(() => {
     if (currUser.token && currUser.accountType === 'Buyer') {
       getMyBag(dispatch, currUser.token);
     }
   }, [])
+
 
   // Get listing from react state
   const listingArray = useSelector(store => store.listings);
@@ -45,13 +45,14 @@ export default function ListingDetails() {
 
   //Delete to cart Handler
   const handleDeleteListing = () => {
-    return document.getElementById('my_modal_3').showModal();
+    return document.getElementById('my_modal_1').showModal();
   }
-  const HandlefetchReviews = () => {
-    if (listing && allReviews.length===0) {
-      return getReviews(dispatch, listing._id)
-    } 
+  const HandleFetchReviews = () => {
+    if (listing && allReviews.length === 0) {
+      return getReviews(dispatch, listing._id, setNewFetching)
+    }
   }
+
 
   //Set preview image
   const [mainImage, setMainImage] = useState(null);
@@ -76,18 +77,14 @@ export default function ListingDetails() {
       return document.getElementById('my_modal_3').showModal()
     }
   }
-  
-  if (!listing?.description || listing?.features?.length===0) {
+  const fetching = useSelector(store => store.fetching);
+
+
+
+  if (fetching || !listing?.description || listing?.features?.length === 0) {
     return <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
-    <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
-  </div>
-  }
-
-
-  const handleDeleteReview = (reviewId) => {
-    if (currUser.token && currUser.accountType === 'Buyer') {
-      return deleteReview(dispatch, listing._id, reviewId, currUser.token)
-    }
+      <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+    </div>
   }
 
   return (
@@ -338,39 +335,6 @@ export default function ListingDetails() {
 
                 <div class="mt-6 flex flex-col gap-y-5">
                   {allReviews.length === 0 && listing && listing?.reviews && listing?.reviews?.map(review => (
-                     <div class="flex items-start justify-between">
-                      <div className='flex items-start'>
-                        <div class="rounded-full border-[4px] border-gray-200 flex items-center justify-center" >
-                        <img src={review?.customer?.image} className='w-[3.2rem] h-[3.2rem] object-cover rounded-full' alt="" />
-                        </div>
-                        <div class="ml-3">
-                          <h4 class="text-sm font-bold">{`${review?.customer?.firstName || ""} ${review?.customer?.lastName}`}</h4>
-                          <div class="flex space-x-1 mt-1">
-                            {[1, 2, 3, 4, 5].map(ele => {
-                              if (ele <= review.rating) {
-                                return <svg class="w-[14px] h-[14px] fill-blue-600" viewBox="0 0 14 13" fill="none"
-                                  xmlns="http://www.w3.org/2000/svg">
-                                  <path
-                                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                                </svg>
-                              } else {
-                                return <svg class="w-[14px] h-[14px] fill-[#CED5D8]" viewBox="0 0 14 13" fill="none"
-                                  xmlns="http://www.w3.org/2000/svg">
-                                  <path
-                                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                                </svg>
-                              }
-                            })}
-                            <p class="text-xs text-gray-500 !ml-2">2 months ago</p>
-                          </div>
-                          <p class="text-sm text-gray-500 mt-4">{review.comment}</p>
-                        </div>
-                      </div>
-                    
-                    </div>
-                  ))}
-
-                  {allReviews?.length > 0 && allReviews?.map(review => (
                     <div class="flex items-start justify-between">
                       <div className='flex items-start'>
                         <div class="rounded-full border-[4px] border-gray-200 flex items-center justify-center" >
@@ -399,12 +363,40 @@ export default function ListingDetails() {
                           <p class="text-sm text-gray-500 mt-4">{review.comment}</p>
                         </div>
                       </div>
+
+                    </div>
+                  ))}
+
+                  {allReviews?.length > 0 && allReviews?.map(review => (
+                    <div class="flex items-start justify-between">
+                      <div className='flex items-start'>
+                        <div class="rounded-full border-[4px] border-gray-200 flex items-center justify-center" >
+                          <img src={review?.customer?.image} className='w-[3.2rem] h-[3.2rem] object-cover rounded-full' alt="" />
+                        </div>
+                        <div class="ml-3">
+                          <h4 class="text-sm font-bold">{`${review?.customer?.firstName || ""} ${review?.customer?.lastName}`}</h4>
+                          <div class="flex space-x-1 mt-1">
+                            {
+                              [1, 2, 3, 4, 5].map(ele => (ele <= review.rating) ?
+                                <svg class="w-[14px] h-[14px] fill-blue-600" viewBox="0 0 14 13" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                                  <path
+                                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                                </svg>
+                                :
+                                <svg class="w-[14px] h-[14px] fill-[#CED5D8]" viewBox="0 0 14 13" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                                  <path
+                                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
+                                </svg>
+                              )}
+                            <p class="text-xs text-gray-500 !ml-2">2 months ago</p>
+                          </div>
+                          <p class="text-sm text-gray-500 mt-4">{review.comment}</p>
+                        </div>
+                      </div>
                       {currUser?._id === review?.customer?._id &&
-                        <button
-                          className="flex px-2 py-1 items-center gap-1 text-sm font-bold text-red-600  rounded-md hover:opacity-90 transition-opacity bg-gray-200 hover:bg-gray-400 hover:text-red-700 disabled:cursor-not-allowed disabled:hover:bg-gray-200 disabled:text-red-400"
-                          onClick={() => handleDeleteReview(review._id)}
-                        >
-                          Delete</button>
+                        <DeleteReviewBtn reviewId = {review._id} listingId={listing._id} />
                       }
                     </div>
                   ))}
@@ -416,7 +408,7 @@ export default function ListingDetails() {
 
                     :
                     <button
-                      onClick={HandlefetchReviews}
+                      onClick={HandleFetchReviews}
                       class="block text-blue-600 text-left hover:underline text-sm mt-6 font-semibold">Read all
                       reviews</button>
                   }
@@ -437,11 +429,9 @@ export default function ListingDetails() {
 
 
 
-        {listing?.accountType !== 'Buyer' ?
+        {currUser?.accountType === 'Seller' &&
           <DeleteModal listingDetails={{ productName: listing.productName, _id: listing._id }} />
-          : 'HELOO'
         }
-
       </div>
     </div>
   )

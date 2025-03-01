@@ -1,20 +1,23 @@
 import axiosInstance from "../helper/axiosInstatance";
+import { fetchSliceAction } from "../store/slices/fetchSlice";
 import { sellerSliceAction } from "../store/slices/seller";
 import toast from "react-hot-toast";
 
 export const getAllSellers = async(dispatch,token)=>{
   try {
+    dispatch(fetchSliceAction.serializeFetching())
     const res = await axiosInstance.get(`/seller`,{
       headers:{
         'Authorisation':`Bearer ${token}`
       }
     });
-
+    dispatch(fetchSliceAction.deserializeFetching())
     if (res.data && res.data.success) {
       console.log("All Seller Response --->>>", res)
       dispatch(sellerSliceAction.setSellerData(res.data.allSellers));
     }
   } catch (error) {
+    dispatch(fetchSliceAction.deserializeFetching())
     console.log('Get all listing error : ', error);
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."

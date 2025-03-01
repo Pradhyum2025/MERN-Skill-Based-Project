@@ -21,7 +21,7 @@ export default function AdderessCart({ address }) {
     return navigate('/bag/order-summary')
   }
   return (
-    <div className={`flex items-start gap-x-3 px-4 pt-4 pb-2 w-[100%] ${address.isDefault ? 'bg-blue-50 border-b-2 border-t-2 border-gray-200' : null}`}>
+    <div className={`flex items-start gap-x-3 border-b-2 border-t-2 border-gray-200 px-4 pt-4 pb-2 w-[100%] ${address.isDefault ? 'bg-blue-100' : 'bg-gray-50'}`}>
 
       {address.isDefault ?
         <div className='p-[3px] cursor-pointer'>

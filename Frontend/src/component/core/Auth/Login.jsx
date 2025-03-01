@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { RxCross2 } from "react-icons/rx";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux';
 import { signIn } from '../../../operations/auth';
@@ -10,6 +10,7 @@ export default function Login() {
 
   let dispatch = useDispatch()
   const navigate = useNavigate();
+  const currPath = useLocation().pathname;
   //useForm hook
   const { register,
     handleSubmit,
@@ -17,9 +18,7 @@ export default function Login() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data)
-
-    return await signIn(navigate, dispatch, data);
+    return await signIn(navigate, dispatch, data,currPath);
   }
 
   const handleNavigateSignUp = () => {

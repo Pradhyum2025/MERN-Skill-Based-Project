@@ -77,7 +77,7 @@ export const setDefaultAddress = async (dispatch, token, addressId) => {
   try {
     dispatch(fetchSliceAction.serializeFetching());
     // Send request with authorization
-    const res = await axios.get(`/address/${addressId}`, {
+    const res = await axiosInstance.get(`/address/${addressId}`, {
       headers: {
         "Authorisation": `Bearer ${token}`, // Pass the user's token
       },

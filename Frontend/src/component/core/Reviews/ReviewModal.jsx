@@ -1,15 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PostReview from './PostReview'
 import { useSelector } from 'react-redux'
 
 export default function ReviewModal({orderId, listingId}) {
-  const fetching = useSelector(store=>store.fetching);
+    const [newFetching, setNewFetching] = useState(false);
+
   return (
           <dialog id="my_modal_1" className="modal">
             <div className="modal-box bg-gray-200 p-0"> 
             <button 
               type="button"
-              disabled={fetching}
+              disabled={newFetching}
               onClick={() => document.getElementById('my_modal_1').close()}
                 class="absolute top-3 end-2.5 text-gray-500 bg-gray-200  hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  disabled:cursor-not-allowed" data-modal-hide="popup-modal">
 
@@ -20,7 +21,7 @@ export default function ReviewModal({orderId, listingId}) {
                 <span class="sr-only">Close modal</span>
 
               </button>
-              <PostReview  orderId={orderId} listingId={listingId}/>
+              <PostReview  orderId={orderId} listingId={listingId} newFetching={newFetching} setNewFetching={setNewFetching}/>
             </div>
           </dialog>
   )

@@ -9,6 +9,7 @@ export const SellerOrderHistory = () => {
   const currUser = useSelector(store => store.auth);
   const savedOrderStatus = localStorage.getItem('SelectOrderStatus')?localStorage.getItem('SelectOrderStatus'):'*';
   const dispatch = useDispatch();
+  
   useEffect(() => {
     if (currUser.token) {
       getMyOrder(dispatch, currUser.token,{status:'*'})
@@ -40,7 +41,16 @@ export const SellerOrderHistory = () => {
 
   
   const myOrders = useSelector(store => store.orders);
-  // console.log(myOrders)
+  const fetching = useSelector(store => store.fetching);
+
+  if (fetching) {
+    return (
+      <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-gray-50 sm:px-6 mt-0 w-full">
       <div className="max-w-5xl mx-auto bg-card rounded-lg shadow-sm sm:p-6">

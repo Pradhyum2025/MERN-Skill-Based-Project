@@ -9,7 +9,7 @@ import { postReview } from '../../../operations/review';
 import LoadingBtn from '../../common/LoadingBtn';
 
 
-export default function PostReview({orderId,listingId }) {
+export default function PostReview({orderId,listingId,newFetching ,setNewFetching}) {
 
   let currUser = useSelector(store=>store.auth);
   const [rating, setRating] = useState(1);
@@ -32,12 +32,12 @@ export default function PostReview({orderId,listingId }) {
       rating: rating
     }
     if (currUser.token && currUser.accountType==='Buyer'){
-      return await postReview(dispatch,orderId,listingId,currUser.token,reviewData)
+      return await postReview(dispatch,orderId,listingId,currUser.token,reviewData,setNewFetching)
     }else{
      return; 
     }
   }
-  const fetching = useSelector(store=>store.fetching);
+  
   return (
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -76,11 +76,11 @@ export default function PostReview({orderId,listingId }) {
           </div>
 
           <button
-          disabled={fetching}
+          disabled={newFetching}
            type="submit"
            className="font-bold bg-blue-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed"
           >
-            {fetching?
+            {newFetching?
             <LoadingBtn working={'Submiting'}/>:"Submit Review"}
             
           </button>
