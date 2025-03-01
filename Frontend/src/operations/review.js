@@ -1,4 +1,4 @@
-import axios from "axios"
+import axiosInstance from "../helper/axiosInstatance";
 import { fetchSliceAction } from "../store/slices/fetchSlice"
 import toast from "react-hot-toast";
 import { reviewSliceAction } from "../store/slices/review";
@@ -7,7 +7,7 @@ import { reviewSliceAction } from "../store/slices/review";
 export const postReview = async (dispatch,orderId,listingId, token, reviewData) => {
   try {
      dispatch(fetchSliceAction.serializeFetching());
-    let res = await axios.post(`http://localhost:8080/review/${orderId}/${listingId}`, reviewData, {
+    let res = await axiosInstance.post(`/review/${orderId}/${listingId}`, reviewData, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -50,7 +50,7 @@ export const postReview = async (dispatch,orderId,listingId, token, reviewData) 
 export const getReviews = async (dispatch,listingId) => {
   try {
      dispatch(fetchSliceAction.serializeFetching());
-    let res = await axios.get(`http://localhost:8080/review/${listingId}`)
+    let res = await axiosInstance.get(`/review/${listingId}`)
     dispatch(fetchSliceAction.deserializeFetching());
     if (res?.data && res?.data?.success) {
       // console.log("GET REVIEW RESPONSE --->>>", res)
@@ -77,7 +77,7 @@ export const getReviews = async (dispatch,listingId) => {
 export const deleteReview = async (dispatch,listingId,reviewId,token) => {
   try {
      dispatch(fetchSliceAction.serializeFetching());
-    let res = await axios.delete(`http://localhost:8080/review/${listingId}/${reviewId}`,{
+    let res = await axiosInstance.delete(`/review/${listingId}/${reviewId}`,{
       headers: {
         'Authorisation': `Bearer ${token}`
       }

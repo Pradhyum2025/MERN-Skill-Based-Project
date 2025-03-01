@@ -1,5 +1,5 @@
 
-import axios from "axios";
+import axiosInstance from "../helper/axiosInstatance";
 import { fetchSliceAction } from "../store/slices/fetchSlice";
 import toast from "react-hot-toast";
 import { listinSlicegAction } from "../store/slices/listings";
@@ -10,7 +10,7 @@ export const postListing = async (dispatch, navigate, productDetails, token) => 
 
     dispatch(fetchSliceAction.serializeFetching());
     // Send request with authorization
-    const res = await axios.post(`http://localhost:8080/seller`, productDetails, {
+    const res = await axiosInstance.post(`http://localhost:8080/seller`, productDetails, {
       headers: {
         "Authorisation": `Bearer ${token}`, // Pass the user's token
         "Content-Type": "multipart/form-data", // Required for FormData
@@ -56,7 +56,7 @@ export const postListing = async (dispatch, navigate, productDetails, token) => 
 //Get my listings
 export const getMyListings = async (dispatch, token) => {
   try {
-    const res = await axios.get('http://localhost:8080/seller/listing', {
+    const res = await axiosInstance.get('/seller/listing', {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -78,7 +78,7 @@ export const deleteLisitng = async (dispatch, token, listingId) => {
   console.log(token)
   try {
     setFetching(() => true)
-    let res = await axios.delete(`http://localhost:8080/seller/${listingId}`, {
+    let res = await axiosInstance.delete(`/seller/${listingId}`, {
       headers: {
         'Authorisation': `Bearer ${token}` // Include token as a Bearer token
       }
@@ -124,7 +124,7 @@ export const deleteLisitng = async (dispatch, token, listingId) => {
 //Get singleListing  
 export const getSingleListing = async (dispatch, listingId) => {
   try {
-    let res = await axios.get(`http://localhost:8080/listing/show/${listingId}`)
+    let res = await axiosInstance.get(`/listing/show/${listingId}`)
 
     if (res.data && res.data.success) {
       console.log("GET  SINGLE LISTING RESPONSE --->>>", res)
@@ -144,7 +144,7 @@ export const updateListing = async (dispatch, navigate, listingId, formData, tok
 
     dispatch(fetchSliceAction.serializeFetching());
     // Send request with authorization
-    const res = await axios.patch(`http://localhost:8080/seller/${listingId}`, formData, {
+    const res = await axiosInstance.patch(`/seller/${listingId}`, formData, {
       headers: {
         "Authorisation": `Bearer ${token}`, // Pass the user's token
         "Content-Type": "multipart/form-data", // Required for FormData
@@ -190,7 +190,7 @@ export const updateListing = async (dispatch, navigate, listingId, formData, tok
 export const getFilteredListing = async (dispatch, categoryId) => {
 
   try {
-    const res = await axios.get(`http://localhost:8080/listing/filter/${categoryId}`, {
+    const res = await axiosInstance.get(`/listing/filter/${categoryId}`, {
     });
     if (res.data && res.data.success) {
       console.log("GET Filter Listing Response --->>>", res)
@@ -206,7 +206,7 @@ export const getFilteredListing = async (dispatch, categoryId) => {
 
 export const getAllListings = async (dispatch) => {
   try {
-    const res = await axios.get(`http://localhost:8080/listing`, {
+    const res = await axiosInstance.get(`/listing`, {
     });
 
     if (res.data && res.data.success) {
@@ -223,7 +223,7 @@ export const getAllListings = async (dispatch) => {
 
 export const getAllListingsForAdmin = async (dispatch,token) => {
   try {
-    const res = await axios.get(`http://localhost:8080/listing/admin`, {
+    const res = await axiosInstance.get(`/listing/admin`, {
       headers: {
         "Authorisation": `Bearer ${token}`,
       },

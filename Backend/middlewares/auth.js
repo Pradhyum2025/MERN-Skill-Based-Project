@@ -25,7 +25,7 @@ export const isAuth = (req,res,next)=>{
       
       // console.log('payload',payload)
     }catch(err){
-      console.log(err.message); 
+      console.log("Verify JWT Token Error : ",err.message); 
       return res.status(400).json({
         success:false,
         message:'Failed to verify token'

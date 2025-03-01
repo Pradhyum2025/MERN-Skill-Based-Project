@@ -22,8 +22,9 @@ export const MyListing = () => {
   }, [])
 
   const myListings = useSelector(store => store.listings);
-  
-  if (myListings.length===0) {
+  const fetching = useSelector(store=>store.fetching)
+
+  if (fetching) {
     return (
       <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
@@ -40,7 +41,7 @@ export const MyListing = () => {
 
         {myListings?.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-xl">Your Listing is empty</p>
+            <p className="text-gray-600 font-[900] text-xl">Your Listing is empty</p>
           </div>
         ) : (
           <div

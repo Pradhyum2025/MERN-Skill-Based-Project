@@ -1,13 +1,13 @@
 import toast from "react-hot-toast";
 import { AddressSliceAction } from "../store/slices/Address";
 import { fetchSliceAction } from "../store/slices/fetchSlice";
-import axios from "axios";
+import axiosInstance from "../helper/axiosInstatance";
 
 export const postAddress = async (navigate,dispatch,FormData,token) => {
   try {
     dispatch(fetchSliceAction.serializeFetching());
     // Send request with authorization
-    const res = await axios.post(`http://localhost:8080/address`, FormData, {
+    const res = await axiosInstance.post(`/address`, FormData, {
       headers: {
         "Authorisation": `Bearer ${token}`, // Pass the user's token
       },
@@ -55,7 +55,7 @@ export const postAddress = async (navigate,dispatch,FormData,token) => {
 export const getMyAddresses = async (dispatch, token) => {
 
   try {
-    const res = await axios.get('http://localhost:8080/address', {
+    const res = await axiosInstance.get('/address', {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -77,7 +77,7 @@ export const setDefaultAddress = async (dispatch, token, addressId) => {
   try {
     dispatch(fetchSliceAction.serializeFetching());
     // Send request with authorization
-    const res = await axios.get(`http://localhost:8080/address/${addressId}`, {
+    const res = await axios.get(`/address/${addressId}`, {
       headers: {
         "Authorisation": `Bearer ${token}`, // Pass the user's token
       },

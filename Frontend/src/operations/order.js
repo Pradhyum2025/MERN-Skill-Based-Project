@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "../helper/axiosInstatance.js";
 import toast from "react-hot-toast";
 import { fetchSliceAction } from "../store/slices/fetchSlice.js";
 import { orderSliceAction } from "../store/slices/order.js";
@@ -7,7 +7,7 @@ export const createOrder = async (navigate, dispatch, token) => {
   const toastId = toast.loading("Creating your order...");
   try {
     dispatch(fetchSliceAction.serializeFetching());
-    const res = await axios.get(`http://localhost:8080/order/create`, {
+    const res = await axiosInstance.get(`/order/create`, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -51,7 +51,7 @@ export const createOrder = async (navigate, dispatch, token) => {
 export const getMyOrder = async (dispatch, token, data) => {
   try {
     dispatch(fetchSliceAction.serializeFetching());
-    const res = await axios.post(`http://localhost:8080/order/my-order`, data, {
+    const res = await axiosInstance.post(`/order/my-order`, data, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -81,7 +81,7 @@ export const getMyOrder = async (dispatch, token, data) => {
 export const getAllOrdersForAdmin = async (dispatch, token, data) => {
   try {
     dispatch(fetchSliceAction.serializeFetching());
-    const res = await axios.post(`http://localhost:8080/order/admin`, data, {
+    const res = await axiosInstance.post(`/order/admin`, data, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -130,10 +130,10 @@ export const calTotalPrice = (products) => {
   return Math.floor(totalPrice);
 }
 
-export const getOrderDetails = async (dispatch, orderId, token) => {
+export const getOrderDetails = async (dispatch, orderId, token) => {c
   try {
     dispatch(fetchSliceAction.serializeFetching());
-    const res = await axios.get(`http://localhost:8080/order/my-order/${orderId}`, {
+    const res = await axiosInstance.get(`/order/my-order/${orderId}`, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -163,7 +163,7 @@ export const getOrderDetails = async (dispatch, orderId, token) => {
 export const getOrderDetailsforAdmin = async (dispatch, orderId, token) => {
   try {
     dispatch(fetchSliceAction.serializeFetching());
-    const res = await axios.get(`http://localhost:8080/order/admin/${orderId}`, {
+    const res = await axiosInstance.get(`/order/admin/${orderId}`, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -193,7 +193,7 @@ export const getOrderDetailsforAdmin = async (dispatch, orderId, token) => {
 export const cancleOrder = async (dispatch, orderId, token) => {
   try {
     dispatch(fetchSliceAction.serializeFetching())
-    const res = await axios.get(`http://localhost:8080/order/${orderId}/cancle`, {
+    const res = await axiosInstance.get(`/order/${orderId}/cancle`, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -202,7 +202,7 @@ export const cancleOrder = async (dispatch, orderId, token) => {
     dispatch(fetchSliceAction.deserializeFetching())
     if (res.data && res.data.success) {
       console.log("CANCLE  ORDER  DETAILS RESPONSE --->>>", res);
-      document.getElementById('my_modal_1').close();
+
       dispatch(orderSliceAction.cancleOrder(orderId));
       toast.success(res?.data?.message,
         {
@@ -238,7 +238,7 @@ export const setDeliveredOrder = async (dispatch,navigate,orderId,otp,token) => 
   try {
     
     dispatch(fetchSliceAction.serializeFetching())
-    const res = await axios.post(`http://localhost:8080/order/${orderId}/delivered`,{otp}, {
+    const res = await axiosInstance.post(`/order/${orderId}/delivered`,{otp}, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -284,7 +284,7 @@ export const setDeliveredOrder = async (dispatch,navigate,orderId,otp,token) => 
 export const sendOtp = async (navigate,orderId,setOtpFetching, token, resend)=>{
   try {
     setOtpFetching(()=>true)
-    let res = await axios.get(`http://localhost:8080/order/${orderId}/otp`,{
+    let res = await axiosInstance.get(`/order/${orderId}/otp`,{
       headers: {
         'Authorisation': `Bearer ${token}`
       }

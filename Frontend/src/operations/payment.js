@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "../helper/axiosInstatance";
 import toast from "react-hot-toast";
 import { fetchSliceAction } from "../store/slices/fetchSlice";
 import { orderSliceAction } from "../store/slices/order";
@@ -32,7 +32,7 @@ export const capturePayment = async (dispatch, token) => {
 
   // After script load make order reuest
   try {
-    const res = await axios.get(`http://localhost:8080/payment`, {
+    const res = await axiosInstance.get(`/payment`, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -68,7 +68,7 @@ export const capturePayment = async (dispatch, token) => {
 export const verifyPayment = async (navigate, dispatch, bodyData,token) => {
   const toastId = toast.loading("Verifying Payment...");
   try {
-    const res = await axios.post(`http://localhost:8080/payment`, bodyData, {
+    const res = await axiosInstance.post(`/payment`, bodyData, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -120,7 +120,7 @@ export const capturePaymentAtDelivery = async (dispatch,orderId,token) => {
 
   // After script load make order reuest
   try {
-    const res = await axios.get(`http://localhost:8080/payment/${orderId}`, {
+    const res = await axiosInstance.get(`/payment/${orderId}`, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -157,7 +157,7 @@ export const capturePaymentAtDelivery = async (dispatch,orderId,token) => {
 export const verifyPaymentAtDelivery = async(dispatch,bodyData,token,orderId)=>{
   const toastId = toast.loading("Verifying Payment...");
   try {
-    const res = await axios.post(`http://localhost:8080/payment/${orderId}`, bodyData, {
+    const res = await axiosInstance.post(`/payment/${orderId}`, bodyData, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }

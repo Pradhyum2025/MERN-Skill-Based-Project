@@ -1,10 +1,10 @@
-import axios from "axios";
+import axiosInstance from "../helper/axiosInstatance";
 import { sellerSliceAction } from "../store/slices/seller";
 import toast from "react-hot-toast";
 
 export const getAllSellers = async(dispatch,token)=>{
   try {
-    const res = await axios.get(`http://localhost:8080/seller`,{
+    const res = await axiosInstance.get(`/seller`,{
       headers:{
         'Authorisation':`Bearer ${token}`
       }
@@ -24,7 +24,7 @@ export const getAllSellers = async(dispatch,token)=>{
 
 export const getSellersDetails = async(dispatch,sellerId,token)=>{
   try {
-    const res = await axios.get(`http://localhost:8080/seller/${sellerId}`,{
+    const res = await axiosInstance.get(`/seller/${sellerId}`,{
       headers:{
         'Authorisation':`Bearer ${token}`
       }

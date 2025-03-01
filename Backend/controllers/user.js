@@ -59,9 +59,12 @@ export const signup = async(req,res)=>{
     
     currUser =currUser.toObject();
     currUser.token = token;
-    currUser.password=undefined
-    currUser.bag=undefined
-    
+    currUser.password = undefined;
+    currUser.listing=null;
+    currUser.myOrders=null;
+    currUser.sellerDetails=null;
+    currUser.addresses=null;
+
     let options = {
       expiresIn:new Date(Date.now()+3*24*60*60*1000),
       httpOnly:true

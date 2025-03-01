@@ -15,12 +15,12 @@ export default function BuyerOrderDetails() {
   const navigate = useNavigate();
   const [selectedListingId, setSelectedListingId] = useState('')
 
+
   useEffect(() => {
-    if (currUser.token && orderId) {
-      getOrderDetails(dispatch, orderId, currUser.token, currUser.accountType)
+    if (currUser.token &&  currUser.accountType==='Buyer' && orderId) {
+      getOrderDetails(dispatch, orderId, currUser.token)
     }
   }, []);
-
   const orderArray = useSelector(store => store.orders);
   const orderDetails = orderArray.length > 0 ? orderArray[0] : null
 
@@ -43,8 +43,9 @@ export default function BuyerOrderDetails() {
         return "bg-pink-100 text-pink-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
     }
   };
+  const fetching = useSelector(store => store.fetching);
 
-  if (!orderDetails) {
+  if (fetching || !orderDetails) {
     return (
       <div className="min-h-screen bg-background p-6 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>

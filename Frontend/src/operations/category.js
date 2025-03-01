@@ -1,13 +1,13 @@
 import toast from "react-hot-toast";
 import { fetchSliceAction } from "../store/slices/fetchSlice";
-import axios from "axios";
+import axiosInstance from "../helper/axiosInstatance";
 import { categorySliceAction } from "../store/slices/categorySlice";
 
 //Create category
 export const createCategory = async (dispatch,navigate,categoryData,token)=>{
   try {
     dispatch(fetchSliceAction.serializeFetching());
-    const res = await axios.post('http://localhost:8080/category', categoryData, {
+    const res = await axiosInstance.post('/category', categoryData, {
       headers:{
         'Authorisation':`Bearer ${token}`,
         "Content-Type": "multipart/form-data", 
@@ -51,7 +51,7 @@ export const createCategory = async (dispatch,navigate,categoryData,token)=>{
 // Get all categories
 export const getAllCategories = async (dispatch)=>{
   try {
-    const res = await axios.get('http://localhost:8080/category');
+    const res = await axiosInstance.get('/category');
      
     if (res.data && res.data.success) {
       dispatch(categorySliceAction.setCatagory(res.data.catagories))
@@ -70,7 +70,7 @@ export const getAllCategories = async (dispatch)=>{
 export const deleteCategory = async (dispatch,categoryId,token)=>{
   try {
     dispatch(fetchSliceAction.serializeFetching());
-    const res = await axios.delete(`http://localhost:8080/category/${categoryId}`,{
+    const res = await axiosInstance.delete(`/category/${categoryId}`,{
       headers:{
         'Authorisation':`Bearer ${token}`
       }
@@ -115,7 +115,7 @@ export const deleteCategory = async (dispatch,categoryId,token)=>{
 export const updateCategory = async(dispatch,categoryId,updatedData,token)=>{
   try {
     dispatch(fetchSliceAction.serializeFetching());
-    const res = await axios.patch(`http://localhost:8080/category/${categoryId}`, updatedData, {
+    const res = await axios.patch(`/category/${categoryId}`, updatedData, {
       headers:{
         'Authorisation':`Bearer ${token}`,
         "Content-Type": "multipart/form-data", 

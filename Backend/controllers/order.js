@@ -10,6 +10,7 @@ import OrderCancellationEmail from "../emailTemplate/orderCancle.js";
 import { OTP } from "../models/otp.js";
 import otpGenerator from 'otp-generator'
 import dotenv from 'dotenv'
+import mongoose from "mongoose";
 dotenv.config();
 
 export const createOrder = async (req, res) => {
@@ -217,8 +218,14 @@ export const getOrderDetails = async (req, res) => {
   try {
     const userId = req.user.id;
     const { orderId } = req.params;
-
-    const currUser = await User.findById(userId, { myOrders: true })
+   
+    if(!orderId || !userId){
+      return res.status(400).json({
+        success: false,
+        message: 'All fields are required'
+      })
+    }
+    const currUser = await User.findById(userId)
 
     if (!currUser) {
       return res.status(400).json({
@@ -229,12 +236,12 @@ export const getOrderDetails = async (req, res) => {
 
     let orderDetails = null;
     if (req.user.role === 'Buyer') {
-      orderDetails = await Order.findOne({ _id:{$in:currUser.myOrders}, buyer: userId }, { subOrders: false })
+      orderDetails = await Order.findOne({ _id:orderId, buyer: userId }, { subOrders: false })
         .populate('deliveryAddress')
         .populate({ path: 'products', populate: { path: 'product', select: 'price images productName discount returnPolicy' } })
 
     } else if (req.user.role === 'Seller') {
-      orderDetails = await SubOrder.findOne({ _id: {$in:currUser.myOrders}, seller: userId })
+      orderDetails = await SubOrder.findOne({ _id: orderId , seller: userId })
         .populate({ path: 'products', populate: { path: 'productId', select: "price images productName discount", populate: { path: 'shippingAddress' } } })
         .populate('SellerDetails')
         .populate({ path: 'seller', select: 'firstName lastName email contact' })
@@ -244,7 +251,7 @@ export const getOrderDetails = async (req, res) => {
         .populate({ path: 'seller', select: 'firstName lastName email contact'})
         .populate('SellerDetails','companyName contact')
     }
-
+   
     // Check for validation
     return res.status(200).json({
       success: true,

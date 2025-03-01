@@ -1,6 +1,6 @@
 import { FaCircleCheck } from "react-icons/fa6";
 import React from "react";
-import axios from "axios";
+import axiosInstance from "../helper/axiosInstatance";
 import { bagSliceAction } from "../store/slices/Bag";
 import toast from "react-hot-toast";
 
@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 export const getMyBag = async (dispatch, token) => {
 
   try {
-    const res = await axios.get('http://localhost:8080/bag', {
+    const res = await axiosInstance.get('/bag', {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -27,7 +27,7 @@ export const getMyBag = async (dispatch, token) => {
 export const addToBag = async (dispatch, listing, quantity, token, setFetching) => {
   try {
     setFetching(() => true)
-    const res = await axios.post(`http://localhost:8080/bag/addToBag/${listing._id}`, { quantity }, {
+    const res = await axiosInstance.post(`/bag/addToBag/${listing._id}`, { quantity }, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -70,7 +70,7 @@ export const addToBag = async (dispatch, listing, quantity, token, setFetching) 
 export const removeToBag = async (dispatch, bagId, token, setFetching) => {
   try {
     setFetching(() => true)
-    const res = await axios.get(`http://localhost:8080/bag/removeToBag/${bagId}`, {
+    const res = await axiosInstance.get(`/bag/removeToBag/${bagId}`, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -100,7 +100,7 @@ export const removeToBag = async (dispatch, bagId, token, setFetching) => {
 
 export const incQuantity = async (dispatch, token, setFetching, bagId) => {
   try {
-    const res = await axios.get(`http://localhost:8080/bag/incQuantity/${bagId}`, {
+    const res = await axiosInstance.get(`/bag/incQuantity/${bagId}`, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
@@ -139,7 +139,7 @@ export const incQuantity = async (dispatch, token, setFetching, bagId) => {
 export const decQuantity = async (dispatch, token, setFetching, bagId) => {
   try {
 
-    const res = await axios.get(`http://localhost:8080/bag/decQuantity/${bagId}`, {
+    const res = await axiosInstance.get(`/bag/decQuantity/${bagId}`, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }

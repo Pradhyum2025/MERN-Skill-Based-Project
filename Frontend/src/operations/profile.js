@@ -1,14 +1,14 @@
 import toast from "react-hot-toast";
 import { authSliceAction } from "../store/slices/auth.js";
 import { fetchSliceAction } from "../store/slices/fetchSlice.js";
-import axios from "axios";
+import axiosInstance from "../helper/axiosInstatance.js";
 import { Children } from "react";
 
 // Edit Profile Details
 export const updateProfileDetails = async(dispatch,updatedData,token,setIsEditing)=>{
   try {
     dispatch(fetchSliceAction.serializeFetching())
-    const res = await axios.patch(`http://localhost:8080/profile/details`, updatedData, {
+    const res = await axiosInstance.patch(`/profile/details`, updatedData, {
       headers:{
         'Authorisation':`Bearer ${token}`
       }
@@ -52,7 +52,7 @@ export const updateProfileDetails = async(dispatch,updatedData,token,setIsEditin
 export const updateProfileImage = async(dispatch,picData,token,setFetching,setPicture)=>{
   try {
     setFetching(()=>true)
-    const res = await axios.patch(`http://localhost:8080/profile/picture`, picData, {
+    const res = await axiosInstance.patch(`/profile/picture`, picData, {
       headers:{
         'Authorisation':`Bearer ${token}`,
         'Content-Type':'multipart/form-data'
@@ -99,7 +99,7 @@ export const updateProfileImage = async(dispatch,picData,token,setFetching,setPi
 export const getMyAccountDetails = async(dispatch,token)=>{
   try {
     dispatch(fetchSliceAction.serializeFetching())
-    const res = await axios.get(`http://localhost:8080/profile`,
+    const res = await axiosInstance.get(`/profile`,
      {
       headers:{
         'Authorisation':`Bearer ${token}`,
