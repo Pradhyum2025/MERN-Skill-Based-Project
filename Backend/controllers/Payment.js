@@ -1,7 +1,6 @@
 import { User } from "../models/user.js";
 import instance from '../config/razorpay.js'
 import { mailSender } from "../utils/mailSender.js";
-import razorpay from 'razorpay'
 import crypto from 'crypto'
 import { Address } from "../models/address.js";
 import { Bag } from "../models/bag.js";

@@ -1,5 +1,5 @@
 import express from 'express'
-import {  isAuth, isBuyer } from '../middlewares/auth.js';
+import { isAuth,isBuyer } from '../middlewares/Auth.js';
 import { addToBag, decQuantity, getMyBag, incQuantity, removeToBag } from '../controllers/Bag.js';
 
 const bagRoutes = express.Router();

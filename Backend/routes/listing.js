@@ -1,6 +1,6 @@
 import express from 'express'
 import {getAllListings, getAllListingsforAdmin, getFilteredListing, showListing } from '../controllers/listing.js';
-import {isAuth ,isAdmin} from '../middlewares/auth.js'
+import {isAuth ,isAdmin} from '../middlewares/Auth.js'
 
 const listingRouter = express.Router();
 
