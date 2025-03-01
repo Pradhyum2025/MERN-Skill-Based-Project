@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 
 export default function CreateAddressModal() {
-  
+  const fetching = useSelector(store=>store.fetching);
   return (
     <div>
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box bg-white pt-2">
           <button
             type="button"
-
+            disabled={fetching}
             onClick={() => document.getElementById('my_modal_1').close()}
             class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-6 h-6 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-500 dark:hover:text-white disabled:cursor-not-allowed" data-modal-hide="popup-modal">
 

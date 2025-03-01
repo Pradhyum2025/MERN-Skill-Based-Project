@@ -99,7 +99,8 @@ export const updateProfileImage = async(dispatch,picData,token,setFetching,setPi
 export const getMyAccountDetails = async(dispatch,token)=>{
   try {
     dispatch(fetchSliceAction.serializeFetching())
-    const res = await axios.get(`http://localhost:8080/profile`, {
+    const res = await axios.get(`http://localhost:8080/profile`,
+     {
       headers:{
         'Authorisation':`Bearer ${token}`,
       }

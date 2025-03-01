@@ -3,7 +3,7 @@ import { AddressSliceAction } from "../store/slices/Address";
 import { fetchSliceAction } from "../store/slices/fetchSlice";
 import axios from "axios";
 
-export const postAddress = async (dispatch, navigate,FormData,token) => {
+export const postAddress = async (navigate,dispatch,FormData,token) => {
   try {
     dispatch(fetchSliceAction.serializeFetching());
     // Send request with authorization
@@ -33,7 +33,17 @@ export const postAddress = async (dispatch, navigate,FormData,token) => {
     }
   } catch (error) {
     dispatch(fetchSliceAction.deserializeFetching());
-    toast.error(error.response?.data?.message, { position: 'bottom-right', duration: 2000 });
+    document.getElementById('my_modal_1').close();
+    toast.error(error.response?.data?.message, { 
+      style:{
+        background:'#001a00',
+        color:'#f2f2f2',
+        borderRadius:'0px',
+        width:'500px',
+        fontWeight:'500'
+      },
+      position:'bottom-center'
+    });
     console.log('CREATE NEW ADDRESS ERROR : ', error?.message || error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."

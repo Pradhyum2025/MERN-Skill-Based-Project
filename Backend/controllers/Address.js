@@ -36,6 +36,13 @@ export const createNewAddress = async (req, res) => {
 
     }
     let currUser = await User.findById(req.user.id, { addresses: true });
+     
+    if(currUser.addresses.length>=3){
+      return res.status(400).json({
+        success: false,
+        message: 'Maximum 3 address allowed'
+      })
+    }
 
     await Address.updateMany({ _id: { $in: currUser.addresses } }, { isDefault: false })
 

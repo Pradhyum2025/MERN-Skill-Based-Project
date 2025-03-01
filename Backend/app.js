@@ -20,13 +20,18 @@ import addressRoutes from './routes/Address.js';
 import paymentRoutes from './routes/Payment.js';
 import reviewRouter from './routes/review.js';
 import profileRoutes from './routes/Profile.js';
+import cookieParser from 'cookie-parser';
 
 //load env files
 dotenv.config();
 const app = express();
 
 //parse json data from body
-app.use(cors());
+app.use(cors({
+  origin:'http://localhost:5173',
+  credentials:true
+}));
+app.use(cookieParser());
 app.use(bodyParser.json({ limit: "50mb" })); // Increase JSON payload size
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 

@@ -46,7 +46,6 @@ export const MyProfile = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
 
     if (currUser.token) {
       updateProfileDetails(dispatch, data, currUser.token, setIsEditing)
@@ -69,8 +68,6 @@ export const MyProfile = () => {
       <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
     </div>
   }
-
-
 
   return (
     <div className={`min-h-screen bg-gray-100 p-4 w-full ${currUser.accountType==='Buyer'?'mt-[4rem]':null}`}>
@@ -144,12 +141,14 @@ export const MyProfile = () => {
             <FaAddressCard className="text-blue-500  text-xl  font-semibold"/>
             <span className="text-gray-500   text-sm font-semibold"> Address</span>
             </p>
-            {/* Address cart */}
+           {myAddresses.length===0 && 
+           <p className="text-gray-500 text-sm font-[600]">No address found for this account </p>}
             <div>
             {myAddresses.length > 0 && myAddresses?.map(address=>(
               <AdderessCart address={address}/>
             ))}
             </div>
+            {myAddresses.length <3 &&
              <div className='w-full flex items-center justify-end p-2'>
               <button 
               onClick={() => document.getElementById('my_modal_1').showModal()}
@@ -157,6 +156,7 @@ export const MyProfile = () => {
                NEW ADDRESS
               </button>
             </div>
+            }
           </div>
           }
           </div>

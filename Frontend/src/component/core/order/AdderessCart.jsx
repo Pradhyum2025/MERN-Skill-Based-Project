@@ -8,7 +8,7 @@ export default function AdderessCart({ address }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currRoute = useLocation().pathname;
-
+ 
   const handleSetDefault = async () => {
     if (currUser.token && (currUser.accountType === 'Buyer' || currUser.accountType === 'Seller')) {
       return await setDefaultAddress(dispatch, currUser.token, address._id)
