@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import OtpInput from './OtpInput';
 import OtpVerifyBtn from './OtpVerifyBtn';
 import { useForm } from 'react-hook-form';
-import { useLocation, useNavigate,useParams } from 'react-router-dom';
+import { useNavigate,useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingBtn from '../../../common/LoadingBtn';
 import { setDeliveredOrder,sendOtp } from '../../../../operations/order';

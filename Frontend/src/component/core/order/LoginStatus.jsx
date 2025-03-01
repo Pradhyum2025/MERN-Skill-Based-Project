@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { IoMdCheckmark } from "react-icons/io";
 import { FaCheck } from "react-icons/fa6";
 export default function LoginStatus() {
 

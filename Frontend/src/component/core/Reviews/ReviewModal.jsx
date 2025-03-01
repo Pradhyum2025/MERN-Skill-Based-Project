@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import PostReview from './PostReview'
-import { useSelector } from 'react-redux'
 
 export default function ReviewModal({orderId, listingId}) {
     const [newFetching, setNewFetching] = useState(false);

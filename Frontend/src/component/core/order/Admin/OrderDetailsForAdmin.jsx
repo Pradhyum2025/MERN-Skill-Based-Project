@@ -5,11 +5,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FiDownload, FiPhone, FiPrinter } from 'react-icons/fi';
 import { BiRupee } from 'react-icons/bi';
 import { LiaRupeeSignSolid } from 'react-icons/lia';
-
 import { capturePaymentAtDelivery, verifyPaymentAtDelivery } from '../../../../operations/payment';
 import CancleModal from '../Buyer/CancleOrderModal';
 import SubOrderCart from './SubOrderCart';
-import { orderSliceAction } from '../../../../store/slices/order';
+
 
 export default function OrderDetailsForAdmin() {
   const [otpFetching, setOtpFetching] = useState(false);

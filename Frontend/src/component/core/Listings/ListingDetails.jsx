@@ -2,18 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { HiCurrencyRupee } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { deleteLisitng, getSingleListing } from '../../../operations/listing';
-import { FaAngleLeft } from 'react-icons/fa';
+import { getSingleListing } from '../../../operations/listing';
 import DeleteModal from './Seller/DeleteModal';
 import { getMyBag } from '../../../operations/bag';
 import { BagButtons2 } from '../BagPage/BagButtons2';
 import { GoPlus } from "react-icons/go";
 import { LuMinus } from "react-icons/lu";
-import { FaUserLarge } from "react-icons/fa6";
-import { deleteReview, getReviews } from '../../../operations/review';
+import {  getReviews } from '../../../operations/review';
 import { reviewSliceAction } from '../../../store/slices/review';
-import LoadingBtn from '../../common/LoadingBtn';
 import DeleteReviewBtn from '../Reviews/DeleteReviewBtn';
+
 export default function ListingDetails() {
   const dispatch = useDispatch();
   const navigate = useNavigate();

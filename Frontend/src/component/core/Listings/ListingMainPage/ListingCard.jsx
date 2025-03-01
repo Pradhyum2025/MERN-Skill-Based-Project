@@ -1,7 +1,6 @@
 import React from 'react'
-import { FaAward, FaRegHeart } from "react-icons/fa";
-import { FaIndianRupeeSign } from 'react-icons/fa6';
-import { Link, useNavigate } from 'react-router-dom';
+import { FaRegHeart } from "react-icons/fa";
+import {  useNavigate } from 'react-router-dom';
 import { AiFillStar } from "react-icons/ai";
 import BagBtns from '../../BagPage/BagBtns';
 

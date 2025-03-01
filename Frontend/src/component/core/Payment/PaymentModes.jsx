@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaCreditCard, FaPaypal, FaMoneyBillWave, FaMobile } from "react-icons/fa";
+import { FaCreditCard, FaPaypal,  FaMobile } from "react-icons/fa";
 import { BsCashStack } from "react-icons/bs";
 import { createOrder } from "../../../operations/order";
 import { useDispatch, useSelector } from "react-redux";

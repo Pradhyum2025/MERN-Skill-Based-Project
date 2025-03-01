@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form";
 import { GoStarFill } from "react-icons/go";
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { postReview } from '../../../operations/review';
 import LoadingBtn from '../../common/LoadingBtn';
@@ -37,7 +34,7 @@ export default function PostReview({orderId,listingId,newFetching ,setNewFetchin
      return; 
     }
   }
-  
+
   return (
         <form
           onSubmit={handleSubmit(onSubmit)}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import ListingCard from './ListingCard'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllListings, getFilteredListing } from '../../../../operations/listing';
-import { useLocation, useParams } from 'react-router-dom';
+import { getFilteredListing } from '../../../../operations/listing';
+import {  useParams } from 'react-router-dom';
 import ListingSkeletonCard from './ListingSkeletonCard';
 import { getMyBag } from '../../../../operations/bag';
 
@@ -17,17 +17,15 @@ export default function ListingContainer() {
     if (categoryId) {
       getFilteredListing(dispatch, categoryId,setNewFetching);
     }
-  }, [])
-  
-  useEffect(() => {
     if (currUser.token && currUser.accountType==='Buyer') {
       getMyBag(dispatch,currUser.token);
     }
   }, [])
+  
 
   const filteredListing = useSelector(store => store.listings);
   const myBag = useSelector(store=>store.bag);
-  
+
   return (
     <>
       {filteredListing.length === 0 ?

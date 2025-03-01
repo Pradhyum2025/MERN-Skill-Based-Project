@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { IoMdCheckmark } from "react-icons/io";
 import { FaCheck } from "react-icons/fa6";
 import { getMyAddresses } from '../../../operations/Address';
 import AdderessCart from './AdderessCart';

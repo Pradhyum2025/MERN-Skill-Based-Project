@@ -1,7 +1,7 @@
 import React from 'react'
 import { dateFormate } from '../../../../operations/order'
-import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import {  useNavigate } from 'react-router-dom'
+import {  useSelector } from 'react-redux'
 import { BiRupee } from 'react-icons/bi';
 
 export default function OrderCart({order,index}) {

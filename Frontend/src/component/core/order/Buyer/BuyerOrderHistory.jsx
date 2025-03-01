@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-
-import { FiSearch, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { getMyOrder } from "../../../../operations/order";
 import { useSelector, useDispatch } from 'react-redux';
 import myImage from '../../../../assets/NoOrderFound.jpg';

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import LoadingBtn from '../../Common/LoadingBtn';
 import { FaUserEdit } from "react-icons/fa";
 import { updateProfileImage } from '../../../operations/profile';
+import LoadingBtn from '../../common/LoadingBtn';
 
 export default function ChangeProfilePicture() {
   const currUser = useSelector(store => store.auth);

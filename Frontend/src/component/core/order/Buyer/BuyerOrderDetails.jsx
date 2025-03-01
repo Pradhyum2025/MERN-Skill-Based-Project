@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { dateFormate, getOrderDetails } from '../../../../operations/order';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FiPackage, FiTruck, FiCheck, FiAlertCircle, FiPrinter, FiDownload, FiPhone } from "react-icons/fi";
+import { FiPrinter, FiDownload, FiPhone } from "react-icons/fi";
 import { BiRupee } from "react-icons/bi";
 import { LiaRupeeSignSolid } from 'react-icons/lia';
-import categorySlice from '../../../../store/slices/categorySlice';
 import ReviewModal from '../../Reviews/ReviewModal';
 
 export default function BuyerOrderDetails() {

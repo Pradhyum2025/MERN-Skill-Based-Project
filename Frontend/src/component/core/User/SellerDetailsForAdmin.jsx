@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSellersDetails } from '../../../operations/seller';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { MdMarkEmailRead, MdOutlinePhone } from 'react-icons/md';
 import { AiTwotoneShop } from 'react-icons/ai';
