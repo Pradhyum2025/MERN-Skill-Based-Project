@@ -1,7 +1,7 @@
 import express from 'express'
 
 import { createNewAddress, getAddresses, setDefaultAddress } from '../controllers/Address.js';
-import { isAuth, isBuyerOrSeller, isMultiRoll } from '../middlewares/Auth.js';
+import { isAuth, isBuyerOrSeller, isMultiRoll } from '../middlewares/auth.js';
 
 const addressRoutes = express.Router();
 

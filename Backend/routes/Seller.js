@@ -1,6 +1,6 @@
 import express from 'express'
 import { deleteListing, postNewListing, updateListing, getMyListing ,getAllSellers, getSellerDetailsForAdmin} from '../controllers/Seller.js';
-import { isAdmin, isAuth, isSeller } from '../middlewares/Auth.js';
+import { isAdmin, isAuth, isSeller } from '../middlewares/auth.js';
 
 const sellerRouter = express.Router();
 

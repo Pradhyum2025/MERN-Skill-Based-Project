@@ -1,6 +1,6 @@
 import express from 'express'
 import { getMyAccountDetails, updateProfile, updateProfilePicture } from '../controllers/Profile.js';
-import { isAuth, isMultiRoll } from '../middlewares/Auth.js';
+import { isAuth, isMultiRoll } from '../middlewares/auth.js';
 const profileRoutes = express.Router();
 
 //Get curr user details

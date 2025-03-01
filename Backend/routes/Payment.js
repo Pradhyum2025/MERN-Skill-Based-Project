@@ -1,5 +1,5 @@
 import express from 'express'
-import { isAdmin, isAuth,isBuyer } from "../middlewares/Auth.js";
+import { isAdmin, isAuth,isBuyer } from "../middlewares/auth.js";
 import { capturePayment, varifySignature ,capturePaymentAtDelivery, verifyPaymentAtDelivery} from '../controllers/Payment.js';
 const paymentRoutes = express.Router();
 

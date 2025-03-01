@@ -1,6 +1,6 @@
 import express from 'express'
 import { cancleOrder, createOrder, getAllOrdersForAdmin, getMyOrder, getOrderDetails, getOrderDetailsforAdmin, sendOTP, setDeliveredOrder } from '../controllers/order.js';
-import { isAdmin, isAuth, isBuyer, isBuyerOrAdmin, isBuyerOrSeller, isMultiRoll } from '../middlewares/Auth.js';
+import { isAdmin, isAuth, isBuyer, isBuyerOrAdmin, isBuyerOrSeller, isMultiRoll } from '../middlewares/auth.js';
 
 
 const orderRouter = express.Router();
