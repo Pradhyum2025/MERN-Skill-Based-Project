@@ -5,7 +5,8 @@ import { FaCheck } from "react-icons/fa6";
 import { getMyAddresses } from '../../../operations/Address';
 import AdderessCart from './AdderessCart';
 import { Link } from 'react-router-dom';
-import LoadingBtn from '../../Common/LoadingBtn';
+import LoadingBtn from '../../common/LoadingBtn';
+LoadingBtn
 export default function AddressStatus() {
   const dispatch = useDispatch();
   const currUser = useSelector(store => store.auth);
