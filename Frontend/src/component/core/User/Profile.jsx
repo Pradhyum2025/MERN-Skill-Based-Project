@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { FiX, FiCheck, } from "react-icons/fi";
 import { MdEditNote, MdMarkEmailRead, MdOutlinePhone } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import LoadingBtn from '../../Common/LoadingBtn.jsx'
 import ChangeProfilePicture from "./ChangeProfilePicture.jsx";
 import { FaAngleLeft } from "react-icons/fa";
 import { getMyAccountDetails, updateProfileDetails } from "../../../operations/profile.js";
@@ -13,6 +12,7 @@ import { FaAddressCard } from "react-icons/fa6";
 import CreateAddressModal from "../Address/CreateAddressModal.jsx";
 import AdderessCart from "../order/AdderessCart.jsx";
 import { getMyAddresses } from "../../../operations/Address.js";
+import LoadingBtn from "../../common/LoadingBtn.jsx";
 
 
 export const MyProfile = () => {

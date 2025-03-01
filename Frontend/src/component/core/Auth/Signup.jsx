@@ -123,7 +123,7 @@ export default function Signup() {
                 {...register("contact", {
                   required: true,
                   maxLength: { value: 10, message: "Enter valid contact number" },
-                  maxLength: { value: 10, message: 'Enter valid contact number' }
+                  minLength: { value: 10, message: 'Enter valid contact number' }
                 })}
               />
               {/* ---- Error handling ---- */}
