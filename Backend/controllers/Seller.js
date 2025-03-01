@@ -16,8 +16,7 @@ export const postNewListing = async (req, res) => {
     let features = req.body?.['features[]'];
 
     let productImages = req?.files?.['images']
-     console.log(productImages)
-    console.log(req.body)
+
     if (!productName || !brand || !category || !shippingAddress || !price || !state || !returnPolicy || !description || !productWeight || !stock || !discount || !productImages || !features) {
       return res.status(400).json({
         success: false,
