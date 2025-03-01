@@ -70,7 +70,7 @@ export const isSeller = (req,res,next)=>{
 }
 
 // check user is seller or NOT
-export const isBuyer= (req,res,next)=>{
+export const isBuyer = (req,res,next)=>{
   
   try{
     let payload = req.user;
@@ -157,6 +157,7 @@ export const isBuyerOrSeller = (req,res,next)=>{
     })
   }
 }
+
 export const isBuyerOrAdmin = (req,res,next)=>{
   
   try{
