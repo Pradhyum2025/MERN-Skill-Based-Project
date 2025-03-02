@@ -3,6 +3,7 @@ import { FilteredListingCard } from './FilteredListingCard'
 import { HiCurrencyRupee } from 'react-icons/hi'
 import { getAllListingsForAdmin } from '../../../../operations/listing'
 import { useDispatch, useSelector } from 'react-redux'
+import myImage from '../../../../assets/rBgDataNotFound.png';
 
 export default function AllListings() {
  const currUser = useSelector(store=>store.auth);
@@ -20,20 +21,21 @@ export default function AllListings() {
   const fetching = useSelector(store => store.fetching)
   
   if (fetching) {
-    return <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
+    return <div className="bg-background p-6 flex items-center justify-center w-full">
       <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
     </div>
   }
   return (
-       <div className="w-full min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-10">
+       <div className="w-full  bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-4">
          <div className="max-w-5xl mx-auto">
    
-           <h1 className="w-full text-xl font-[800] text-gray-500 mb-8 text-center md:text-left">All Products
+           <h1 className="w-full text-lg font-[800] text-gray-500  text-center md:text-left">
+            ALL  PRODUCTS
            </h1>
    
            {allListings?.length === 0 ? (
-             <div className="text-center py-12">
-               <p className="text-gray-500 text-xl">Empty</p>
+             <div className="text-center ">
+              <img src={myImage} alt=""  className='sm:aspect-[5/3]'/>
              </div>
            ) : (
              <div

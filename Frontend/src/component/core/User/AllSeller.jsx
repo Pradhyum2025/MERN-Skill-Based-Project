@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllSellers } from '../../../operations/seller';
 import SellerRow from './SellerRow';
-
+import myImage from '../../../assets/rBgDataNotFound.png';
 export default function AllSeller() {
   const currUser = useSelector(store => store.auth);
   const dispatch = useDispatch();
@@ -24,21 +24,19 @@ export default function AllSeller() {
   }
   
   return (
-    <div className="w-full min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-10">
-      <div className="max-w-4xl mx-auto">
-
-        <h1 className="w-full text-xl font-[800] text-blue-600 mb-8 text-center md:text-left">Our seller  Deatils
-        </h1>
-
+    <div className="w-full bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-4 pt-3">
+      <div className="max-w-5xl mx-auto">
+      <h1 className="w-full text-lg font-[800] text-gray-500  text-center md:text-left">OUR SELLER  DETAILS
+      </h1>
         {allSellers.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-xl">Your Listing is empty</p>
+          <div className="text-center">
+             <img src={myImage} alt=""  className='sm:aspect-[5/3]'/>
           </div>
-        ) : (<div class="overflow-x-auto font-[sans-serif]">
+        ) : (<div class="overflow-x-auto font-[sans-serif] mt-4">
           {/* Table */}
           <table class="min-w-full bg-white">
             {/* Table head */}
-            <thead class="bg-gray-100 whitespace-nowrap">
+            <thead class="bg-blue-100 whitespace-nowrap">
               <tr>
 
                 <th class="p-4 text-left text-sm font-semibold text-black">

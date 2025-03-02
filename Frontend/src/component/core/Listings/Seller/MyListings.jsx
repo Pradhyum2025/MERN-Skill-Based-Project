@@ -4,6 +4,7 @@ import { MyListingCard } from "./MyListingCard";
 import { getMyListings } from "../../../../operations/listing";
 import { HiCurrencyRupee } from "react-icons/hi";
 import DeleteModal from "./DeleteModal";
+import myImage from '../../../../assets/rBgDataNotFound.png';
 
 export const MyListing = () => {
   const currUser = useSelector(store => store.auth)
@@ -34,14 +35,14 @@ export const MyListing = () => {
 
   return (
 
-    <div className="w-full min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-10">
+    <div className="w-full min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-4">
       <div className="max-w-4xl mx-auto">
 
-      <h1 className="text-lg font-[700] text-gray-500 mb-3">MY PRODUCTS</h1>
+      <h1 className="text-lg font-[700] sm:text-left text-center text-gray-500 mb-3">MY PRODUCTS</h1>
 
         {myListings?.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-600 font-[900] text-xl">Your Listing is empty</p>
+          <div className="text-center">
+            <img src={myImage} alt=""  className='sm:aspect-[5/3]'/>
           </div>
         ) : (
           <div
@@ -49,7 +50,7 @@ export const MyListing = () => {
 
             <table class="min-w-full bg-white">
               {/* Table head */}
-              <thead class="bg-gray-100 whitespace-nowrap">
+              <thead class="bg-blue-100 whitespace-nowrap">
                 <tr>
                   <th class="p-4 text-left text-sm font-semibold text-black">
                     Product

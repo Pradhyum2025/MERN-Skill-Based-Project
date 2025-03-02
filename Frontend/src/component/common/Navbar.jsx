@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { FiSearch, FiShoppingCart, FiUser, FiGlobe, FiSun, FiMoon, FiMenu, FiX } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaRegUserCircle } from "react-icons/fa";
 import { signOut } from "../../operations/auth";
 import { MdOutlineLogout } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { IoSettingsOutline } from "react-icons/io5";
-import { BiSolidDashboard } from "react-icons/bi";
+import { FaRegUserCircle } from "react-icons/fa";
+import { FiBox } from "react-icons/fi";
+import { MdOutlineSell } from "react-icons/md";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -65,7 +67,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo Section */}
           <Link to={'/'}>
-            <div className="flex items-center btn w-[8rem]">
+            <div className="flex items-center btn  w-[8rem]">
               E-commerce
             </div>
           </Link>
@@ -132,37 +134,33 @@ const Navbar = () => {
               >
                 <FiUser className="h-6 w-6 cursor-pointer" />
 
-               {/* User account options */}
+                {/* User account options */}
                 {userDropdown ?
                   <>
                     {(currUser?.email) ? (
-                      <div className="absolute top-full  right-[-70px] w-[8.3rem] bg-white  shadow-lg rounded-md py-2 mt-0">
+                      <div className="absolute top-full  right-[-70px] w-[10rem] bg-white  shadow-lg rounded-md py-2 mt-0">
                         {currUser.accountType === 'Buyer'
                           &&
                           <>
                             <Link
                               to={'/profile'}
-                              className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100"
+                              className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 flex items-center gap-2"
                             >
+                              <FaRegUserCircle className="text-lg" />
                               Profile
                             </Link>
                             <Link
                               to={'/my-order'}
-                              className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100"
-                            >
+                              className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 flex items-center gap-2"
+                            > <FiBox className="text-lg" />
                               My Order
                             </Link>
                             <Link
-                              to={'/wishlist'}
-                              className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100"
-                            >
-                              Wishlist
-                            </Link>
-                            <Link
                               to={'/become-seller'}
-                              className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100"
+                              className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 flex items-center gap-2"
                             >
-                              Become a seller
+                              <MdOutlineSell className="text-lg" />
+                              Become a Seller
                             </Link>
                           </>
                         }
@@ -173,14 +171,14 @@ const Navbar = () => {
                               to={'/dashbord'}
                               className="block px-4 py-2 text-sm  font-[600] hover:bg-gray-100 flex items-center gap-1"
                             >
-                              <RxDashboard className="text-"/>
+                              <RxDashboard className="text-lg" />
                               Dashbord
                             </Link>
                             <Link
                               to={'/dashbord'}
                               className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 flex items-center gap-1"
                             >
-                              <IoSettingsOutline/>
+                              <IoSettingsOutline className="text-lg" />
                               Setting
                             </Link>
 
@@ -190,14 +188,14 @@ const Navbar = () => {
                           onClick={handleSignOut}
                           className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 cursor-pointer flex items-center gap-1"
                         >
-                           <MdOutlineLogout className="text-gray-800"/> Logout
+                          <MdOutlineLogout className="text-lg" /> Logout
                         </p>
                       </div>
                     ) : (
                       <div className="absolute top-full  right-[-70px] w-[8.2rem] bg-white  shadow-lg rounded-md py-2 mt-0">
                         <Link
                           to={'/signup'}
-                          className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 "
+                          className="block px-4 py-2 text-sm  font-[600] hover:bg-gray-100 flex items-center gap-1  "
                         >
                           Signup
                         </Link>
@@ -243,39 +241,35 @@ const Navbar = () => {
             >
               <FiUser className="h-6 w-6 cursor-pointer" />
 
-          
-          {/* For responsive */}
+
+              {/* For responsive */}
               {userDropdown ?
                 <>
                   {(currUser?.email) ? (
-                    <div className="absolute top-full  right-[-70px] w-[8.2rem] bg-white  shadow-lg rounded-md py-2 mt-0">
+                    <div className="absolute top-full  right-[-96px] w-[10rem] bg-white  shadow-lg rounded-md py-2 mt-0">
                       {/* Buyer */}
                       {currUser.accountType === 'Buyer'
                         &&
                         <>
                           <Link
                             to={'/profile'}
-                            className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 flex items-center gap-2"
                           >
+                            <FaRegUserCircle className="text-lg" />
                             Profile
                           </Link>
                           <Link
                             to={'/my-order'}
-                            className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
-                          >
+                            className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 flex items-center gap-2"
+                          > <FiBox className="text-lg" />
                             My Order
                           </Link>
                           <Link
-                            to={'/wishlist'}
-                            className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
-                          >
-                            Wishlist
-                          </Link>
-                          <Link
                             to={'/become-seller'}
-                            className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 flex items-center gap-2"
                           >
-                            Become a seller
+                            <MdOutlineSell className="text-lg" />
+                            Become a Seller
                           </Link>
                         </>
                       }
@@ -284,45 +278,46 @@ const Navbar = () => {
                         <>
                           <Link
                             to={'/dashbord'}
-                            className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                            className="block px-4 py-2 text-sm  font-[600] hover:bg-gray-100 flex items-center gap-2"
                           >
-                           <RxDashboard/> Dashbord
+                            <RxDashboard className="" />
+                            Dashbord
+                          </Link>
+                          <Link
+                            to={'/dashbord'}
+                            className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 flex items-center gap-2"
+                          >
+                            <IoSettingsOutline  className=""/>
+                            Setting
                           </Link>
 
                         </>
                       }
-                      <Link
-                        to={'/dashbord'}
-                        className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
-                      >
-                        Settings
-                      </Link>
-
                       <p
                         onClick={handleSignOut}
-                        className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                        className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 cursor-pointer flex items-center gap-2"
                       >
-                        Logout
+                        <MdOutlineLogout className="" /> Logout
                       </p>
                     </div>
                   ) : (
-                    <div className="absolute top-full  right-[-70px] w-[8.2rem] bg-white  shadow-lg rounded-md py-2 mt-0">
+                    <div className="absolute top-full  right-[-54px] w-[7rem] bg-white  shadow-lg rounded-md py-2 mt-0">
                       <Link
                         to={'/signup'}
-                        className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 "
+                        className="block px-4 py-2 text-sm  font-[600] hover:bg-gray-100 flex items-center gap-1 "
                       >
                         Signup
                       </Link>
 
                       <p
                         onClick={handleNavigateLogin}
-                        className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                        className="block px-4 py-2 text-sm  font-[600] hover:bg-gray-100 flex items-center gap-1"
                       >
                         Login
                       </p>
 
                       <p
-                        className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                        className="block px-4 py-2 text-sm  font-[600] hover:bg-gray-100 flex items-center gap-1 "
                       >
                         Help
                       </p>
@@ -333,8 +328,8 @@ const Navbar = () => {
               }
 
             </div>
-           
-           {/* Bag */}
+
+            {/* Bag */}
             {currUser.accountType === 'Buyer' &&
               <div className="relative">
                 <Link to={'/bag'}>

@@ -6,6 +6,7 @@ import { FaEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { FilteredListing } from '../Listings/Admin/FilteredListing';
 import EditModal from './EditModal';
+import myImage from '../../../assets/rBgDataNotFound.png';
 
 export default function Categories() {
 
@@ -33,16 +34,16 @@ export default function Categories() {
 
   return (
 
-    <div className="w-full min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="w-full min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">All Categories</h1>
+        <h1 className="text-lg font-bold text-gray-500 mb-8 text-center">PRODUCT CATEGORIES</h1>
         {categories.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-xl">Your category is empty</p>
+          <div className="text-center">
+            <img src={myImage} alt="" />
           </div>
         ) : (
 
-          <div className='flex flex-col gap-y-3'>
+          <div className='flex flex-col gap-y-3 mt-4'>
             {categories.map((category) => (
               <div key={category._id} className='flex flex-col p-3 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300'>
 

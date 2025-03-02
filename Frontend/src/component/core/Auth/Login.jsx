@@ -2,8 +2,9 @@ import React, { useContext, useState } from 'react'
 import { RxCross2 } from "react-icons/rx";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signIn } from '../../../operations/auth';
+import LoadingBtn from '../../common/LoadingBtn';
 
 
 export default function Login() {
@@ -25,14 +26,17 @@ export default function Login() {
     document.getElementById('my_modal_3').close();
     return navigate('/signup')
   }
-
+  
+  const fetching =useSelector(store=>store.fetching)
 
   return (
     <div>
       <dialog id="my_modal_3" className="modal">
         <div className="modal-box dark:bg-gray-800 text-black ">
           {/* if there is a button in form, it will close the modal */}
-          <button className="absolute text-2xl text-gray-800 hover:text-gray-800 bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 rounded  font-extrabold right-2 top-2"
+          <button 
+          disabled={fetching}
+          className="absolute text-2xl text-gray-800 hover:text-gray-800 bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 rounded  font-extrabold right-2 top-2 disabled:cursor-not-allowed "
             onClick={() => document.getElementById('my_modal_3').close()}
           ><RxCross2 /></button>
 
@@ -94,7 +98,15 @@ export default function Login() {
                   </div>
                   <a href="#" class="text-sm font-medium text-blue-400 hover:underline ">Forgot password?</a>
                 </div>
-                <button type="submit" class="w-full text-white bg-yellow-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign in</button>
+                <button 
+                type="submit"
+                disabled={fetching}
+                 class="w-full text-white bg-yellow-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center justify-center disabled:cursor-not-allowed disabled:bg-primary-600">
+                  {fetching?
+                  <LoadingBtn working={'Verifying..'}/>:
+                 ' Sign in'
+                  }
+                  </button>
                 <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don’t have an account yet? <span
                     onClick={handleNavigateSignUp}

@@ -25,14 +25,20 @@ export const BagPage = () => {
   }, [])
 
   const userBag = useSelector(store => store.bag);
-
+  const fetching = useSelector(store => store.fetching);
+  
   const handleCreateOrder = (bag) => {
-
     return navigate('/bag/delivery-address');
-
   }
-
   const { totalPrice, totalSaving, totalItems } = calcTotal(userBag)
+  
+   
+  if((userBag.length> 0 && !isObject(userBag[0])) || fetching){
+    return <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
+    <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+  </div>
+  }
+  
   return (
     <>
       <Navbar />

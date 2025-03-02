@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Children } from "react";
+const authData = window.localStorage.getItem('currUser')!=='undefined'?JSON.parse(window.localStorage.getItem('currUser')):null;
+const initalState = (authData && authData.bag)?authData.bag:[];
 
 const bagSlice = createSlice({
   name: 'bag',
-  initialState: [],
+  initialState: initalState,
   reducers: {
     setBagData: (state, action) => {
       return [...action.payload]

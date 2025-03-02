@@ -114,16 +114,16 @@ export const deleteCategory = async (dispatch,categoryId,token)=>{
 }
 
 //Edit category
-export const updateCategory = async(dispatch,categoryId,updatedData,token)=>{
+export const updateCategory = async(dispatch,categoryId,updatedData,token,setFetching)=>{
   try {
-    dispatch(fetchSliceAction.serializeFetching());
-    const res = await axios.patch(`/category/${categoryId}`, updatedData, {
+    setFetching(()=>true)
+    const res = await axiosInstance.patch(`/category/${categoryId}`, updatedData, {
       headers:{
         'Authorisation':`Bearer ${token}`,
         "Content-Type": "multipart/form-data", 
       }
     });
-    dispatch(fetchSliceAction.deserializeFetching());
+    setFetching(()=>false)
     // console.log("Category Updation Response  --->>>", res)
     if (res.data && res.data.success) {
       dispatch(categorySliceAction.deleteCategory(updatedData._id))
@@ -142,7 +142,7 @@ export const updateCategory = async(dispatch,categoryId,updatedData,token)=>{
     }
 
   } catch (error) {
-    dispatch(fetchSliceAction.deserializeFetching());
+    setFetching(()=>false)
     document.getElementById('my_modal_1').close()
     toast.error(error.response?.data?.message, {
       style: {

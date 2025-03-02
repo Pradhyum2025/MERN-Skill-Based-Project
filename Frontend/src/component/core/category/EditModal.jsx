@@ -9,7 +9,8 @@ import { FiUploadCloud } from 'react-icons/fi';
 
 export default function EditModal({ category }) {
   const currUser = useSelector(store => store.auth);
-  const fetching = useSelector(store => store.fetching)
+
+  const [fetching,setFetching] = useState(false)
   const dispatch = useDispatch();
 
   const [relatedImage, setrRelatedImage] = useState('');
@@ -33,7 +34,7 @@ export default function EditModal({ category }) {
   const onSubmit = async (data) => {
     if (currUser.token) {
       try {
-        await updateCategory(dispatch,category._id, data, currUser.token);
+        await updateCategory(dispatch,category._id, data, currUser.token,setFetching);
       } catch (error) {
         console.log(error)
       }

@@ -57,7 +57,7 @@ export const BuyerOrderHistory = () => {
       case "cancelled":
         return "bg-red-100 text-red-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
       default:
-        return "bg-pink-100 text-pink-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
+        return "bg-gray-100 text-gray-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm";
     }
   };
 
@@ -66,7 +66,7 @@ export const BuyerOrderHistory = () => {
 
   return (
       <div className="bg-gray-50 p-3 sm:p-6 mt-[3.6rem]">
-        <div className="max-w-7xl mx-auto bg-card rounded-lg sm:p-6">
+        <div className="max-w-7xl mx-auto bg-card rounded-lg">
           <div className="">
             <div className="flex items-center justify-between">
               <h1 className="text-lg font-[700] text-gray-500 mb-3">MY ORDERS</h1>
@@ -75,7 +75,7 @@ export const BuyerOrderHistory = () => {
               defaultValue={savedOrderStatus}
                 className={`font-[600] ${getStatusColor(savedOrderStatus)} rounded mb-1`} name="" id="">
                 <option className="text-sm font-semibold" value="">select status</option>
-                <option className="text-sm font-semibold" value="*">All orders</option>
+                <option className="text-sm font-semibold" value="*">All Orders</option>
                 <option className="text-sm font-semibold" value="Processing">Processing</option>
                 <option className="text-sm font-semibold" value="Refunded">Refunded</option>
                 <option className="text-sm font-semibold" value="Delivered">Delivered</option>
@@ -83,10 +83,10 @@ export const BuyerOrderHistory = () => {
               </select>
             </div>
             {myOrders.length === 0 ?
-              <div className="h-full w-full flex flex-col items-center justify-center bg-white p-5">
+              <div className="h-full w-full flex flex-col items-center justify-center bg-gray-50 p-5">
                 <div className="flex items-center justify-center relative">
-                  <p className="text-xl font-bold text-blue-500 text-center  absolute top-[1rem] left-[1rem] ">Orders Not Found</p>
-                  <img src={myImage} alt="" className="smh-[30rem] sm:w-[40rem] " />
+                 
+                  <img src={myImage} alt=""  className='sm:aspect-[9/4]'/>
 
                 </div>
                 <Link to={'/'} class="inline-block rounded-lg bg-primary-700 px-3 py-2 text-center font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Shop Now</Link>

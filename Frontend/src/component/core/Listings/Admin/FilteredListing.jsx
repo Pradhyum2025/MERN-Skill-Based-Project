@@ -29,7 +29,8 @@ export const FilteredListing = ({ categoryId }) => {
     <>
       {myListings?.length === 0 ? (
         <div className="text-center py-5">
-          <p className="text-gray-500  text-[1  rem] font-[700] text-xl">There is no listing </p>
+          <p className="text-gray-500 text-md font-[600] ">
+            No item added yet </p>
         </div>
       ) : (
         <div

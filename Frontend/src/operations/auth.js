@@ -110,18 +110,18 @@ export const becomeSeller = async (navigate,dispatch,formData,token) => {
       console.log("BECOME SELLER RESPONSE --->>>", res)
       dispatch(authSliceAction.setUserData(res.data.currUser));
       window.localStorage.setItem('currUser', JSON.stringify(res.data.currUser));
-      toast.success(res?.data?.message, { 
+      toast.success(res?.data?.message, {
         style: {
           background: '#001a00',
           color: '#f2f2f2',
           borderRadius: '0px',
-          width: '400px',
+          width: '350px',
           height:'40px',
           padding:'0px 10px',
           fontWeight: 900
         },
         position: 'bottom-center'
-      });
+      })
       navigate('/dashbord');
 
     }

@@ -69,39 +69,44 @@ export const MyProfile = () => {
     }
 
   return (
-    <div className={`min-h-screen bg-gray-100 p-4 w-full ${currUser.accountType==='Buyer'?'mt-[4rem]':null}`}>
+    <div className={`min-h-screen bg-gray-100 p-2  w-full sm:pt-3  ${currUser.accountType==='Buyer'?'mt-[4rem]':null}`}>
       <div className="max-w-5xl mx-auto space-y-8">
       {!isEditing ? (
         <div className="">
-          <h2 className="text-lg font-heading text-gray-600 font-semibold mb-2">{currUser?.accountType && currUser?.accountType.toUpperCase()} ACCOUNT</h2>
+          <h2 className="text-lg sm:text-left text-center font-heading text-gray-500 font-semibold mb-2">{currUser?.accountType && currUser?.accountType.toUpperCase()} ACCOUNT</h2>
 
-          <div className="space-y-4 bg-white p-6 rounded-lg shadow-sm flex  flex-col gap-5">
+          <div className="space-y-4 bg-white  p-3 sm:p-6 rounded-lg shadow-sm flex  flex-col gap-5">
             {/* Personal Informations */}
             <div>
-            <div className="flex  items-center justify-between">
+            <div className="flex items-center justify-between gap-y-3 sm:items-center sm:justify-start sm:justify-between relative">
 
-              <p className='text-gray-600 fonr-md font-semibold flex items-center gap-3'>{currUser?.accountType} ID : <span className='bg-blue-100 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm'>#{currUser?._id}</span></p>
+              <p className='text-gray-600 font-md font-semibold flex justify-start items-center gap-3 w-full '>
+                <span className="hidden sm:flex"> {currUser?.accountType} ID : </span>
+               <span className='bg-blue-100 text-blue-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded-sm'>#{currUser?._id}</span></p>
 
               {/* Edit btn */}
               <button
                 onClick={() => setIsEditing(() => true)}
-                className="btn min-h-[2rem] h-[2.2rem] bg-gray-100 px-3 border-1 border-gray-200 hover:border-gray-300  hover:bg-gray-200  text-black disabled:text-gray-600 font-[900]"
-              > <span className="text-blue-600">Edit</span>
+                className="btn min-h-[2rem] h-[2.2rem] bg-gray-100 px-3 border-1 border-gray-200 hover:border-gray-300  hover:bg-gray-200  text-black disabled:text-gray-600 font-[900]  "
+              > <span className="text-blue-600 sm:block hidden">Edit</span>
                 <MdEditNote size={25} className="text-blue-600" />
               </button>
 
             </div>
 
-            <div className='flex sm:items-center gap-y-5 sm:gap-7 flex-col sm:flex-row'>
+            <div className='flex sm:items-center gap-y-5 sm:gap-7 flex-col sm:flex-row mt-2'>
                  {/* Image */}
+                 <div className="flex items-center gap-3">
+
                  <div className="rounded-full">
                 <img src={currUser?.image} className="w-[3rem] h-[3rem] rounded-[30px] " alt="User image" />
                  </div>
 
                 {/* FullName */}
-                <span className="text-gray-500  text-md font-semibold ">
+                <span className="text-gray-500  text-lg font-semibold ">
                 {currUser?.firstName + " " + currUser?.lastName}
                 </span>
+                 </div>
               {/* Email */}
               <p 
               className="text-gray-500  text-sm font-semibold flex items-center gap-1">
@@ -141,7 +146,7 @@ export const MyProfile = () => {
             <span className="text-gray-500   text-sm font-semibold"> Address</span>
             </p>
            {myAddresses.length===0 && 
-           <p className="text-gray-500 text-sm font-[600]">No address found for this account </p>}
+           <p className="text-gray-500 text-sm font-[600]">Add a New Address </p>}
             <div>
             {myAddresses.length > 0 && myAddresses?.map(address=>(
               <AdderessCart address={address}/>
@@ -167,7 +172,7 @@ export const MyProfile = () => {
 
           <button
             disabled={fetching}
-            className="btn min-h-[2rem] h-[2.5rem] bg-gray-100 border-1 border-gray-200 hover:border-gray-300  hover:bg-gray-200  text-black disabled:text-gray-600 md:mt-0 mt-12"
+            className="btn min-h-[2rem] h-[2.5rem] bg-gray-100 border-1 border-gray-200 hover:border-gray-300  hover:bg-gray-200  text-black disabled:text-gray-600 mt-8 "
             onClick={() => setIsEditing(() => false)}> <FaAngleLeft />
             Back
           </button>

@@ -3,21 +3,25 @@ import React from "react";
 import axiosInstance from "../helper/axiosInstatance";
 import { bagSliceAction } from "../store/slices/Bag";
 import toast from "react-hot-toast";
+import { fetchSliceAction } from "../store/slices/fetchSlice";
 
 //Add to cart
 export const getMyBag = async (dispatch, token) => {
 
   try {
+    dispatch(fetchSliceAction.serializeFetching())
     const res = await axiosInstance.get('/bag', {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
     });
+    dispatch(fetchSliceAction.deserializeFetching())
     if (res.data && res.data.success) {
       console.log("GET MY BAG RESPONSE --->>>", res)
       dispatch(bagSliceAction.setBagData(res.data.bag));
     }
   } catch (error) {
+    dispatch(fetchSliceAction.deserializeFetching())
     toast.error(error?.response?.data?.message, { position: 'right-bottom', duration: 2000 });
     console.log('Get my bag error : ', error)
   }
