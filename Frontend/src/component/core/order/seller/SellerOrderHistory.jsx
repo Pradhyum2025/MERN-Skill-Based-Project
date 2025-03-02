@@ -70,7 +70,7 @@ export const SellerOrderHistory = () => {
           </select>
         </div>
 
-        {myOrders?.length !== 0 ? (
+        {myOrders?.length === 0 ? (
           <div className="text-center">
             <img src={myImage} alt="" className='sm:aspect-[5/3]' />
           </div>) : (
