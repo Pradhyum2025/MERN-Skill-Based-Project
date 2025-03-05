@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { BagCard } from "./BagCard";
 import { useDispatch, useSelector } from 'react-redux';
 import { calcTotal, getMyBag } from "../../../operations/bag";
-import { createOrder } from "../../../operations/order";
 import { LiaRupeeSignSolid } from "react-icons/lia";
 import CreateAddressModal from "../Address/CreateAddressModal";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../common/Navbar";
 import Footer from "../../common/Footer";
 import { Toaster } from "react-hot-toast";
+import Login from "../Auth/Login";
 
 export const BagPage = () => {
+  const [fetching,setFetching] = useState(false);
   const currUser = useSelector(store => store.auth)
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -18,26 +18,23 @@ export const BagPage = () => {
 
   useEffect(() => {
     if (currUser?.accountType === 'Buyer' && currUser.token) {
-      getMyBag(dispatch, currUser.token)
+      getMyBag(dispatch, currUser.token,setFetching)
     } else {
       return;
     }
   }, [])
 
   const userBag = useSelector(store => store.bag);
-  const fetching = useSelector(store => store.fetching);
-  
   const handleCreateOrder = (bag) => {
     return navigate('/bag/delivery-address');
   }
-  const { totalPrice, totalSaving, totalItems } = calcTotal(userBag)
-  
    
-  if((userBag.length> 0 && !isObject(userBag[0])) || fetching){
+  if(fetching){
     return <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
     <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
   </div>
   }
+  const { totalPrice, totalSaving, totalItems } = calcTotal(userBag)
   
   return (
     <>
@@ -126,6 +123,7 @@ export const BagPage = () => {
         
         {/* Modal for create address */}
         <CreateAddressModal />
+        <Login/>
       </div>
 
       <Footer />

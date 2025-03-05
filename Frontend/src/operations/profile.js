@@ -5,16 +5,16 @@ import axiosInstance from "../helper/axiosInstatance.js";
 import { Children } from "react";
 
 // Edit Profile Details
-export const updateProfileDetails = async(dispatch,updatedData,token,setIsEditing)=>{
+export const updateProfileDetails = async(dispatch,updatedData,token,setIsEditing,setNewFetching)=>{
   try {
-    dispatch(fetchSliceAction.serializeFetching())
+    setNewFetching(()=>true)
     const res = await axiosInstance.patch(`/profile/details`, updatedData, {
       headers:{
         'Authorisation':`Bearer ${token}`
       }
     });
-    dispatch(fetchSliceAction.deserializeFetching());
     setIsEditing(()=>false)
+    setNewFetching(()=>false)
     if (res.data && res.data.success) {
       window.localStorage.setItem('currUser', JSON.stringify(res.data.userDetails));
       dispatch(authSliceAction.setFormData(res.data.userDetails));
@@ -32,7 +32,7 @@ export const updateProfileDetails = async(dispatch,updatedData,token,setIsEditin
     }
 
   } catch (error) {
-    dispatch(fetchSliceAction.deserializeFetching())
+    setNewFetching(()=>false)
     toast.error(error.response?.data?.message, {  style: {
       background: '#001a00',
       color: '#f2f2f2',

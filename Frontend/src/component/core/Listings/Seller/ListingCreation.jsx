@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FiUploadCloud } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
-import { getAllCategories } from "../../../../operations/category";
+import { getAllCategories, getBrandsOfCategory } from "../../../../operations/category";
 import { useDispatch, useSelector } from "react-redux";
 import { postListing } from "../../../../operations/listing";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,7 @@ import CreateAddressModal from "../../Address/CreateAddressModal.jsx";
 const ProductForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [fetching,setFetching] = useState(false);
   const [productFeatures, setProductFeatures] = useState([]);
   const [images, setImages] = useState([]);
   const currUser = useSelector(store => store.auth);
@@ -27,7 +28,7 @@ const ProductForm = () => {
   }, [])
   useEffect(() => {
     getAllCategories(dispatch)
-  },[])
+  }, [])
 
   const allCategories = useSelector(store => store.category);
 
@@ -74,7 +75,7 @@ const ProductForm = () => {
     }
 
     if (currUser.token) {
-      return await postListing(dispatch, navigate, formData, currUser.token)
+      return await postListing(dispatch, navigate, formData, currUser.token,setFetching)
     } else {
       return document.getElementById('my_modal_3').showModal()
     }
@@ -120,9 +121,19 @@ const ProductForm = () => {
     return setImages(images.filter((_, i) => i !== index));
   };
 
-  const fetching = useSelector(store => store.fetching);
-  const myAddresses = useSelector(store => store.addresses);
+  const handleGetBrandsOfCategory = async (e)=>{
+    const categoryId = e.target.value;
+  
+    if(currUser.accountType==='Seller' && categoryId){
+      return await getBrandsOfCategory(dispatch,categoryId);
+    }else{
+      return
+    }
+  }
 
+  const Brands = useSelector(store => store.bag);
+  const myAddresses = useSelector(store => store.addresses);
+  
   return (
     <div className="w-full bg-gray-50 py-5 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
@@ -132,14 +143,55 @@ const ProductForm = () => {
             <h1 className="text-lg font-[700] text-gray-500 text-center mb-3">SELL PRODUCTS</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
+
+                {/* -----------Category ----------- */}
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900">Category</label>
+                  <select
+                    name="category"
+                    {...register("category", {
+                      required: { value: true, message: "Category is required" },
+                    })}
+                    onChange={(e)=>handleGetBrandsOfCategory(e)}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
+
+                  > <option value={''} >Select category</option>
+                    {allCategories.map(category => {
+                      return <option value={category._id}>{category.name}</option>
+                    })}
+                    {errors.category && <p className="text-red-500 text-sm">{errors?.category?.message}</p>}
+                  </select>
+
+                </div>
+                  
+                  {/* Brand Name */}
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900">Brand Name</label>
+                  <select
+                    name="brand"
+                    {...register("brand", {
+                      required: { value: true, message: "Brand name is required" },
+                    })}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
+
+                  > <option value={''} >Select brand</option>
+                    {Brands.map(brand => {
+                      return <option value={brand}>{brand}</option>
+                    })}
+                    {errors.brand && <p className="text-red-500 text-sm">{errors?.brand?.message}</p>}
+                  </select>
+
+                </div>
+
+
                 {/* -----------Product Name ----------- */}
                 <div className="sm:col-span-2">
-                  <label className="block mb-2 text-sm font-medium text-gray-900">Product Name</label>
+                  <label className="block mb-2 text-sm font-medium text-gray-900">Model Name</label>
                   <input
                     type="text"
                     {...register("name", { required: "Product name is required" })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                    placeholder="Type product name"
+                    placeholder="Enter Model Name"
                   />
                   {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
                 </div>
@@ -163,20 +215,10 @@ const ProductForm = () => {
 
                   {errors.description && <p className="text-red-500 text-sm">{errors?.description?.message}</p>}
 
-                  <p className="w-full text-left">{watch('description')?.length}/200</p>
+                  <p className="w-full text-xs text-left">{watch('description')?.length}/200</p>
                 </div>
 
-                {/* -----------Brand ----------- */}
-                <div className="w-full">
-                  <label className="block mb-2 text-sm font-medium text-gray-900">Brand</label>
-                  <input
-                    type="text"
-                    {...register("brand", { required: "Brand is required" })}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                    placeholder="Product brand"
-                  />
-                  {errors.brand && <p className="text-red-500 text-sm">{errors.brand.message}</p>}
-                </div>
+
                 {/* -----------Price ----------- */}
                 <div className="w-full">
                   <label className="block mb-2 text-sm font-medium text-gray-900 flex items-center gap-2">Price <HiCurrencyRupee className="text-lg" /></label>
@@ -192,24 +234,7 @@ const ProductForm = () => {
                   />
                   {errors.price && <p className="text-red-500 text-sm">{errors?.price?.message}</p>}
                 </div>
-                {/* -----------Category ----------- */}
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900">Category</label>
-                  <select
-                    name="category"
-                    {...register("category", {
-                      required: { value: true, message: "Category is required" },
-                    })}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
 
-                  > <option value={''} >Select category</option>
-                    {allCategories.map(category => {
-                      return <option value={category._id}>{category.name}</option>
-                    })}
-                    {errors.category && <p className="text-red-500 text-sm">{errors?.category?.message}</p>}
-                  </select>
-
-                </div>
                 {/* -----------Product state ----------- */}
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900">Product state</label>
@@ -361,7 +386,7 @@ const ProductForm = () => {
                     </div>
                   </div>
                 })}
-                 {errors?.shippingAddress && <p className="text-red-500 text-sm w-full text-left">{errors?.shippingAddress?.message}</p>}
+                {errors?.shippingAddress && <p className="text-red-500 text-sm w-full text-left">{errors?.shippingAddress?.message}</p>}
                 <div className='bg-gray-100 h-[3px] shadow-0'></div>
 
                 <div className='w-full flex items-center justify-end p-2'>
@@ -448,7 +473,7 @@ const ProductForm = () => {
               </div>
 
             </form>
-             <CreateAddressModal />
+            <CreateAddressModal />
           </div>
         </section>
       </div>

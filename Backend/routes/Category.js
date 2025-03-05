@@ -1,5 +1,5 @@
 import express from 'express'
-import { createCategory, getAllCategory, getSingleCategory, updateCategory } from '../controllers/Category.js';
+import { createCategory, getAllCategory, getBrandsOfCategory, getSingleCategory, updateCategory } from '../controllers/Category.js';
 import { isAuth,isAdmin } from '../middlewares/auth.js';
 
 const categoryRoutes = express.Router();
@@ -9,6 +9,8 @@ categoryRoutes.get('/',getAllCategory);
 
 //Get single catagory handler
 categoryRoutes.get('/:categoryId',getSingleCategory);
+
+categoryRoutes.get('/brand/:categoryId',getBrandsOfCategory);
 
 //Update catagory handler
 categoryRoutes.patch("/:categoryId",isAuth,isAdmin,updateCategory);

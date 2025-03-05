@@ -6,10 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { LoaderIcon } from "react-hot-toast";
 import LoadingBtn from "../../common/LoadingBtn";
+import { RxCross2 } from "react-icons/rx";
 
 const CategoryCreation = () => {
 
   const [isLoading, setIsLoading] = useState(false);
+  const [productBrands, setProductBrands] = useState([]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,13 +25,29 @@ const CategoryCreation = () => {
   const currUser = useSelector(store => store.auth);
 
   const onSubmit = async (data) => {
+    data.relativeBrands = productBrands;
 
-    if (!currUser.token || currUser.accountType!=='Admin') return;
+    if (!currUser.token || currUser.accountType !== 'Admin') return;
     try {
       await createCategory(dispatch, navigate, data, currUser.token);
     } catch (error) {
       console.log(error)
     }
+  }
+
+
+  const handleBrands = (e) => {
+    e.preventDefault();
+    if (e.target.value !== '') {
+      const newEntry = e.target.value;
+      setProductBrands((prev) => [...prev, newEntry.trim()]);
+      e.target.value = '';
+    }
+
+  }
+
+  const handleRemovalOfBrands = (indx) => {
+    setProductBrands(() => productBrands.filter((_, index) => index !== indx))
   }
 
   const fetching = useSelector(store => store.fetching);
@@ -54,7 +72,7 @@ const CategoryCreation = () => {
               <input
                 type="text"
                 name="name"
-                className={`w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white ${errors.name ? "border-red-500" : "border-gray-300"}`}
+                className={`w-full px-4 py-2 border rounded-md shadow-sm focus:ring-0 outline-0 focus:ring-blue-500 focus:border-blue-500 bg-white ${errors.name ? "border-red-500" : "border-gray-300"}`}
                 placeholder="Enter category name"
                 {...register("name", { required: true, maxLength: 40 })}
               />
@@ -62,6 +80,75 @@ const CategoryCreation = () => {
               {errors.name?.type === "required" && (
                 <p role="alert" className='text-[.81rem] text-red-500'>Category of course is required</p>
               )}
+            </div>
+
+            {/*startingPrice  */}
+            <div>
+              <label htmlFor="startingPrice" className="block text-sm font-medium text-gray-700 mb-1">
+                Starting price  <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                name="startingPrice"
+                className={`w-full px-4 py-2 border rounded-md shadow-sm focus:ring-0 focus:ring-blue-500 focus:border-blue-500 bg-white outline-0 ${errors?.startingPrice ? "border-red-500" : "border-gray-300"}`}
+                placeholder="Enter starting price or estimated staring price"
+                {...register("startingPrice", { required: true, min: 0 })}
+              />
+              {/* ---- Error handling ---- */}
+              {errors.startingPrice?.type === "required" && (
+                <p role="alert" className='text-[.81rem] text-red-500'>Starting price is requires</p>
+              )}
+            </div>
+
+            {/* Discription */}
+            <div>
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                Description <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                name="description"
+                rows="4"
+                className={`w-full px-4 py-2 border rounded-md shadow-sm focus:ring-0 outline-0 focus:ring-blue-500 focus:border-blue-500 bg-white ${errors.description ? "border-red-500" : "border-gray-300"}`}
+                placeholder="Provide a detailed description of the category (Max length 500 word)"
+                aria-describedby="description-error"
+                {...register("description", { required: true, maxLength: 500 })}
+              />
+              {/* ---- Error handling ---- */}
+              {errors.description?.type === "required" && (
+                <p role="alert" className='text-[.81rem] text-red-500'>Description of category is required</p>
+              )}
+            </div>
+
+            {/* ------------  Brands ------------  */}
+            <div className="sm:col-span-2">
+              <label className="block mb-2 text-sm font-medium text-gray-900">Relative brands of category</label>
+              <input
+                name="relativeBrands"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleBrands(e);
+                  }
+                }}
+                {...register("relativeBrands", {
+
+                  required: { value: productBrands.length === 0 ? true : false, message: 'Relative Brands is reuired' }
+                }
+                )}
+                rows="4"
+                className={`block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 outline-0 focus:ring-primary-500 focus:border-primary-500 ${errors.name ? "border-red-500" : "border-gray-300"} `}
+                placeholder="Press enter to add brands "
+              />
+
+              {errors?.relativeBrands && <p className="text-red-500 text-xs">{errors?.relativeBrands?.message}</p>}
+
+              <div className="flex gap-2 mt-2 flex-wrap">
+                {productBrands.map((brand, indx) => {
+                  return <span key={indx} class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-1 py-0.5 rounded-sm flex items-center justify-between gap-x-2" >{brand}<RxCross2
+                    onClick={() => handleRemovalOfBrands(indx)}
+                    className="cursor-pointer hover:bg-gray-300 rounded"
+                  /></span>
+                })}
+              </div>
             </div>
 
             {/* Related image Input */}
@@ -80,10 +167,10 @@ const CategoryCreation = () => {
                         accept="image/*"
                         className="sr-only"
                         {...register("relatedImage", {
-                          required: { value : true, message: 'Images  is reuired' }
+                          required: { value: true, message: 'Images  is reuired' }
                         }
                         )}
-                        
+
                       />
                     </label>
                     <p className="pl-1">or drag and drop</p>
@@ -94,37 +181,20 @@ const CategoryCreation = () => {
                 </div>
               </div>
 
-            
+
 
               {errors.relatedImage && <p className="text-red-500 text-sm">{errors.relatedImage.message}</p>}
             </div>
 
-             {/* Discription */}
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                Description <span className="text-red-500">*</span>
-              </label>
-              <textarea
-                name="description"
-                rows="4"
-                className={`w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white ${errors.description ? "border-red-500" : "border-gray-300"}`}
-                placeholder="Provide a detailed description of the category (Max length 500 word)"
-                aria-describedby="description-error"
-                {...register("description", { required: true, maxLength: 500 })}
-              />
-              {/* ---- Error handling ---- */}
-              {errors.description?.type === "required" && (
-                <p role="alert" className='text-[.81rem] text-red-500'>Description of category is required</p>
-              )}
-            </div>
-
-            {/* Related Courses Info */}
+            {/* Related  Info */}
             <div className="bg-gray-50 p-4 rounded-md">
               <div className="flex items-center text-gray-600">
                 <FiBook className="mr-2" />
                 <span className="text-sm">Products will be linked after category creation</span>
               </div>
             </div>
+
+
 
             {/* Action Buttons */}
             <div className="flex items-center justify-end space-x-4 pt-4">

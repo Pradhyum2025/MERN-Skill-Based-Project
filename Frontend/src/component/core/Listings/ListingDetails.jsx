@@ -29,7 +29,7 @@ export default function ListingDetails() {
   useEffect(() => {
     getSingleListing(dispatch, listingId)
     if (currUser.token && currUser.accountType === 'Buyer') {
-      getMyBag(dispatch, currUser.token);
+      getMyBag(dispatch, currUser.token,setNewFetching);
     }
   }, [])
 
@@ -79,7 +79,7 @@ export default function ListingDetails() {
 
 
 
-  if (fetching || !listing?.description || listing?.features?.length === 0) {
+  if (fetching  || !listing?.description || listing?.features?.length === 0) {
     return <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
       <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
     </div>

@@ -16,6 +16,14 @@ const categorySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    startingPrice:{
+      type: Number,
+      required: true,
+    },
+    relativeBrands:{
+      type: [String],
+      required: true,
+    },
     listingItems: [
       {
        type:mongoose.Schema.Types.ObjectId,

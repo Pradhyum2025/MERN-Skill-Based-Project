@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingBtn from '../../../common/LoadingBtn';
 import { cancleOrder } from '../../../../operations/order';
@@ -7,16 +7,15 @@ import { cancleOrder } from '../../../../operations/order';
 export default function CancleModal({orderId}) {
   const currUser = useSelector(store => store.auth);
   const dispatch = useDispatch();
-
+  const [fetching,setFetching]= useState(false)
   //Add to cart Handler
    const handleCancelOrder = ()=>{
      if(currUser.token && currUser.accountType==='Buyer' || currUser.accountType==='Admin'){
-       return  cancleOrder(dispatch,orderId,currUser.token);
+       return  cancleOrder(dispatch,orderId,currUser.token,setFetching);
      }else {
       return document.getElementById('my_modal_3').showModal();
     }
   }
-  const fetching = useSelector(store => store.fetching);
 
   return (
     <div>

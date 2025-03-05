@@ -3,9 +3,9 @@ import { AddressSliceAction } from "../store/slices/Address";
 import { fetchSliceAction } from "../store/slices/fetchSlice";
 import axiosInstance from "../helper/axiosInstatance";
 
-export const postAddress = async (navigate,dispatch,FormData,token) => {
+export const postAddress = async (navigate,dispatch,FormData,token,setFetching) => {
   try {
-    dispatch(fetchSliceAction.serializeFetching());
+    setFetching(()=>true)
     // Send request with authorization
     const res = await axiosInstance.post(`/address`, FormData, {
       headers: {
@@ -13,7 +13,7 @@ export const postAddress = async (navigate,dispatch,FormData,token) => {
       },
     });
 
-    dispatch(fetchSliceAction.deserializeFetching());
+    setFetching(()=>false)
     if (res.data && res.data.success) {
       document.getElementById('my_modal_1').close();
       console.log("CREATE NEW ADDRESS RESPONSE --->>>", res)
@@ -32,7 +32,7 @@ export const postAddress = async (navigate,dispatch,FormData,token) => {
     
     }
   } catch (error) {
-    dispatch(fetchSliceAction.deserializeFetching());
+    setFetching(()=>false)
     document.getElementById('my_modal_1').close();
     toast.error(error.response?.data?.message, { 
       style:{
@@ -73,9 +73,9 @@ export const getMyAddresses = async (dispatch, token) => {
 }
 
 // Delete listing  
-export const setDefaultAddress = async (dispatch, token, addressId) => {
+export const setDefaultAddress = async (dispatch, token, addressId,setFetching) => {
   try {
-    dispatch(fetchSliceAction.serializeFetching());
+     setFetching(()=>true)
     // Send request with authorization
     const res = await axiosInstance.get(`/address/${addressId}`, {
       headers: {
@@ -83,24 +83,33 @@ export const setDefaultAddress = async (dispatch, token, addressId) => {
       },
     });
 
-    dispatch(fetchSliceAction.deserializeFetching());
+    setFetching(()=>false)
+    console.log("SET DEFAULT ADDRESS RESPONSE --->>>", res)
     if (res.data && res.data.success) {
-      console.log("SET DEFAULT ADDRESS RESPONSE --->>>", res)
       dispatch(AddressSliceAction.setDefaultAddress(addressId))
-      toast(`✅${res?.data?.message}`,{
+      toast.success(`${res?.data?.message}`,{
         style:{
           background:'#001a00',
           color:'#f2f2f2',
           borderRadius:'0px',
           width:'500px',
-          fontWeight:'600'
+          fontWeight:'500'
         },
         position:'bottom-center'
        })
     }
   } catch (error) {
-    dispatch(fetchSliceAction.deserializeFetching());
-    toast.error(error.response?.data?.message, { position: 'bottom-right', duration: 2000 });
+    setFetching(()=>false)
+    toast.error(error.response?.data?.message, {
+      style:{
+        background:'#001a00',
+        color:'#f2f2f2',
+        borderRadius:'0px',
+        width:'500px',
+        fontWeight:'500'
+      },
+      position:'bottom-center'
+     });
     console.log('SET DEFAULT ADDRESSERROR : ', error?.message || error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."

@@ -29,9 +29,10 @@ export default function PaymentOptions() {
               </div>
     
     
-              <Link
-                className='px-1 py-2 w-[20%] sm:w-[10%] text-center border border-blue-600 text-blue-600 hover:bg-gray-50 text-sm font-semibold'
-                to={'/bag/login-status'}>EDIT</Link>
+              <button
+                onClick={()=>document.getElementById('my_modal_3').showModal()}
+                  className='px-1 py-2 w-[20%] md:w-[10%] text-center border border-blue-600 text-blue-600 hover:bg-gray-50 text-sm font-semibold'
+                  >EDIT</button>
     
             </div>
           </div> 

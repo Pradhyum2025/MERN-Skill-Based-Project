@@ -19,22 +19,23 @@ export default function Categories() {
     getAllCategories(dispatch);
   }, [])
 
+
   // Edit cateory details
   const handleEditaregory = (category) => {
-    setSelectedCategory(category);
+    setSelectedCategory(()=>category);
     return document.getElementById('my_modal_1').showModal()
   }
   const fetching = useSelector(store => store.fetching)
 
   if (fetching) {
-    return <div className=" bg-background p-6 flex items-center justify-center w-full">
+    return <div className="min-h-[25rem] bg-background p-6 flex items-center justify-center w-full">
       <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
     </div>
   }
 
   return (
 
-    <div className="w-full min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-4">
+    <div className="w-full min-h-[screen] bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-4">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-lg font-bold text-gray-500 mb-8 text-center">PRODUCT CATEGORIES</h1>
         {categories.length === 0 ? (
@@ -80,6 +81,13 @@ export default function Categories() {
                 {/* category.description */}
                 <div className={`${hideSection_id === category._id ? 'block border-t-2 mt-4 pt-2' : 'hidden'}`}>
                   <p className='text-[.95rem] md:text-[1.01rem]'>{category.description}</p>
+
+                  <div className='flex gap-2 flex-wrap my-3'>
+                  {category.relativeBrands.map(brand =>(
+                    <span className='bg-blue-100 text-blue-800 text-sm font-semibold me-2 px-3 py-0.5 rounded-sm '>{brand.charAt(0)+brand.toLowerCase().substring(1,brand.length)}</span>
+                  ))}
+                  </div>
+
                 </div>
 
                 {hideSection_id === category._id &&

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { FaCheck } from "react-icons/fa6";
 import { getMyAddresses } from '../../../operations/Address';
@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import LoadingBtn from '../../common/LoadingBtn';
 LoadingBtn
 export default function AddressStatus() {
+  const [fetching,setFetching] =useState(false);
   const dispatch = useDispatch();
   const currUser = useSelector(store => store.auth);
 
@@ -16,7 +17,7 @@ export default function AddressStatus() {
     }
   }, [])
   const myAddresses = useSelector(store => store.addresses);
-  const fetching = useSelector(store => store.fetching);
+ 
   return (
     <div className="flex flex-col gap-y-2">
       {/*  --------- Login status ---------  */}
@@ -38,9 +39,10 @@ export default function AddressStatus() {
           </div>
 
 
-          <Link
-            className='px-1 py-2 w-[20%] md:w-[10%] text-center border border-blue-600 text-blue-600 hover:bg-gray-50 text-sm font-semibold'
-            to={'/bag/login-status'}>EDIT</Link>
+          <button
+                onClick={()=>document.getElementById('my_modal_3').showModal()}
+                  className='px-1 py-2 w-[20%] md:w-[10%] text-center border border-blue-600 text-blue-600 hover:bg-gray-50 text-sm font-semibold'
+                  >EDIT</button>
 
         </div>
       </div>
@@ -83,11 +85,11 @@ export default function AddressStatus() {
             </div>
 
             {myAddresses && myAddresses.map(address => {
-              return <AdderessCart key={address._id} address={address} />
+              return <AdderessCart key={address._id} address={address} setFetching={setFetching} />
             })}
 
             <div className='bg-gray-100 h-[3px] shadow-0'></div>
-
+            {myAddresses.length<3 &&
             <div className='w-full flex items-center justify-end p-2'>
               <button 
               onClick={() => document.getElementById('my_modal_1').showModal()}
@@ -95,6 +97,7 @@ export default function AddressStatus() {
                NEW ADDRESS
               </button>
             </div>
+            }
 
           </div>
         </div>

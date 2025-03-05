@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { FiSearch, FiShoppingCart, FiUser, FiGlobe, FiSun, FiMoon, FiMenu, FiX } from "react-icons/fi";
+import { IoSearchOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { signOut } from "../../operations/auth";
@@ -9,14 +10,17 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FiBox } from "react-icons/fi";
 import { MdOutlineSell } from "react-icons/md";
+import { getSearchingList, loadData } from "../../operations/search";
 
 const Navbar = () => {
+  const [searchData,setSerachData] = useState([])
+  const [data,setData] = useState([])
   const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState("");
   const [userDropdown, setUserDropdown] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const currPath = useLocation().pathname
   const bag = useSelector(store => store.bag);
 
   const currUser = useSelector(store => store.auth);
@@ -26,7 +30,6 @@ const Navbar = () => {
     { name: "Smartphones", items: ["iPhone", "Samsung", "Google Pixel"] },
     { name: "Laptops", items: ["MacBook", "Dell XPS", "HP Spectre"] },
     { name: "Tablets", items: ["iPad", "Samsung Tab", "Surface Pro"] },
-    { name: "Accessories", items: ["Cases", "Chargers", "Screen Protectors"] },
     { name: "Audio Equipment", items: ["Headphones", "Speakers", "Earbuds"] },
     { name: "Computer Components", items: ["CPUs", "GPUs", "RAM"] }
   ];
@@ -40,6 +43,7 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
+    loadData(setSerachData);
     const handleResize = () => {
       if (window.innerWidth > 768) {
         setIsOpen(false);
@@ -49,7 +53,7 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const currPath = useLocation().pathname;
+
   const handleNavigateLogin = () => {
     if (currPath === '/signup') {
       navigate('/');
@@ -60,6 +64,34 @@ const Navbar = () => {
   const handleSignOut = () => {
     return signOut(dispatch, navigate, setUserDropdown);
   }
+
+  const handleSearching = (e)=>{
+    const typedData = e.target.value.toLowerCase();
+    const filterData = searchData.filter(
+      (item) =>
+        item.productName.toLowerCase().includes(typedData) ||
+        item.brand.toLowerCase().includes(typedData) ||
+        item.category.name.toLowerCase().includes(typedData)
+    );
+    if(typedData===''){
+      setData([])
+    }else{
+      setData([...filterData])
+    }
+  }
+
+  const handleSearchItems = (listing)=>{
+  setData([])
+   document.getElementById('searchBar').value= '';
+   if(currPath!=='/search-result'){
+     return navigate('/search-result',{state:{listingId:listing._id}})
+   }else{
+    if(listing._id){
+      getSearchingList(dispatch,listing._id)
+    }
+   }
+  }
+
 
   return (
     <nav className={`w-full fixed top-0 z-50 shadow-lg bg-white text-black`}>
@@ -106,20 +138,23 @@ const Navbar = () => {
             <div className="relative">
               <input
                 type="text"
+                id="searchBar"
                 placeholder="Search products..."
-                className="xl:w-64 px-4 py-2 rounded-full border focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-100 "
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                className="sm:w-[25rem] md:w-[19rem] lg:w-[18rem] xl:w-[25rem]  px-4 py-2  border focus:outline-none focus:ring-[1px] focus:ring-blue-300 bg-blue-50 "
+                // value={searchQuery}
+                onChange={(e) => handleSearching(e)}
               />
               <FiSearch className="absolute right-4 top-2.5 text-gray-400" />
-              {searchQuery && (
+              {data.length>0 && (
                 <div className="absolute top-full left-0 w-full bg-white  shadow-lg rounded-md mt-2">
-                  {suggestions.map((suggestion) => (
+                  {data.map((suggestion) => (
                     <div
-                      key={suggestion}
-                      className="px-4 py-2 hover:bg-gray-100  cursor-pointer"
-                    >
-                      {suggestion}
+                    onClick={()=>handleSearchItems(suggestion)}
+                      key={suggestion._id}
+                      className="px-4 py-2 hover:bg-gray-100  cursor-pointer flex items-center gap-2 font-[700]"
+                    ><IoSearchOutline/>
+                    <span>{suggestion.brand.charAt(0)+suggestion.brand.toLowerCase().substring(1,suggestion.brand.length)}</span>
+                    <span>{suggestion.category.name.charAt(0) + suggestion.category.name.toLowerCase().substring(1,suggestion.category.name.length)}</span>
                     </div>
                   ))}
                 </div>

@@ -24,7 +24,7 @@ export const postNewListing = async (req, res) => {
       })
     }
 
-
+   
     const currCategory = await Category.findById(category);
 
     if (!currCategory) {
@@ -33,14 +33,15 @@ export const postNewListing = async (req, res) => {
         message: 'Category not found!'
       })
     }
-
+    const priceAfterDiscount = Math.floor(price-(discount/100)*price)
     //Upload multiple files
     const uploadImagesSecureUrl = await uploadMultipleImages(productImages, process.env.FOLDER_NAME)
 
     let productPayload = new Listing({
       productName,
-      brand,
+      brand:brand.toUpperCase(),
       category,
+      priceAfterDiscount,
       features,
       price,
       returnPolicy,
@@ -131,11 +132,12 @@ export const updateListing = async (req, res) => {
         message: 'Category not found!'
       })
     }
-
+    const priceAfterDiscount = Math.floor(price - (discount/100)*price)
 
     let productPayload = {
       productName,
-      brand,
+      brand:brand.toUpperCase(),
+      priceAfterDiscount,
       features,
       price,
       returnPolicy,

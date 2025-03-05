@@ -51,11 +51,11 @@ export const signUp = async (navigate, dispatch, signUpData) => {
 }
 
 // Login / Signin function handler
-export const signIn = async (navigate,dispatch,formData,currPath) => {
+export const signIn = async (navigate,dispatch,formData,currPath,setFetching) => {
   try {
-    dispatch(fetchSliceAction.serializeFetching());
+    setFetching(()=>true)
     const res = await axiosInstance.post('/auth/login', formData);
-    dispatch(fetchSliceAction.deserializeFetching());
+    setFetching(()=>false)
     if (res.data && res.data.success) {
       console.log("LOGIN RESPONSE --->>>", res)
       dispatch(authSliceAction.setUserData(res.data.currUser));
@@ -76,7 +76,7 @@ export const signIn = async (navigate,dispatch,formData,currPath) => {
       navigate(`${currPath}`);
     }
   } catch (error) {
-    dispatch(fetchSliceAction.deserializeFetching());
+    setFetching(()=>false)
     toast.error(error?.response?.data?.message, { 
       style: {
         background: '#001a00',

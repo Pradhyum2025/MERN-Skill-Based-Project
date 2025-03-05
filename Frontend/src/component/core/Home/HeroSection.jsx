@@ -14,7 +14,6 @@ export default function HeroSection() {
 
   const allCategories = useSelector(store => store.category);
 
-  const ammount = 999;
  const handleNavigate = (categoryId)=>{
   return navigate(`/listings/${categoryId}`)
  }
@@ -44,7 +43,7 @@ export default function HeroSection() {
             {category.name}
             </span>
             <span className='text-sm text-green-700 font-bold'>
-              Start from {ammount.toLocaleString('en-IN',{style:'currency',currency:'INR'})}
+              Start from {category?.startingPrice.toLocaleString('en-IN',{style:'currency',currency:'INR'})}
             </span>
             </div>
 

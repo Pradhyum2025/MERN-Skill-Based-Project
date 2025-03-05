@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import { fetchSliceAction } from "../store/slices/fetchSlice";
 import axiosInstance from "../helper/axiosInstatance";
 import { categorySliceAction } from "../store/slices/categorySlice";
+import { bagSliceAction } from "../store/slices/Bag";
 
 //Create category
 export const createCategory = async (dispatch,navigate,categoryData,token)=>{
@@ -60,7 +61,15 @@ export const getAllCategories = async (dispatch)=>{
     }
   } catch (error) {
     dispatch(fetchSliceAction.serializeFetching())
-    toast.error(error.response?.data?.message, { position: 'top-right', duration: 2000 });
+    toast.error(error.response?.data?.message, { 
+      style: {
+      background: '#001a00',
+      color: '#f2f2f2',
+      borderRadius: '0px',
+      width: '400px',
+      fontWeight: 900
+    },
+    position: 'bottom-center' });
     console.log('Get All Category error EROR: ', error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."
@@ -113,7 +122,7 @@ export const deleteCategory = async (dispatch,categoryId,token)=>{
   }
 }
 
-//Edit category
+//Edit category 
 export const updateCategory = async(dispatch,categoryId,updatedData,token,setFetching)=>{
   try {
     setFetching(()=>true)
@@ -155,6 +164,34 @@ export const updateCategory = async(dispatch,categoryId,updatedData,token,setFet
       position: 'bottom-center'
     })
     console.log('Category updation error : ', error)
+    throw new Error(
+      error.response?.data?.message || error.message || "An unknown error occurred."
+    );
+  }
+}
+
+// Get brands categories
+export const getBrandsOfCategory = async (dispatch,categoryId)=>{
+  try {
+    const res = await axiosInstance.get(`/category/brand/${categoryId}`);
+
+    console.log("Get brands of category RESPONSE --->>>", res)
+    if (res.data && res.data.success) {
+      //Use bag slice for seller to get all brands
+      dispatch(bagSliceAction.setBagData(res.data.brands))
+    }
+  } catch (error) {
+    dispatch(fetchSliceAction.serializeFetching())
+    toast.error(error.response?.data?.message, { 
+      style: {
+      background: '#001a00',
+      color: '#f2f2f2',
+      borderRadius: '0px',
+      width: '400px',
+      fontWeight: 900
+    },
+    position: 'bottom-center' });
+    console.log('Get All Category error EROR: ', error)
     throw new Error(
       error.response?.data?.message || error.message || "An unknown error occurred."
     );

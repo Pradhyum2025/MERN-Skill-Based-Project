@@ -18,7 +18,7 @@ export default function ListingContainer() {
       getFilteredListing(dispatch, categoryId,setNewFetching);
     }
     if (currUser.token && currUser.accountType==='Buyer') {
-      getMyBag(dispatch,currUser.token);
+      getMyBag(dispatch,currUser.token,setNewFetching);
     }
   }, [])
   
@@ -26,9 +26,10 @@ export default function ListingContainer() {
   const filteredListing = useSelector(store => store.listings);
   const myBag = useSelector(store=>store.bag);
 
+
   return (
     <>
-      {filteredListing.length === 0 ?
+      {(filteredListing.length === 0) ?
        <div class="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-4 justify-items-center 2xl:px-10">
        {/*  ------ Product Cart ------   */}
        {[1,2,3,4].map(num => {

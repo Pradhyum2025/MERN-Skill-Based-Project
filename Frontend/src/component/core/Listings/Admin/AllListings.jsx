@@ -21,12 +21,12 @@ export default function AllListings() {
   const fetching = useSelector(store => store.fetching)
   
   if (fetching) {
-    return <div className="bg-background p-6 flex items-center justify-center w-full">
+    return <div className="bg-background p-6 flex items-center justify-center w-full min-h-[25rem]">
       <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
     </div>
   }
   return (
-       <div className="w-full  bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-4">
+       <div className="w-full bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 pt-4">
          <div className="max-w-5xl mx-auto">
    
            <h1 className="w-full text-lg font-[800] text-gray-500  text-center md:text-left">

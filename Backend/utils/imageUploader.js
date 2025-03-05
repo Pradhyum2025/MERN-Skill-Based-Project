@@ -40,7 +40,7 @@ export const uploadMultipleImages = async(files,folder,quality,height)=>{
    if(!Array.isArray(files)) files = [files];
 
    const uploadPromiss = files.map(file=> cloudinary.uploader.upload(file.tempFilePath,options));
-  console.log('uploadPromiss',uploadPromiss)
+  // console.log('uploadPromiss',uploadPromiss)
    const results = await Promise.all(uploadPromiss);
 
    const secureUrls = results

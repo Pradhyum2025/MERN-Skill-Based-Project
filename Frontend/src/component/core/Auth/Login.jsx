@@ -8,7 +8,7 @@ import LoadingBtn from '../../common/LoadingBtn';
 
 
 export default function Login() {
-
+  const [fetching ,setFetching] = useState(false)
   let dispatch = useDispatch()
   const navigate = useNavigate();
   const currPath = useLocation().pathname;
@@ -19,7 +19,7 @@ export default function Login() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    return await signIn(navigate, dispatch, data,currPath);
+    return await signIn(navigate, dispatch, data,currPath,setFetching);
   }
 
   const handleNavigateSignUp = () => {
@@ -27,8 +27,6 @@ export default function Login() {
     return navigate('/signup')
   }
   
-  const fetching =useSelector(store=>store.fetching)
-
   return (
     <div>
       <dialog id="my_modal_3" className="modal">

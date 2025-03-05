@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setDefaultAddress } from '../../../operations/Address';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function AdderessCart({ address }) {
+export default function AdderessCart({ address,setFetching }) {
   const currUser = useSelector(store => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ export default function AdderessCart({ address }) {
  
   const handleSetDefault = async () => {
     if (currUser.token && (currUser.accountType === 'Buyer' || currUser.accountType === 'Seller')) {
-      return await setDefaultAddress(dispatch, currUser.token, address._id)
+      return await setDefaultAddress(dispatch, currUser.token, address._id,setFetching)
     } else {
       return document.getElementById('my_modal_3').showModal();
     }

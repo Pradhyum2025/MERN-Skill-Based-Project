@@ -20,6 +20,52 @@ export const getAllListings = async(req,res)=>{
   }
 }
 
+
+//get listing data  
+export const getAllListingForSearching = async(req,res)=>{
+  
+  try{
+    const allListings = await Listing.find({},{productName:true,brand:true,category:true}).populate('category','name');
+    return res.status(200).json({
+      success:true,
+      message:'fetch data Successfully!',
+      allListings
+    })
+  }catch(error){
+    // console.log(error.message)
+    return res.status(500).json({
+      success:false,
+      message:'Internal Server Error!'
+    })
+  }
+}
+
+export const getSearchingList = async(req,res)=>{ 
+  
+  try{
+    const {listingId } = req.params;
+
+    const searchListing = await Listing.findById(listingId);
+
+    const brand = searchListing.brand;
+    const relatedListings = await Listing.find({brand:brand,_id:{$ne:searchListing._id} }).limit(10);
+    const allListings = [searchListing ,...relatedListings]
+    
+    return res.status(200).json({
+      success:true,
+      message:'fetch data Successfully!',
+      allListings
+    })
+  }catch(error){
+    // console.log(error.message)
+    return res.status(500).json({
+      success:false,
+      message:'Internal Server Error!'
+    })
+  }
+}
+
+
 //get listing data 
 export const getAllListingsforAdmin= async(req,res)=>{
   
@@ -44,7 +90,7 @@ export const showListing = async(req,res)=>{
   try{
   
     let {listingId} = req.params;
-    
+   
     let listingData = await Listing.findById(listingId)
     .populate({path:'reviews', options: { limit: 1 },populate:{path:'customer',select:'firstName lastName image'}})
 

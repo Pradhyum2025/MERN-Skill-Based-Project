@@ -27,6 +27,11 @@ const listingSchema = new mongoose.Schema({
     required: true,
     min: 0
   },
+  priceAfterDiscount :{
+    type: Number,
+    required: true,
+    min: 0
+  },
   state: {
     type: String,
     enum: ["New", "Used", "Refurbished"],

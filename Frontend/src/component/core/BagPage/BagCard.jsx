@@ -25,6 +25,7 @@ export const BagCard = ({ bagItem }) => {
     }
   }
 
+  const priceAfterDiscount = bagItem?.product.price - ((bagItem?.product.discount/100)*bagItem?.product.price)
 
   const increaseQuantity=()=>{
     if(currUser.token && currUser.accountType==='Buyer'){
@@ -64,7 +65,7 @@ export const BagCard = ({ bagItem }) => {
   }
 
   const handleNavigatation = () => {
-    return navigate(`/show/${bagItem.product}`, { state: { returnPath: `/dashbord/cart` } })
+    return navigate(`/show/${bagItem.product._id}`, { state: { returnPath: `/dashbord/cart` } })
   }
 
   return (
@@ -89,7 +90,7 @@ export const BagCard = ({ bagItem }) => {
           <p className="text-gray-600">{new Intl.NumberFormat('en-IN', {
             style: 'currency',
             currency: 'INR',
-          }).format(bagItem?.product?.price)}
+          }).format(Math.floor(priceAfterDiscount))}
           </p>
 
           {/* Stock */} 

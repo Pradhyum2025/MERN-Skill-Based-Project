@@ -63,7 +63,7 @@ export default function BagBtns({ listing, myBag, quantity }) {
           onClick={() => handleRemoveTocart(isPresentBagId)}
           type="button" class="inline-flex items-center  bg-primary-600 px-3 py-2.5 text-sm font-medium items-center gap-x-2 text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 ">
           {fetching ?
-            <LoadingBtn working={'Adding...'} /> :
+            <LoadingBtn working={'Removing...'} /> :
             <>
               <TbShoppingCartOff className='text-lg font-[900]' />
               Remove to cart

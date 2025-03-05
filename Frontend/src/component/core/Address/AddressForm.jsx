@@ -7,8 +7,7 @@ import LoadingBtn from "../../common/LoadingBtn";
 
 
 
-export default function AddressForm() {
-
+export default function AddressForm({fetching,setFetching}) {
   const currUser = useSelector(store => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,10 +31,9 @@ export default function AddressForm() {
 
   const onSubmit = async (data) => {
    if(currUser.token && (currUser.accountType==='Buyer' || currUser.accountType==='Seller')){
-     return await postAddress(navigate,dispatch,data,currUser.token)
+     return await postAddress(navigate,dispatch,data,currUser.token,setFetching)
    }
   };
- const fetching = useSelector(store=>store.fetching);
 
   return (
     <>

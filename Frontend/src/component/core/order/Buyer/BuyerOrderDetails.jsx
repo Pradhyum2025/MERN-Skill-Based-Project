@@ -122,7 +122,7 @@ export default function BuyerOrderDetails() {
                       onClick={() => handleNavigatation(orderItem?.product?._id)}
                       className="font-semibold text-blue-700 cursor-pointer hover:text-blue-600">{orderItem?.product?.productName}</h3>
                     {/* <p className="text-gray-500  text-sm font-[600] pl-0">Items: {orderItem?.quantity}</p> */}
-                    <p className="text-gray-600 font-[600] flex text-sm items-center"><BiRupee />{((orderItem?.product?.price) - (orderItem?.product?.price * orderItem?.product?.discount) / 100) + '/-'}
+                    <p className="text-gray-600 font-[600] flex text-sm items-center"><BiRupee />{Math.floor(((orderItem?.product?.price) - (orderItem?.product?.price * orderItem?.product?.discount) / 100)) + '/-'}
                     </p>
                     <span className='text-xs text-gray-700 font-[600]'>&nbsp;Quantity : {+ orderItem?.quantity}</span>
                   </div>

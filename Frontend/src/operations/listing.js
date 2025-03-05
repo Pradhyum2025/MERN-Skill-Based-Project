@@ -5,10 +5,10 @@ import toast from "react-hot-toast";
 import { listinSlicegAction } from "../store/slices/listings";
 
 // Upload new listing
-export const postListing = async (dispatch, navigate, productDetails, token) => {
+export const postListing = async (dispatch, navigate, productDetails, token,setFetching) => {
   try {
 
-    dispatch(fetchSliceAction.serializeFetching());
+    setFetching(()=>true)
     // Send request with authorization
     const res = await axiosInstance.post(`/seller`, productDetails, {
       headers: {
@@ -17,7 +17,7 @@ export const postListing = async (dispatch, navigate, productDetails, token) => 
       },
     });
 
-    dispatch(fetchSliceAction.deserializeFetching());
+    setFetching(()=>false)
     if (res.data && res.data.success) {
       console.log("CREATE LISING RESPONSE --->>>", res)
       toast.success(res?.data?.message, {
@@ -34,7 +34,7 @@ export const postListing = async (dispatch, navigate, productDetails, token) => 
       navigate('/dashbord');
     }
   } catch (error) {
-    dispatch(fetchSliceAction.deserializeFetching());
+    setFetching(()=>false)
     toast.error(error.response?.data?.message, {
       style: {
         background: '#001a00',

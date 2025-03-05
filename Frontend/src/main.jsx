@@ -36,6 +36,7 @@ import OTP from './component/core/order/Admin/OTP.jsx'
 import SubOrderDetails from './component/core/order/Admin/SubOrderDetails.jsx'
 import SellerDetailsForAdmin from './component/core/User/SellerDetailsForAdmin.jsx'
 import { MyProfile } from './component/core/User/Profile.jsx'
+import SearchResult from './component/core/Listings/search/SearchResult.jsx'
 
 const router = createBrowserRouter([
     {
@@ -50,7 +51,8 @@ const router = createBrowserRouter([
         {path:'/address',element: <AddressForm/>},
         {path:'/my-order',element: <BuyerOrderHistory/>},
         {path:'/my-order/:orderId',element: <BuyerOrderDetails/>},
-        {path:'/profile',element: <MyProfile/>}
+        {path:'/profile',element: <MyProfile/>},
+        {path:'/search-result',element: <SearchResult/>},
         
       ]
     },

@@ -6,22 +6,21 @@ import toast from "react-hot-toast";
 import { fetchSliceAction } from "../store/slices/fetchSlice";
 
 //Add to cart
-export const getMyBag = async (dispatch, token) => {
-
+export const getMyBag = async (dispatch,token,setFetching) => {
   try {
-    dispatch(fetchSliceAction.serializeFetching())
+    setFetching(()=>true)
     const res = await axiosInstance.get('/bag', {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
     });
-    dispatch(fetchSliceAction.deserializeFetching())
+    setFetching(()=>false)
     if (res.data && res.data.success) {
       console.log("GET MY BAG RESPONSE --->>>", res)
       dispatch(bagSliceAction.setBagData(res.data.bag));
     }
   } catch (error) {
-    dispatch(fetchSliceAction.deserializeFetching())
+    setFetching(()=>false)
     toast.error(error?.response?.data?.message, { position: 'right-bottom', duration: 2000 });
     console.log('Get my bag error : ', error)
   }
@@ -177,7 +176,6 @@ export const decQuantity = async (dispatch, token, setFetching, bagId) => {
 }
 
 export const isPresentInCart = (listing, userBag) => {
-
   let isPresent = false;
   let isPresentBagId = null;
 
@@ -198,7 +196,7 @@ export const calcTotal = (userBag) => {
   for (let bagItem of userBag) {
     if (bagItem.product.stock !== 0) {
       totalItems += bagItem.quantity
-      totalPrice += bagItem?.product.price ? (bagItem.product.price * bagItem.quantity): 0;
+      totalPrice += bagItem?.product?.price ? (bagItem.product.price * bagItem.quantity): 0;
       totalSaving += (bagItem?.product?.discount && bagItem?.product.price) ?
         ((bagItem.product.discount / 100) * bagItem.product.price) * bagItem.quantity : 0;
     }

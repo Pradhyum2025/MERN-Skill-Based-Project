@@ -4,18 +4,28 @@ import { uploadImageToCloudinary } from '../utils/imageUploader.js';
 //Create Category ka handler function
 export const createCategory = async (req, res) => {
   try {
-    let { name, description } = req.body;
+    let { name, description,startingPrice } = req.body;
     name = name.trim();
     //Validation
     const relatedImage  =  req?.files?.['relatedImage[]'];
+    let relativeBrands =  req.body?.['relativeBrands[]'];
 
 
-    if(!name || !description || !relatedImage) {
+    if(!name || !description || !startingPrice || !relatedImage || !relativeBrands) {
       return res.status(401).json({
         success: false,
         message: 'All fields are required'
       })
     }
+    
+    if(Array.isArray(relativeBrands)){
+      relativeBrands = relativeBrands.map(brand =>{
+        return brand.toUpperCase()
+      })
+    }else{
+     relativeBrands = [relativeBrands.toUpperCase()]
+    }
+
     //Search that input category already present or not
     const currCategory = await Category.findOne({name})
 
@@ -31,11 +41,12 @@ export const createCategory = async (req, res) => {
     const categoryPayload = {
       name,
       description,
+      startingPrice,
+      relativeBrands,
       relatedImage:relatedImageResponse.secure_url
     }
 
     let response = await Category.create(categoryPayload);
-    console.log(response);
 
     return res.status(200).json({
       success: true,
@@ -56,7 +67,7 @@ export const createCategory = async (req, res) => {
 //get all category handler function
 export const getAllCategory = async (req, res) => {
   try {
-    const allCatagories = await Category.find({}, { name: true, description: true, relatedImage:true })
+    const allCatagories = await Category.find({})
     if(allCatagories.length===0){
       return res.status(200).json({
         success: false,
@@ -106,18 +117,29 @@ export const getSingleCategory = async (req, res) => {
 // Update specific category handler function
 export const updateCategory = async(req,res)=>{
   try{
-    const { name, description } = req.body;
+    const { name, description,startingPrice } = req.body;
     const {categoryId}= req.params;
-
     const relatedImage  =  req?.files?.['relatedImage[]'];
+    let relativeBrands =  req.body?.['relativeBrands[]'];
+
 
     //Validation
-    if(!name || !description || !categoryId ) {
+    if(!name || !description || !startingPrice || !categoryId || !relativeBrands ) {
       return res.status(401).json({
         success: false,
         message: 'All fields are required'
       })
     }
+  
+    if(Array.isArray(relativeBrands)){
+      relativeBrands = relativeBrands.map(brand =>{
+        return brand.toUpperCase()
+      })
+    }else{
+     relativeBrands = [relativeBrands.toUpperCase()]
+    }
+
+
     //Search that input category already present or not
     const currCategory = await Category.findById(categoryId)
 
@@ -130,7 +152,9 @@ export const updateCategory = async(req,res)=>{
 
     let updatedCategoryPayLoad = {
       name,
-      description
+      description,
+      startingPrice,
+      relativeBrands
     }
 
     if(relatedImage){
@@ -157,6 +181,36 @@ export const updateCategory = async(req,res)=>{
     })
   }
 }
+
+//get all brands of category handler function
+export const getBrandsOfCategory = async (req, res) => {
+  try {
+    const {categoryId } = req.params;
+    const Catagory = await Category.findById(categoryId,{relativeBrands:true})
+    if(Catagory && Catagory.relativeBrands.length===0){
+      return res.status(200).json({
+        success: false,
+        message: 'There is no product brand listed',
+        brands: []
+      })
+    }
+    return res.status(200).json({
+      success: true,
+      message: 'All catagories return successful',
+      brands:  Catagory.relativeBrands
+    })
+
+  } catch (error) {
+    console.log('error occured in get brands of category');
+    return res.status(500).json({
+      success: false,
+      message: "Error occured while getting brands of  category"
+    })
+  }
+}
+
+
+
 
 
 //Delete category handler function

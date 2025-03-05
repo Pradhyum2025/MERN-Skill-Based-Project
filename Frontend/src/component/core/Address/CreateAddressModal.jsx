@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AddressForm from './AddressForm'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux'
+
 
 export default function CreateAddressModal() {
-  const fetching = useSelector(store=>store.fetching);
+  const [fetching,setFetching] = useState(false);
   return (
     <div>
       <dialog id="my_modal_1" className="modal">
@@ -22,7 +22,7 @@ export default function CreateAddressModal() {
             <span class="sr-only">Close modal</span>
 
           </button>
-          <AddressForm />
+          <AddressForm fetching={fetching} setFetching={setFetching}/>
         </div>
       </dialog>
     </div>

@@ -190,20 +190,21 @@ export const getOrderDetailsforAdmin = async (dispatch, orderId, token) => {
   }
 }
 
-export const cancleOrder = async (dispatch, orderId, token) => {
+export const cancleOrder = async (dispatch, orderId, token,setFetching) => {
   try {
-    dispatch(fetchSliceAction.serializeFetching())
+    setFetching(()=>true)
     const res = await axiosInstance.get(`/order/${orderId}/cancle`, {
       headers: {
         'Authorisation': `Bearer ${token}`
       }
     });
     
-    dispatch(fetchSliceAction.deserializeFetching())
+    setFetching(()=>false)
     if (res.data && res.data.success) {
       console.log("CANCLE  ORDER  DETAILS RESPONSE --->>>", res);
 
       dispatch(orderSliceAction.cancleOrder(orderId));
+      document.getElementById('my_modal_1').close();
       toast.success(res?.data?.message,
         {
           style: {
@@ -217,7 +218,7 @@ export const cancleOrder = async (dispatch, orderId, token) => {
         })
     }
   } catch (error) {
-    dispatch(fetchSliceAction.deserializeFetching())
+    setFetching(()=>false)
     console.log('CANCLE ORDER  DETAILS  ERROR :', error)
     toast.error(error?.response?.data?.message,
       {
