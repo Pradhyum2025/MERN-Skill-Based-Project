@@ -28,8 +28,7 @@ const app = express();
 
 //parse json data from body
 app.use(cors({
-  // origin:'https://e-commerce-frontend-n6rg.onrender.com',
-  origin:"http://localhost:5173",
+  origin:'https://e-commerce-frontend-n6rg.onrender.com',
   credentials:true
 }));
 app.use(cookieParser());
