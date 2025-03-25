@@ -22,7 +22,7 @@ export default function HeroSection() {
     <>
       <div className='flex flex-col gap-y-5 px-2 py-5'>
         {fetching?
-       <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
+       <div className="h-[20rem] bg-background p-6 flex items-center justify-center w-full">
        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
      </div>
         :
