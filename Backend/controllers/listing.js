@@ -25,11 +25,31 @@ export const getAllListings = async(req,res)=>{
 export const getAllListingForSearching = async(req,res)=>{
   
   try{
+    
     const allListings = await Listing.find({},{productName:true,brand:true,category:true}).populate('category','name');
     return res.status(200).json({
       success:true,
       message:'fetch data Successfully!',
       allListings
+    })
+  }catch(error){
+    // console.log(error.message)
+    return res.status(500).json({
+      success:false,
+      message:'Internal Server Error!'
+    })
+  }
+}
+
+export const getBrandListings =  async(req,res)=>{
+  try{
+    let {category,brandName} = req.body;
+    brandName= brandName.toUpperCase();
+    const brandListings = await Listing.find({brand:brandName,category:category},{price:true,productName:true,images:true,discount:true,priceAfterDiscount:true,brand:true});
+    return res.status(200).json({
+      success:true,
+      message:'fetch brands data Successfully!',
+      brandListings
     })
   }catch(error){
     // console.log(error.message)

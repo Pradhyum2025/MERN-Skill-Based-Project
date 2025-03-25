@@ -1,11 +1,13 @@
 import express from 'express'
-import {getAllListingForSearching, getAllListings, getAllListingsforAdmin, getFilteredListing, getSearchingList, showListing } from '../controllers/listing.js';
+import {getAllListingForSearching, getAllListings, getAllListingsforAdmin, getBrandListings, getFilteredListing, getSearchingList, showListing } from '../controllers/listing.js';
 import {isAuth ,isAdmin} from '../middlewares/auth.js'
 
 const listingRouter = express.Router();
 
 //get all listings
 listingRouter.get('/',getAllListings);
+
+listingRouter.post('/brand',getBrandListings);
 
 listingRouter.get('/search',getAllListingForSearching)
 

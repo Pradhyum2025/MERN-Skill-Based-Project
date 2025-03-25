@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaArrowRightLong } from "react-icons/fa6";
 import { Link, useNavigate } from 'react-router-dom';
 import { getAllCategories } from '../../../operations/category';
@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function HeroSection() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
 
   useEffect(() => {
     getAllCategories(dispatch)
@@ -17,10 +16,16 @@ export default function HeroSection() {
  const handleNavigate = (categoryId)=>{
   return navigate(`/listings/${categoryId}`)
  }
+
+ const fetching =  useSelector(store=>store.fetching);
   return (
     <>
       <div className='flex flex-col gap-y-5 px-2 py-5'>
-        
+        {fetching?
+       <div className="min-h-screen bg-background p-6 flex items-center justify-center w-full">
+       <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+     </div>
+        :
         <div className='grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-y-5 gap-x-3 w-full py-5 justify-between'>
 
         {allCategories.map(category=>{
@@ -52,6 +57,7 @@ export default function HeroSection() {
         })}
         
         </div>
+        }
 
       </div>
 

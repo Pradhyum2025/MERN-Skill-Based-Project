@@ -18,6 +18,7 @@ categoryRoutes.patch("/:categoryId",isAuth,isAdmin,updateCategory);
 //Create catagory handler
 categoryRoutes.post('/',isAuth,isAdmin,createCategory);
 
+
 //Delete category handler
 // categoryRoutes.delete('/:categoryId',isAuth,isAdmin,deleteCategory)
 

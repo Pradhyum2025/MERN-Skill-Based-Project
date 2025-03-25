@@ -256,3 +256,22 @@ export const getAllListingsForAdmin = async (dispatch, token) => {
     );
   }
 }
+
+export const  getRelativeBrandProducts = async(dispatch, productInfo)=>{
+  try {
+    dispatch(fetchSliceAction.serializeFetching())
+    const res = await axiosInstance.post(`/listing/brand`,productInfo);
+    dispatch(fetchSliceAction.deserializeFetching())
+    if (res.data && res.data.success) {
+      // console.log("GET Brand Listing Response --->>>", res)
+      dispatch(listinSlicegAction.SetListingData(res.data.brandListings));
+    }
+  } catch (error) {
+    dispatch(fetchSliceAction.deserializeFetching())
+    console.log('GET Brand listing error : ', error);
+    throw new Error(
+      error.response?.data?.message || error.message || "An unknown error occurred."
+    );
+  } 
+}
+  

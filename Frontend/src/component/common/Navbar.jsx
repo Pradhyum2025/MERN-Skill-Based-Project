@@ -11,10 +11,13 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { FiBox } from "react-icons/fi";
 import { MdOutlineSell } from "react-icons/md";
 import { getSearchingList, loadData } from "../../operations/search";
+import { getAllCategories } from "../../operations/category";
+import { getRelativeBrandProducts } from "../../operations/listing";
 
 const Navbar = () => {
-  const [searchData,setSerachData] = useState([])
-  const [data,setData] = useState([])
+  const [searchData, setSerachData] = useState([]);
+  const [loadingSearchData, setLoadingSerachData] = useState([])
+  const [data, setData] = useState([])
   const [isOpen, setIsOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState("");
   const [userDropdown, setUserDropdown] = useState(false);
@@ -25,25 +28,13 @@ const Navbar = () => {
 
   const currUser = useSelector(store => store.auth);
 
-
-  const categories = [
-    { name: "Smartphones", items: ["iPhone", "Samsung", "Google Pixel"] },
-    { name: "Laptops", items: ["MacBook", "Dell XPS", "HP Spectre"] },
-    { name: "Tablets", items: ["iPad", "Samsung Tab", "Surface Pro"] },
-    { name: "Audio Equipment", items: ["Headphones", "Speakers", "Earbuds"] },
-    { name: "Computer Components", items: ["CPUs", "GPUs", "RAM"] }
-  ];
-
-  const suggestions = [
-    "iPhone 13 Pro",
-    "MacBook Air M1",
-    "Samsung Galaxy S21",
-    "AirPods Pro",
-    "Dell XPS 15"
-  ];
+  const categories = useSelector(store => store.category);
 
   useEffect(() => {
-    loadData(setSerachData);
+    if (categories.length == 0) {
+      getAllCategories(dispatch);
+    }
+    loadData(setSerachData, setLoadingSerachData);
     const handleResize = () => {
       if (window.innerWidth > 768) {
         setIsOpen(false);
@@ -65,7 +56,7 @@ const Navbar = () => {
     return signOut(dispatch, navigate, setUserDropdown);
   }
 
-  const handleSearching = (e)=>{
+  const handleSearching = (e) => {
     const typedData = e.target.value.toLowerCase();
     const filterData = searchData.filter(
       (item) =>
@@ -73,23 +64,43 @@ const Navbar = () => {
         item.brand.toLowerCase().includes(typedData) ||
         item.category.name.toLowerCase().includes(typedData)
     );
-    if(typedData===''){
+    if (typedData === '') {
       setData([])
-    }else{
+    } else {
       setData([...filterData])
     }
   }
 
-  const handleSearchItems = (listing)=>{
-  setData([])
-   document.getElementById('searchBar').value= '';
-   if(currPath!=='/search-result'){
-     return navigate('/search-result',{state:{listingId:listing._id}})
-   }else{
-    if(listing._id){
-      getSearchingList(dispatch,listing._id)
+  const handleSearchItems = (listing) => {
+    setData([])
+    document.getElementById('searchBar').value = '';
+    if (currPath !== '/search-result') {
+      return navigate('/search-result', { state: { listingId: listing._id } })
+    } else {
+      if (listing._id) {
+        getSearchingList(dispatch, listing._id)
+      }
     }
-   }
+  }
+
+  const handleFetchBrandProduct = (brand,categoryId) => {
+    if (currPath !== '/listings') {
+      if(isOpen){
+        setIsOpen(()=>false)
+       }
+      return navigate(`/listings?category=${categoryId}&brand=${brand}`)
+    } else {
+      const productInfo = {
+        category:categoryId,
+        brandName: brand.toUpperCase()
+      }
+      if(isOpen){
+        setIsOpen(()=>false)
+       }
+       getRelativeBrandProducts(dispatch, productInfo);
+       navigate(`/listings?category=${categoryId}&brand=${brand}`)
+    }
+  
   }
 
 
@@ -118,14 +129,14 @@ const Navbar = () => {
                 </button>
                 {showDropdown === category.name && (
                   <div className="absolute top-full left-0 w-48 bg-white  shadow-lg rounded-md py-2">
-                    {category.items.map((item) => (
-                      <a
-                        key={item}
-                        href="#"
-                        className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100"
+                    {category.relativeBrands.map((brand) => (
+                      <p
+                        key={brand}
+                        className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                        onClick={() => handleFetchBrandProduct(brand,category._id)}
                       >
-                        {item}
-                      </a>
+                        {brand && brand.charAt(0) + brand.substring(1, brand.length).toLowerCase()}
+                      </p>
                     ))}
                   </div>
                 )}
@@ -139,22 +150,23 @@ const Navbar = () => {
               <input
                 type="text"
                 id="searchBar"
+                disabled={loadingSearchData}
                 placeholder="Search products..."
-                className="sm:w-[25rem] md:w-[19rem] lg:w-[18rem] xl:w-[25rem]  px-4 py-2  border focus:outline-none focus:ring-[1px] focus:ring-blue-300 bg-blue-50 "
+                className="sm:w-[25rem] md:w-[19rem] lg:w-[18rem] xl:w-[25rem]  px-4 py-2  border focus:outline-none focus:ring-[1px] focus:ring-blue-300 bg-blue-50 disabled:cursor-not-allowed "
                 // value={searchQuery}
                 onChange={(e) => handleSearching(e)}
               />
               <FiSearch className="absolute right-4 top-2.5 text-gray-400" />
-              {data.length>0 && (
+              {data.length > 0 && (
                 <div className="absolute top-full left-0 w-full bg-white  shadow-lg rounded-md mt-2">
                   {data.map((suggestion) => (
                     <div
-                    onClick={()=>handleSearchItems(suggestion)}
+                      onClick={() => handleSearchItems(suggestion)}
                       key={suggestion._id}
-                      className="px-4 py-2 hover:bg-gray-100  cursor-pointer flex items-center gap-2 font-[700]"
-                    ><IoSearchOutline/>
-                    <span>{suggestion.brand.charAt(0)+suggestion.brand.toLowerCase().substring(1,suggestion.brand.length)}</span>
-                    <span>{suggestion.category.name.charAt(0) + suggestion.category.name.toLowerCase().substring(1,suggestion.category.name.length)}</span>
+                      className="px-4 py-2 hover:bg-gray-100  cursor-pointer flex items-center gap-2 font-[600] text-sm"
+                    ><IoSearchOutline />
+                      <span>{suggestion.brand.charAt(0) + suggestion.brand.toLowerCase().substring(1, suggestion.brand.length)}</span>
+                      <span>{suggestion.category.name.charAt(0) + suggestion.category.name.toLowerCase().substring(1, suggestion.category.name.length)}</span>
                     </div>
                   ))}
                 </div>
@@ -322,7 +334,7 @@ const Navbar = () => {
                             to={'/dashbord'}
                             className="block px-4 py-2 text-sm font-[600] hover:bg-gray-100 flex items-center gap-2"
                           >
-                            <IoSettingsOutline  className=""/>
+                            <IoSettingsOutline className="" />
                             Setting
                           </Link>
 
@@ -403,14 +415,14 @@ const Navbar = () => {
                 </button>
                 {showDropdown === category.name && (
                   <div className="lg:ml-4 mt-2 space-y-2">
-                    {category.items.map((item) => (
-                      <a
-                        key={item}
-                        href="#"
-                        className="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300"
-                      >
-                        {item}
-                      </a>
+                    {category.relativeBrands.map((brand) => (
+                      <p
+                      key={brand}
+                      className="block px-4 py-2 text-sm font-[400] hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handleFetchBrandProduct(brand,category._id)}
+                    >
+                      {brand && brand.charAt(0) + brand.substring(1, brand.length).toLowerCase()}
+                    </p>
                     ))}
                   </div>
                 )}

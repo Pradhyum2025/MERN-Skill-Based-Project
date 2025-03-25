@@ -37,6 +37,7 @@ import SubOrderDetails from './component/core/order/Admin/SubOrderDetails.jsx'
 import SellerDetailsForAdmin from './component/core/User/SellerDetailsForAdmin.jsx'
 import { MyProfile } from './component/core/User/Profile.jsx'
 import SearchResult from './component/core/Listings/search/SearchResult.jsx'
+import BrandListing from './component/core/Listings/ListingMainPage/BrandListing.jsx'
 
 const router = createBrowserRouter([
     {
@@ -47,12 +48,14 @@ const router = createBrowserRouter([
         {path:'/signup',element:<Signup/>},
         {path:'/become-seller',element:<BecomeSeller/>},
         {path:'/listings/:categoryId',element:<Listing/>},
+        {path:'/listings',element: <BrandListing/>},
         {path:'/show/:listingId',element: <ListingDetails/>},
         {path:'/address',element: <AddressForm/>},
         {path:'/my-order',element: <BuyerOrderHistory/>},
         {path:'/my-order/:orderId',element: <BuyerOrderDetails/>},
         {path:'/profile',element: <MyProfile/>},
         {path:'/search-result',element: <SearchResult/>},
+       
         
       ]
     },

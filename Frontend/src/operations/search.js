@@ -3,26 +3,28 @@ import axiosInstance from "../helper/axiosInstatance";
 import { fetchSliceAction } from "../store/slices/fetchSlice";
 import { listinSlicegAction } from "../store/slices/listings";
 
-export const loadData = async (setSerachData) => {
+export const loadData = async (setSerachData,setLoadingSerachData) => {
   try {
+    setLoadingSerachData(()=>true)
     let response = await axiosInstance.get('/listing/search');
     let result = response.data.allListings; // Extract data from response
+    setLoadingSerachData(()=>false)
+
     if(response.data.success){
       setSerachData(result);
-      console.log(result)
-
+      setLoadingSerachData(()=>false)
     }
   } catch (error) {
+    setLoadingSerachData(()=>true)
     console.error("Error fetching data:", error);
   }
 };
 
 export const getSearchingList = async(dispatch,listingId)=>{
-  console.log(listingId)
+
   try {
     dispatch(fetchSliceAction.serializeFetching());
     let res = await axiosInstance.get(`/listing/search/${listingId}`);
-    
     dispatch(fetchSliceAction.deserializeFetching());
     if (res.data && res.data.success) {
       let result = res.data.allListings; // Extract data from response
