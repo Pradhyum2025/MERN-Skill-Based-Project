@@ -71,6 +71,19 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
                 </Link>
                 <Link
                   onClick={handleSelectSubSection}
+                  to='/dashbord/all-user'
+                >
+                  <li>
+                    <a href="" class={`${currLocation === '/dashbord/alluser' ? 'bg-gray-700 text-white ' : ''} flex items-center p-2 rounded-lg text-white group`}>
+
+                      <RiListUnordered className='font-extrabold' />
+
+                      <span class="flex-1 ms-3 whitespace-nowrap">All Users</span>
+                    </a>
+                  </li>
+                </Link>
+                <Link
+                  onClick={handleSelectSubSection}
                   to='/dashbord/admin/all-orders'
                 >
                   <li>
@@ -149,6 +162,7 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
                     </a>
                   </li>
                 </Link>
+                
                 <Link
                   onClick={handleSelectSubSection}
                   to='/dashbord/create-listing'>
@@ -195,7 +209,9 @@ export default function Dashbord({ setIsSlideBarOpen, handleSelectSubSection }) 
                   </a>
                 </li>
               </Link>
+              
             }
+            
 
             {/*------- My Sign out------- */}
             <li onClick={handleSignOut}>

@@ -38,6 +38,7 @@ import SellerDetailsForAdmin from './component/core/User/SellerDetailsForAdmin.j
 import { MyProfile } from './component/core/User/Profile.jsx'
 import SearchResult from './component/core/Listings/search/SearchResult.jsx'
 import BrandListing from './component/core/Listings/ListingMainPage/BrandListing.jsx'
+import UserDataDisplay from './component/core/Listings/Admin/AllUser.jsx'
 
 const router = createBrowserRouter([
     {
@@ -79,7 +80,8 @@ const router = createBrowserRouter([
         {path:'/dashbord/admin/sub-orderDetails/:orderId',element: <SubOrderDetails/>},
         {path:'/dashbord/otp/:orderId',element: <OTP/>},
         {path:'/dashbord/sellerDetails/:sellerId',element: <SellerDetailsForAdmin/>},
-        {path:'/dashbord/profile',element: <MyProfile/>}
+        {path:'/dashbord/profile',element: <MyProfile/>},
+        {path:'/dashbord/all-user',element: <UserDataDisplay/>}
 
       ] 
     },

@@ -90,6 +90,7 @@ export const login = async (req, res) => {
   try {
     let { email, password } = req.body;
 
+
     let currUser = await User.findOne({ email });
 
     //check user exist
@@ -170,6 +171,23 @@ export const getUser = async (req, res) => {
     })
 
   } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error'
+    })
+  }
+}
+
+export const getAllUser= async (req, res) => {
+  try {
+    let currUser = await User.find({accountType:'Buyer'})
+    return res.status(200).json({
+      success: true,
+      message: 'get All user successfully',
+      currUser
+    })
+
+  } catch (err) { 
     res.status(500).json({
       success: false,
       message: 'Internal Server Error'
