@@ -368,3 +368,49 @@ export const getSellerDetailsForAdmin = async (req, res) => {
     })
   }
 }
+
+
+export const giveUserRating = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { rating, review } = req.body;
+
+
+    const sellerId = req.user.id;
+
+    const currSeller = await User.findById(sellerId);
+
+    if (!currSeller) {
+      return res.status(400).json({
+        success: false,
+        message: 'Seller not found'
+      });
+    }
+
+    const seller = await User.findById(sellerId);
+
+    if (!seller || seller.accountType !== 'Seller') {
+      return res.status(400).json({
+        success: false,
+        message: 'Seller not found'
+      });
+    }
+
+    // Add rating and review to seller
+    seller.ratings.push({ user: userId, rating, review });
+    
+    await seller.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Rating and review added successfully'
+    });
+
+  } catch (error) {
+    console.log('Give user rating error : ', error?.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+}

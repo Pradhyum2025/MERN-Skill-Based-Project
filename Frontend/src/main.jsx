@@ -39,6 +39,8 @@ import { MyProfile } from './component/core/User/Profile.jsx'
 import SearchResult from './component/core/Listings/search/SearchResult.jsx'
 import BrandListing from './component/core/Listings/ListingMainPage/BrandListing.jsx'
 import UserDataDisplay from './component/core/Listings/Admin/AllUser.jsx'
+import CustomerRatingForm from './component/core/Listings/Seller/CustomerRating.jsx'
+
 
 const router = createBrowserRouter([
     {
@@ -56,8 +58,7 @@ const router = createBrowserRouter([
         {path:'/my-order/:orderId',element: <BuyerOrderDetails/>},
         {path:'/profile',element: <MyProfile/>},
         {path:'/search-result',element: <SearchResult/>},
-       
-        
+        {path:'/rating',element: <CustomerRatingForm/>},
       ]
     },
     {

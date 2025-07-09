@@ -20,6 +20,7 @@ import addressRoutes from './routes/Address.js';
 import paymentRoutes from './routes/Payment.js';
 import reviewRouter from './routes/review.js';
 import profileRoutes from './routes/Profile.js';
+import customerRatingRouter from './routes/customerRating.js';
 import cookieParser from 'cookie-parser';
 
 //load env files
@@ -57,7 +58,8 @@ app.use('/order',orderRouter);
 app.use('/address',addressRoutes);
 app.use('/payment',paymentRoutes);
 app.use('/review',reviewRouter);
-app.use('/profile',profileRoutes)
+app.use('/profile',profileRoutes);
+app.use('/customer-rating',customerRatingRouter);
 
 
 const PORT  = process.env.PORT || 4040;
